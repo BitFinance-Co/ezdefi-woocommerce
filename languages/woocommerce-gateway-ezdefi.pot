@@ -1,0 +1,230 @@
+# Copyright (C) 2019 Nexty Platform
+# This file is distributed under the same license as the WooCommerce Ezdefi Payment Gateway plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce Ezdefi Payment Gateway 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-gateway-ezdefi\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2019-11-28T09:57:13+01:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.3.0\n"
+"X-Domain: woocommerce-gateway-ezdefi\n"
+
+#. Plugin Name of the plugin
+msgid "WooCommerce Ezdefi Payment Gateway"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://ezdefi.io/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Ezdefi Gateway integration for Woocommerce"
+msgstr ""
+
+#. Author of the plugin
+msgid "Nexty Platform"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://nexty.io/"
+msgstr ""
+
+#: includes/admin/class-wc-ezdefi-admin-notices.php:49
+msgid "Ezdefi is almost ready. To get started, <a href=\"%s\">set your gateway api url</a>."
+msgstr ""
+
+#: includes/admin/class-wc-ezdefi-admin-notices.php:53
+msgid "Ezdefi is almost ready. To get started, <a href=\"%s\">set your gateway api key</a>."
+msgstr ""
+
+#: includes/admin/class-wc-ezdefi-admin-notices.php:62
+msgid "Ezdefi is almost ready. To get started, <a href=\"%s\">set accepted currency</a>."
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:11
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:12
+msgid "Enable ezDeFi"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:18
+msgid "Title"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:25
+msgid "Description"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:32
+msgid "Gateway API Url"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:38
+msgid "Gateway API Key"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:44
+msgid "Payment Method"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:50
+msgid "Acceptable price variation"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:57
+msgid "Decimals"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:64
+msgid "Amount clear recurrence"
+msgstr ""
+
+#: includes/admin/ezdefi-settings.php:76
+msgid "Accepted Currency"
+msgstr ""
+
+#: includes/class-wc-ezdefi-ajax.php:49
+msgid "Can not get currency"
+msgstr ""
+
+#: includes/class-wc-ezdefi-ajax.php:105
+#: includes/class-wc-ezdefi-ajax.php:126
+#: includes/class-wc-ezdefi-ajax.php:143
+#: includes/class-wc-ezdefi-ajax.php:145
+#: includes/class-wc-ezdefi-ajax.php:204
+msgid "Can not create payment"
+msgstr ""
+
+#: includes/class-wc-ezdefi-ajax.php:190
+#: includes/functions.php:7
+msgid "Can not get payment"
+msgstr ""
+
+#: includes/class-wc-ezdefi-cron.php:20
+msgid "Once Weekly"
+msgstr ""
+
+#: includes/class-wc-ezdefi-cron.php:24
+msgid "Monthly"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:57
+msgid "Ezdefi"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:58
+msgid "Payment Without Middleman"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:153
+#: includes/class-wc-gateway-ezdefi.php:603
+msgid "Simple method"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:154
+msgid "Allow client to pay without using ezDeFi wallet"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:158
+msgid "Pay with Ezdefi wallet"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:159
+msgid "Allow client to pay using ezDeFi wallet"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:198
+msgid "Name"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:199
+#: includes/class-wc-gateway-ezdefi.php:478
+#: includes/class-wc-gateway-ezdefi.php:585
+msgid "Discount"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:200
+msgid "Payment Lifetime"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:201
+msgid "Wallet Address"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:202
+msgid "Block Confirmation"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:224
+#: includes/class-wc-gateway-ezdefi.php:350
+msgid "Edit"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:226
+#: includes/class-wc-gateway-ezdefi.php:352
+msgid "Delete"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:236
+#: includes/class-wc-gateway-ezdefi.php:360
+msgid "Cancel"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:399
+msgid "Add Currency"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:496
+msgid "Please select currency"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:506
+msgid "Awaiting ezdefi payment"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:571
+msgid "Change"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:606
+msgid "Pay with ezDeFi wallet"
+msgstr ""
+
+#: includes/class-wc-gateway-ezdefi.php:617
+msgid "Confirm"
+msgstr ""
+
+#: includes/functions.php:15
+msgid "You have"
+msgstr ""
+
+#: includes/functions.php:15
+msgid "to scan this QR Code"
+msgstr ""
+
+#: includes/functions.php:23
+msgid "Address"
+msgstr ""
+
+#: includes/functions.php:24
+msgid "Amount"
+msgstr ""
+
+#: includes/functions.php:26
+msgid "You have to pay an exact amount so that you payment can be recognized."
+msgstr ""
+
+#: includes/functions.php:29
+msgid "Download ezDeFi for IOS"
+msgstr ""
+
+#: includes/functions.php:30
+msgid "Download ezDeFi for Android"
+msgstr ""

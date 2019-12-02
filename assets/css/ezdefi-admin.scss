@@ -1,0 +1,247 @@
+form {
+  .error {
+    font-size: 13px;
+    color: #dc3232;
+    display: block;
+  }
+
+  td.form-invalid {
+    .select2-selection {
+      border-color: #dc3232!important;
+      box-shadow: 0 0 2px rgba(204,0,0,.8);
+    }
+  }
+
+  tr#amount_clear_next_run {
+    .custom {
+      display: flex;
+      align-items: center;
+
+      input[type=radio] {
+        margin-top: 0!important;
+      }
+
+      span {
+        margin-right: 4px;
+      }
+    }
+  }
+
+  #wc-ezdefi-currency-settings-table {
+    display: block;
+    overflow-x: auto;
+    thead {
+      th {
+        padding: 15px 10px;
+        vertical-align: middle;
+
+        &.sortable-zone {
+          width: 24px;
+
+          .help-tip {
+            color: #666;
+            width: 16px;
+            height: 16px;
+            font-size: 16px;
+            line-height: 16px;
+            cursor: help;
+            display: inline-block;
+            position: relative;
+            vertical-align: middle;
+          }
+        }
+
+        &.logo {
+          width: 32px;
+        }
+
+        &.name {
+          min-width: 120px;
+        }
+
+        //&.discount, &.lifetime, &.block-confirm {
+        //  width: 100px;
+        //}
+        //
+        //&.wallet {
+        //  width: 180px;
+        //}
+      }
+    }
+
+    tbody {
+      tr {
+        &.editing {
+          .view {
+            display: none;
+          }
+
+          .edit {
+            display: block;
+          }
+        }
+
+        td {
+          vertical-align: top;
+
+          .edit {
+            input, select {
+              margin: 1px;
+              padding: 3px 5px;
+              height: auto;
+            }
+
+            input[type=number] {
+              width: 65px;
+            }
+          }
+
+          &.sortable-handle {
+            cursor: move;
+            font-size: 15px;
+            text-align: center;
+            vertical-align: middle;
+
+            span {
+              width: 17px;
+              font-size: 17px;
+              color: #999;
+              display: block;
+              line-height: 24px;
+            }
+
+            &:hover {
+              span {
+                color: #333;
+              }
+            }
+          }
+
+          &.logo {
+            vertical-align: middle;
+
+            img {
+              display: block;
+              width: 32px;
+            }
+          }
+
+          &.name {
+            .view {
+              span {
+                text-transform: capitalize;
+              }
+            }
+
+            .edit {
+              .select2-container {
+                min-width: auto !important;
+
+                .select2-selection {
+                  text-transform: capitalize;
+                }
+              }
+            }
+          }
+
+          &.wallet {
+            .edit {
+              input {
+                width: 100%;
+              }
+            }
+            .checking {
+              display: flex;
+              padding: 2px 0;
+
+              span {
+                font-size: 13px;
+
+                &.text {
+                  color: #0073aa;
+                }
+
+                &.correct {
+                  color: #567622;
+                }
+              }
+
+              .dots {
+                margin-left: 5px;
+                display: flex;
+                padding-bottom: 4px;
+                align-items: flex-end;
+
+                .dot {
+                  display: inline-block;
+                  width: 2px;
+                  height: 2px;
+                  margin-right: 2px;
+                  border-radius: 50%;
+                  background: #0073aa;
+                  -webkit-animation: dot-dot-dot 1.4s linear infinite;
+                  animation: dot-dot-dot 1.4s linear infinite;
+
+                  &:nth-child(2) {
+                    animation-delay: .2s;
+                  }
+
+                  &:nth-child(3) {
+                    animation-delay: .4s;
+                  }
+
+                  @keyframes dot-dot-dot {
+                    0%, 60%, 100% {
+                      -webkit-transform: initial;
+                      -ms-transform: initial;
+                      transform: initial;
+                    }
+                    30% {
+                      -webkit-transform: translateY(-4px);
+                      -ms-transform: translateY(-4px);
+                      transform: translateY(-4px);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          .actions {
+            color: #ddd;
+            font-size: 13px;
+            padding: 2px 0 0;
+            position: static;
+            left: -9999em;
+          }
+
+          .view {
+            display: block;
+          }
+
+          .edit {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.select2-currency {
+  display: flex;
+  align-items: center;
+
+  .select2-currency__icon {
+    margin-right: 10px;
+
+    img {
+      width: 24px;
+      display: block;
+    }
+  }
+
+  .select2-currency__name {
+    text-transform: capitalize;
+  }
+}
