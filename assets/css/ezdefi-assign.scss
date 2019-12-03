@@ -1,0 +1,24 @@
+#wc-ezdefi-order-assign {
+  tbody {
+    tr {
+      td {
+        vertical-align: middle;
+        &.order-select {
+          width: 30%;
+        }
+      }
+    }
+  }
+}
+
+.select2-order {
+  .select2-order__row {
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: space-between;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

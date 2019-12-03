@@ -1,0 +1,17 @@
+#wc-ezdefi-order-assign tbody tr td {
+  vertical-align: middle;
+}
+#wc-ezdefi-order-assign tbody tr td.order-select {
+  width: 30%;
+}
+
+.select2-order .select2-order__row {
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+}
+.select2-order .select2-order__row:last-child {
+  margin-bottom: 0;
+}
+
+/*# sourceMappingURL=ezdefi-assign.css.map */

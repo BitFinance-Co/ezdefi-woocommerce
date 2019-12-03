@@ -38,6 +38,12 @@ class WC_Ezdefi_Ajax
 
 	    add_action( 'wp_ajax_wc_ezdefi_check_order_status', array( $this, 'wc_ezdefi_check_order_status_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_check_order_status', array( $this, 'wc_ezdefi_check_order_status_ajax_callback' ) );
+
+	    add_action( 'wp_ajax_wc_ezdefi_assign_amount_id', array( $this, 'wc_ezdefi_assign_amount_id_ajax_callback' ) );
+	    add_action( 'wp_ajax_nopriv_wc_ezdefi_assign_amount_id', array( $this, 'wc_ezdefi_assign_amount_id_ajax_callback' ) );
+
+	    add_action( 'wp_ajax_wc_ezdefi_delete_amount_id', array( $this, 'wc_ezdefi_delete_amount_id_ajax_callback' ) );
+	    add_action( 'wp_ajax_nopriv_wc_ezdefi_delete_amount_id', array( $this, 'wc_ezdefi_delete_amount_id_ajax_callback' ) );
     }
 
     /**
@@ -328,6 +334,45 @@ class WC_Ezdefi_Ajax
     	$status = $order->get_status();
 
     	wp_die( $status );
+    }
+
+    public function wc_ezdefi_assign_amount_id_ajax_callback()
+    {
+        if( ! isset( $_POST['amount_id'] ) || ! isset( $_POST['order_id'] ) ) {
+            wp_send_json_error();
+        }
+
+        $amount_id = $_POST['amount_id'];
+
+        $order_id = $_POST['order_id'];
+
+	    $order = wc_get_order( $order_id );
+
+	    if( ! $order ) {
+		    wp_send_json_error();
+	    }
+
+        $this->delete_amount_id_exception( $amount_id );
+
+	    $order->update_status( 'completed' );
+
+	    wp_send_json_success();
+    }
+
+    public function wc_ezdefi_delete_amount_id_ajax_callback()
+    {
+	    $amount_id = $_POST['amount_id'];
+
+	    $this->delete_amount_id_exception( $amount_id );
+    }
+
+    protected function delete_amount_id_exception($amount_id)
+    {
+	    global $wpdb;
+
+	    $table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+	    $wpdb->delete( $table_name, array( 'amount_id' => $amount_id ) );
     }
 }
 

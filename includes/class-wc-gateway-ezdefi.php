@@ -764,12 +764,18 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 
 		$payment = $payment['data'];
 
-		$status = $payment['status'];
+		$status = strtolower( $payment['status'] );
 
 		if( $status === 'DONE' ) {
 			$order->update_status( 'completed' );
 			$woocommerce->cart->empty_cart();
-		}
+		} elseif( $status === 'EXPIRED_DONE' ) {
+            global $wpdb;
+			$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+			$wpdb->insert( $table_name, array(
+                'amount_id' => $payment['originValue'],
+            ) );
+        }
 
 		wp_die();
 	}
