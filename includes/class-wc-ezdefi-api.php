@@ -155,10 +155,8 @@ class WC_Ezdefi_Api
 		    'uoid' => $uoid,
 		    'to' => $currency_data['wallet'],
 		    'value' => $value,
-		    'currency' => $order->get_currency() . ':' . $currency_data['symbol'],
 		    'safedist' => ( isset( $currency_data['block_confirm'] ) ) ? $currency_data['block_confirm'] : '',
-//		    'ucid' => $order->get_user_id(),
-		    'ucid' => rand(2, 100),
+		    'ucid' => $order->get_user_id(),
 		    'duration' => ( isset( $currency_data['lifetime'] ) ) ? $currency_data['lifetime'] : '',
 //		    'callback' => home_url() . '/?wc-api=ezdefi',
 	        'callback' => 'http://5ced6b47.ngrok.io/?wc-api=ezdefi',
@@ -166,6 +164,9 @@ class WC_Ezdefi_Api
 
 	    if( $amountId ) {
 		    $data['amountId'] = true;
+		    $data['currency'] = $currency_data['symbol'] . ':' . $currency_data['symbol'];
+	    } else {
+		    $data['currency'] = $order->get_currency() . ':' . $currency_data['symbol'];
 	    }
 
 	    $response = $this->call( 'payment/create', 'post', $data );

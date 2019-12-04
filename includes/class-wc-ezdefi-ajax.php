@@ -229,7 +229,15 @@ class WC_Ezdefi_Ajax
 
 		$ezdefi_payment = $response['data'];
 
-		$html = $this->generate_payment_html( $ezdefi_payment );
+		$uoid = substr( $ezdefi_payment['uoid'], 0, strpos( $ezdefi_payment['uoid'],'-' ) );
+
+		$order = wc_get_order( $uoid );
+
+		if( ! $order ) {
+			wp_send_json_error( __( 'Can not get payment', 'woocommerce-gateway-ezdefi' ) );
+        }
+
+		$html = $this->generate_payment_html( $ezdefi_payment, $order );
 
 		wp_send_json_success( $html );
 	}
@@ -264,7 +272,7 @@ class WC_Ezdefi_Ajax
 
 	    $payment = $response['data'];
 
-	    $html = $this->generate_payment_html( $payment );
+	    $html = $this->generate_payment_html( $payment, $order );
 
 	    if( $clear_meta_data ) {
 		    $ezdefi_payment = array();
@@ -289,7 +297,10 @@ class WC_Ezdefi_Ajax
 	 *
 	 * @return false|string
 	 */
-    public function generate_payment_html( $payment ) {
+    public function generate_payment_html( $payment, $order ) {
+        $total = $order->get_total();
+        $discount = $this->db->get_currency_option( $payment['currency'] )['discount'];
+        $total = $total - ( $total * ( $discount / 100 ) );
 	    ob_start(); ?>
 	    <div class="ezdefi-payment" data-paymentid="<?php echo $payment['_id']; ?>">
 		    <?php if( ! $payment ) : ?>
@@ -297,7 +308,7 @@ class WC_Ezdefi_Ajax
 		    <?php else : ?>
 			    <?php $value = $payment['value'] / pow( 10, $payment['decimal'] ); ?>
 			    <p class="exchange">
-				    <span><?php echo $payment['originCurrency']; ?> <?php echo $payment['originValue']; ?></span>
+				    <span><?php echo $order->get_currency(); ?> <?php echo $total; ?></span>
 				    <img width="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfjChgQMyxZjA7+AAACP0lEQVRo3u2YvWsUQRTAf8nFQs5LCEY0aCGIB1ErRVMoFpYGTGNlo2AnBxHlrLQJKVSwiV//gqCV4gemEGJhiBYXRAtBDIhICiUGL8GP3Fjs7rs5vN0o5M1LsW+a2XkDv9/MvF12t4B2dDDODqbVOan46zgaVKzwN3A4O4VuarGAo8EZC4VeXnoKJruQK+QKa12hI2VyFyUFhY08Ymfcd1S49feU7VSZ5DPL4qrXGpxuhW/iJj8DgJutTrGJ38vHoPCobUnwg9QN8HeTItzGNP2yF7M85D11lTvhLAPSn2CYpah7R5zmOUmnChrgsrf6p6xPhvfRiAe/slsNnoqHcRketsDDbDw8ZYPvlsR5CzwMSGpICT+WhYdBSR4Ov3p9gbGV8Hr3PEAPx6XvPXZC7sBm3qSvPoRApJCB71KB+jHHERbab34YAZjLSuoW4T+EuYBNHJXC32W+A2taYAN9lgJFHjDZfGsNHUWe4XC8VVHwirD9hBLPZcpM+mN0NQTaHUGR+xySq3vpj1Gd8FfvuKjCyDiC5OyjdklpkSeE0N+aCLF6gNGY8IuCBb4zfklxzFjg4ZRQRi3wB/guB1AOjV9HhUXh3Ibo87zEYw7KpFqUWPUoUWaIrXL9gf18iRSeGPyamGdPYlI2wL/zflPQx4+g8CWu0tN6OiNBwL/5xAQjXhWQFCFc4IqMvOYY3xSKcIHlrPQ5z/UVvSr3wQqRK+QKuYIfVU9hSuGt+L924ZoFvqmgji+kZl6wSI2qtsAfm/EoPAbFFD0AAAAldEVYdGRhdGU6Y3JlYXRlADIwMTktMTAtMjRUMTY6NTE6NDQrMDA6MDBiAik3AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE5LTEwLTI0VDE2OjUxOjQ0KzAwOjAwE1+RiwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=" />
 				    <span class="currency"><?php echo $value . ' ' . $payment['currency']; ?></span>
 			    </p>
@@ -308,11 +319,15 @@ class WC_Ezdefi_Ajax
 				    </a>
 			    </p>
 			    <?php if( $payment['amountId'] === true ) : ?>
-				    <p>
-					    <strong><?php echo __( 'Address', 'woocommerce-gateway-ezdefi' ); ?>:</strong> <?php echo $payment['to']; ?><br/>
-					    <strong><?php echo __( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong> <?php echo $value; ?> <span class="currency"><?php echo $payment['currency']; ?></span><br/>
-				    </p>
-				    <p><?php echo __( 'You have to pay an exact amount so that you payment can be recognized.', 'woocommerce-gateway-ezdefi' ); ?></p>
+                    <p>
+                        <strong><?php _e( 'Pay Manually', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['chain']['name'] . ' ' . $payment['chain']['symbol']; ?><br/>
+                        <strong><?php _e( 'Address', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['to']; ?><br/>
+                        <strong><?php _e( 'Amount', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['originValue']; ?><br/>
+                    </p>
+                    <p>
+					    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'edd-ezdefi' ); ?><br/>
+					    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'edd-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
+                    </p>
 			    <?php else : ?>
 				    <p>
 					    <a href=""><?php echo __( 'Download ezDeFi for IOS', 'woocommerce-gateway-ezdefi' ); ?></a><br />

@@ -179,6 +179,10 @@
 #wc_ezdefi_qrcode .ezdefi-payment .exchange img {
   width: 16px;
 }
+#wc_ezdefi_qrcode .ezdefi-payment .count-down {
+  color: #f73f2e;
+  font-weight: bold;
+}
 #wc_ezdefi_qrcode .ezdefi-payment img.qrcode {
   display: block;
   margin: 0 auto;

@@ -9,7 +9,8 @@ jQuery(function($) {
         submitBtn: '.submitBtn',
         ezdefiPayment: '.ezdefi-payment',
         tabs: '.ezdefi-payment-tabs',
-        panel: '.ezdefi-payment-panel'
+        panel: '.ezdefi-payment-panel',
+        ezdefiEnableBtn: '.ezdefiEnableBtn',
     };
 
     var wc_ezdefi_qrcode = function() {
@@ -24,13 +25,15 @@ jQuery(function($) {
         var onChange = this.onChange.bind(this);
         var onSelectItem = this.onSelectItem.bind(this);
         var onSubmit = this.onSubmit.bind(this);
+        var onClickEzdefiLink = this.onClickEzdefiLink.bind(this);
 
         init();
 
         $(document.body)
             .on('click', selectors.changeBtn, onChange)
             .on('click', selectors.item, onSelectItem)
-            .on('click', selectors.submitBtn, onSubmit);
+            .on('click', selectors.submitBtn, onSubmit)
+            .on('click', selectors.ezdefiEnableBtn, onClickEzdefiLink);
     };
 
     wc_ezdefi_qrcode.prototype.init = function() {
@@ -162,6 +165,12 @@ jQuery(function($) {
         });
     };
 
+    wc_ezdefi_qrcode.prototype.onClickEzdefiLink = function(e) {
+        var self = this;
+        e.preventDefault();
+        self.$tabs.tabs('option', 'active', 1);
+    };
+
     wc_ezdefi_qrcode.prototype.checkOrderStatus = function() {
         var self = this;
         // setInterval(function () {
@@ -199,25 +208,16 @@ jQuery(function($) {
                 self.timeout();
             }
 
-            countDown.text(
-                t.days + ' d ' +
-                t.hours + ' h ' +
-                t.minutes + ' m ' +
-                t.seconds + ' s'
-            );
+            countDown.text(t.minutes + ':' + t.seconds);
         }, 1000);
     };
 
     wc_ezdefi_qrcode.prototype.getTimeRemaining = function(endTime) {
         var t = new Date(endTime).getTime() - new Date().getTime();
-        var days = Math.floor(t / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((t % (1000 * 60)) / 1000);
+        var minutes = Math.floor((t / 60000));
+        var seconds = (t % 60000 / 1000).toFixed(0);
         return {
             'total': t,
-            'days': days,
-            'hours': hours,
             'minutes': minutes,
             'seconds': seconds
         };
