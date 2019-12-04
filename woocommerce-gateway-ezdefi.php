@@ -97,6 +97,18 @@ class WC_Ezdefi {
 				DELETE FROM $table_name;
 			END
 		" );
+
+		$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+		$sql = "CREATE TABLE $table_name (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			amount_id decimal(18,10) NOT NULL,
+			created_at timestamp default current_timestamp,
+			PRIMARY KEY (id),
+		) $charset_collate;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $sql );
 	}
 
 	/**
