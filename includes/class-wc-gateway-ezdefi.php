@@ -317,7 +317,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 			                                <?php echo isset( $c['decimal'] ) ? $c['decimal'] : '' ;?>
                                         </div>
                                         <div class="edit">
-                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][decimal]'; ?>" value="<?php echo isset( $c['decimal'] ) ? $c['decimal'] : '' ;?>">
+                                            <input type="number" class="currency-decimal" name="<?php echo $field_key . '[' . $index . '][decimal]'; ?>" value="<?php echo isset( $c['decimal'] ) ? $c['decimal'] : '' ;?>">
                                         </div>
                                     </td>
                                 </tr>

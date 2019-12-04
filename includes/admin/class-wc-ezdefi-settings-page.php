@@ -78,18 +78,20 @@ class WC_Ezdefi_Settings_Page
 		);
 
 		ob_start(); ?>
-			<h2>ezDeFi Manage Exception</h2>
+			<h2><?php _e( 'ezDeFi Manage Exception', 'woocommerce-gateway-ezdefi' ); ?></h2>
 			<table class="widefat" id="wc-ezdefi-order-assign">
 				<thead>
-					<th>Received Amount</th>
-					<th>Received At</th>
-					<th>Assign To</th>
+                    <th>#</th>
+					<th><?php _e( 'Received Amount', 'woocommerce-gateway-ezdefi' ); ?></th>
+					<th><?php _e( 'Received At', 'woocommerce-gateway-ezdefi' ); ?></th>
+					<th><?php _e( 'Assign To', 'woocommerce-gateway-ezdefi' ); ?></th>
 					<th></th>
 				</thead>
 				<tbody>
 					<?php if( ! empty( $exception ) ) : ?>
-						<?php foreach($exception as $e) : ?>
+						<?php foreach($exception as $i => $e) : ?>
 							<tr>
+                                <td><?php echo $i + 1; ?></td>
 								<td>
 									<?php echo $e['amount_id']; ?>
 									<input type="hidden" value="<?php echo $e['amount_id']; ?>" id="amount-id">
@@ -99,14 +101,14 @@ class WC_Ezdefi_Settings_Page
 									<select name="" id="order-select"></select>
 								</td>
 								<td>
-									<button class="button button-primary assignBtn">Assign</button>
-									<button class="button removeBtn">Remove</button>
+									<button class="button button-primary assignBtn"><?php _e( 'Assign', 'woocommerce-gateway-ezdefi' ); ?></button>
+									<button class="button removeBtn"><?php _e( 'Remove', 'woocommerce-gateway-ezdefi' ); ?></button>
 								</td>
 							</tr>
 						<?php endforeach; ?>
 					<?php else : ?>
 						<tr>
-							<td>Empty</td>
+							<td><?php _e( 'Empty', 'woocommerce-gateway-ezdefi' ); ?></td>
 						</tr>
 					<?php endif; ?>
 				</tbody>
