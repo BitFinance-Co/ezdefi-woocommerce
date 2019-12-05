@@ -83,6 +83,7 @@ class WC_Ezdefi_Settings_Page
 				<thead>
                     <th>#</th>
 					<th><?php _e( 'Received Amount', 'woocommerce-gateway-ezdefi' ); ?></th>
+                    <th><?php _e( 'Currency', 'woocommerce-gateway-ezdefi' ); ?></th>
 					<th><?php _e( 'Received At', 'woocommerce-gateway-ezdefi' ); ?></th>
 					<th><?php _e( 'Assign To', 'woocommerce-gateway-ezdefi' ); ?></th>
 					<th></th>
@@ -96,9 +97,18 @@ class WC_Ezdefi_Settings_Page
 									<?php echo $e['amount_id']; ?>
 									<input type="hidden" value="<?php echo $e['amount_id']; ?>" id="amount-id">
 								</td>
+                                <td>
+                                    <?php echo $e['currency']; ?>
+                                    <input type="hidden" value="<?php echo $e['currency']; ?>" id="currency">
+                                </td>
 								<td><?php echo $e['created_at']; ?></td>
 								<td class="order-select">
-									<select name="" id="order-select"></select>
+									<select name="" id="order-select">
+                                        <?php if( $e['order_id'] ) : ?>
+                                            <option value="<?php echo $e['order_id']; ?>" selected></option>
+                                        <?php endif; ?>
+										<?php echo $e['order_id']; ?>
+                                    </select>
 								</td>
 								<td>
 									<button class="button button-primary assignBtn"><?php _e( 'Assign', 'woocommerce-gateway-ezdefi' ); ?></button>

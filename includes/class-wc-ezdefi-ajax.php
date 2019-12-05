@@ -353,11 +353,13 @@ class WC_Ezdefi_Ajax
 
     public function wc_ezdefi_assign_amount_id_ajax_callback()
     {
-        if( ! isset( $_POST['amount_id'] ) || ! isset( $_POST['order_id'] ) ) {
+        if( ! isset( $_POST['amount_id'] ) || ! isset( $_POST['order_id'] ) || ! isset( $_POST['currency'] ) ) {
             wp_send_json_error();
         }
 
         $amount_id = $_POST['amount_id'];
+
+        $currency = $_POST['currency'];
 
         $order_id = $_POST['order_id'];
 
@@ -367,7 +369,7 @@ class WC_Ezdefi_Ajax
 		    wp_send_json_error();
 	    }
 
-        $this->delete_amount_id_exception( $amount_id );
+        $this->db->delete_amount_id_exception( $amount_id, $currency );
 
 	    $order->update_status( 'completed' );
 
@@ -378,16 +380,9 @@ class WC_Ezdefi_Ajax
     {
 	    $amount_id = $_POST['amount_id'];
 
-	    $this->delete_amount_id_exception( $amount_id );
-    }
+	    $currency = $_POST['currency'];
 
-    protected function delete_amount_id_exception($amount_id)
-    {
-	    global $wpdb;
-
-	    $table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
-
-	    $wpdb->delete( $table_name, array( 'amount_id' => $amount_id ) );
+	    $this->db->delete_amount_id_exception( $amount_id, $currency );
     }
 }
 

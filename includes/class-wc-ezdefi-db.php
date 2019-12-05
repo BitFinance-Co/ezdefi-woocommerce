@@ -151,4 +151,29 @@ class WC_Ezdefi_Db
 
 		return $wpdb->prefix . 'woocommerce_ezdefi_amount';
 	}
+
+	public function delete_amount_id_exception($amount_id, $currency)
+	{
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+		$wpdb->delete( $table_name, array( 'amount_id' => $amount_id, 'currency' => $currency ) );
+	}
+
+	public function add_uoid_to_exception($amount_id, $currency, $uoid)
+	{
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+		$wpdb->update(
+			$table_name,
+			array( 'order_id' => $uoid ),
+			array(
+				'amount_id' => $amount_id,
+				'currency' => $currency
+			)
+		);
+	}
 }

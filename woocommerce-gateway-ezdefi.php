@@ -62,6 +62,8 @@ class WC_Ezdefi {
 		$sql[] = "CREATE TABLE $exception_table_name (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			amount_id decimal(18,10) NOT NULL,
+			currency varchar(10) NOT NULL,
+			order_id int(11) NULL,
 			created_at timestamp default current_timestamp,
 			PRIMARY KEY (id)
 		) $charset_collate;";
@@ -94,6 +96,7 @@ class WC_Ezdefi {
 			    INSERT INTO $table_name (amount_key, price, amount_id, currency, expired_time) 
 			        VALUES (unique_id, value, amount_id, token, NOW() + INTERVAL life_time SECOND)
                     ON DUPLICATE KEY UPDATE `expired_time` = NOW() + INTERVAL life_time SECOND;
+                INSERT INTO $exception_table_name (amount_id, currency) VALUES (amount_id, token);
 			END
 		" );
 
