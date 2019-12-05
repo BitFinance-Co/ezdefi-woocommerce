@@ -773,7 +773,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
             global $wpdb;
 			$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
 			$wpdb->insert( $table_name, array(
-                'amount_id' => $payment['originValue'],
+                'amount_id' => $payment['value'] / pow( 10, $payment['decimal'] ),
             ) );
         }
 
