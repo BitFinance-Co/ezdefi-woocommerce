@@ -173,27 +173,27 @@ jQuery(function($) {
 
     wc_ezdefi_qrcode.prototype.checkOrderStatus = function() {
         var self = this;
-        // setInterval(function () {
-        //     $.ajax({
-        //         url: wc_ezdefi_data.ajax_url,
-        //         method: 'post',
-        //         data: {
-        //             action: 'wc_ezdefi_check_order_status',
-        //             order_id: self.paymentData.uoid
-        //         },
-        //         beforeSend: function(jqXHR) {
-        //             self.xhrPool.push(jqXHR);
-        //         },
-        //         success: function (response) {
-        //             if (response == 'completed') {
-        //                 $.each(self.xhrPool, function(index, jqXHR) {
-        //                     jqXHR.abort();
-        //                 });
-        //                 self.success();
-        //             }
-        //         }
-        //     });
-        // }, 600);
+        setInterval(function () {
+            $.ajax({
+                url: wc_ezdefi_data.ajax_url,
+                method: 'post',
+                data: {
+                    action: 'wc_ezdefi_check_order_status',
+                    order_id: self.paymentData.uoid
+                },
+                beforeSend: function(jqXHR) {
+                    self.xhrPool.push(jqXHR);
+                },
+                success: function (response) {
+                    if (response == 'completed') {
+                        $.each(self.xhrPool, function(index, jqXHR) {
+                            jqXHR.abort();
+                        });
+                        self.success();
+                    }
+                }
+            });
+        }, 600);
     };
 
     wc_ezdefi_qrcode.prototype.setTimeRemaining = function(endTime) {

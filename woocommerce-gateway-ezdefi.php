@@ -25,8 +25,6 @@ class WC_Ezdefi {
 	 */
 	protected function __construct()
 	{
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
-
 		$this->includes();
 
 		$this->define_constants();
@@ -41,12 +39,14 @@ class WC_Ezdefi {
 	{
 		global $wpdb;
 
+		$sql = array();
+
 		$table_name = $wpdb->prefix . 'woocommerce_ezdefi_amount';
 
 		$charset_collate = $wpdb->get_charset_collate();
 
 		// Create new table
-		$sql = "CREATE TABLE $table_name (
+		$sql[] = "CREATE TABLE $table_name (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			amount_key int(11) NOT NULL,
 			price decimal(18,10) NOT NULL,
@@ -55,6 +55,15 @@ class WC_Ezdefi {
 			expired_time timestamp default current_timestamp,
 			PRIMARY KEY (id),
 			UNIQUE (amount_id, currency)
+		) $charset_collate;";
+
+		$exception_table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+		$sql[] = "CREATE TABLE $exception_table_name (
+			id int(11) NOT NULL AUTO_INCREMENT,
+			amount_id decimal(18,10) NOT NULL,
+			created_at timestamp default current_timestamp,
+			PRIMARY KEY (id)
 		) $charset_collate;";
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -97,18 +106,6 @@ class WC_Ezdefi {
 				DELETE FROM $table_name;
 			END
 		" );
-
-		$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
-
-		$sql = "CREATE TABLE $table_name (
-			id int(11) NOT NULL AUTO_INCREMENT,
-			amount_id decimal(18,10) NOT NULL,
-			created_at timestamp default current_timestamp,
-			PRIMARY KEY (id),
-		) $charset_collate;";
-
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
 	}
 
 	/**
@@ -170,3 +167,5 @@ function woocommerce_gateway_ezdefi_init() {
 
     WC_Ezdefi::get_instance();
 }
+
+register_activation_hook( __FILE__, array( 'WC_Ezdefi', 'activate' ) );
