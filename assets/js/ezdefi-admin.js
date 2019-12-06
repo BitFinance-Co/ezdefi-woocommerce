@@ -3,6 +3,7 @@ jQuery(function($) {
 
     var selectors = {
         amountIdCheckbox: 'input[name="woocommerce_ezdefi_payment_method[amount_id]"]',
+        ezdefiWalletCheckbox: 'input[name="woocommerce_ezdefi_payment_method[ezdefi_wallet]"]',
         symbolInput: '.currency-symbol',
         nameInput: '.currency-name',
         logoInput: '.currency-logo',
@@ -69,7 +70,9 @@ jQuery(function($) {
                 if(element.hasClass('select-select2')) {
                     error.insertAfter(element.closest('.edit').find('.select2-container'));
                 } else {
-                    error.appendTo(element.closest('td'));
+                    if(element.closest('td').find('span.error').length === 0) {
+                        error.appendTo(element.closest('td'));
+                    }
                 }
             },
             highlight: function(element) {
@@ -91,12 +94,20 @@ jQuery(function($) {
                         depends: function(element) {
                             return self.$form.find(selectors.amountIdCheckbox).is(':checked');
                         }
-                    }
+                    },
+                    min: 0
                 },
-                'woocommerce_ezdefi_amount_decimals': {
+                'woocommerce_ezdefi_payment_method[amount_id]': {
                     required: {
                         depends: function(element) {
-                            return self.$form.find(selectors.amountIdCheckbox).is(':checked');
+                            return ! self.$form.find(selectors.ezdefiWalletCheckbox).is(':checked');
+                        }
+                    }
+                },
+                'woocommerce_ezdefi_payment_method[ezdefi_wallet]': {
+                    required: {
+                        depends: function(element) {
+                            return ! self.$form.find(selectors.amountIdCheckbox).is(':checked');
                         }
                     }
                 }
@@ -161,6 +172,13 @@ jQuery(function($) {
                     messages: {
                         required: 'Please enter wallet address'
                     }
+                });
+            }
+
+            if(name.indexOf('block_confirm') > 0) {
+                var $input = $('input[name="'+name+'"]');
+                $input.rules('add', {
+                    min: 0
                 });
             }
 

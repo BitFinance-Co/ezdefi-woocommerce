@@ -285,15 +285,15 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                             <?php echo isset( $c['discount'] ) ? $c['discount'] . '%' : '' ;?>
                                         </div>
                                         <div class="edit">
-                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][discount]'; ?>" value="<?php echo isset( $c['discount'] ) ? $c['discount'] : '' ;?>"><span> %</span>
+                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][discount]'; ?>" value="<?php echo isset( $c['discount'] ) ? $c['discount'] : 0 ;?>"><span> %</span>
                                         </div>
                                     </td>
                                     <td class="lifetime">
                                         <div class="view">
-                                            <?php echo isset( $c['lifetime'] ) ? $c['lifetime'] : '' ;?>
+                                            <?php echo isset( $c['lifetime'] ) ? $c['lifetime'] . 's' : '' ;?>
                                         </div>
                                         <div class="edit">
-                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? $c['lifetime'] : '' ;?>">
+                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? $c['lifetime'] : '' ;?>"><span> s</span>
                                         </div>
                                     </td>
                                     <td class="wallet">
@@ -357,14 +357,14 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     <div class="view">
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[0][discount]'; ?>" value=""><span> %</span>
+                                        <input type="number" name="<?php echo $field_key . '[0][discount]'; ?>" value="0"><span> %</span>
                                     </div>
                                 </td>
                                 <td class="lifetime">
                                     <div class="view">
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[0][lifetime]'; ?>" value="">
+                                        <input type="number" name="<?php echo $field_key . '[0][lifetime]'; ?>" value=""><span> s</span>
                                     </div>
                                 </td>
                                 <td class="wallet">
@@ -423,14 +423,14 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     <div class="view">
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[1][discount]'; ?>" value=""><span> %</span>
+                                        <input type="number" name="<?php echo $field_key . '[1][discount]'; ?>" value="0"><span> %</span>
                                     </div>
                                 </td>
                                 <td class="lifetime">
                                     <div class="view">
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[1][lifetime]'; ?>" value="">
+                                        <input type="number" name="<?php echo $field_key . '[1][lifetime]'; ?>" value=""><span> s</span>
                                     </div>
                                 </td>
                                 <td class="wallet">

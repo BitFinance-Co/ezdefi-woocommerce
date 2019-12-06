@@ -20,6 +20,7 @@ jQuery(function($) {
         this.$submitBtn = this.$container.find(selectors.submitBtn);
         this.paymentData = JSON.parse(this.$container.find(selectors.paymentData).text());
         this.xhrPool = [];
+        this.checkOrderLoop;
 
         var init = this.init.bind(this);
         var onChange = this.onChange.bind(this);
@@ -71,6 +72,7 @@ jQuery(function($) {
                 method: method
             },
             beforeSend: function() {
+                clearInterval(self.checkOrderLoop);
                 $.each(self.xhrPool, function(index, jqXHR) {
                     jqXHR.abort();
                 });
@@ -138,6 +140,7 @@ jQuery(function($) {
                 self.$tabs.hide();
                 self.$submitBtn.prop('disabled', true).text('Loading...');
                 $.blockUI({message: null});
+                clearInterval(self.checkOrderLoop);
                 $.each(self.xhrPool, function(index, jqXHR) {
                     jqXHR.abort();
                 });
@@ -170,7 +173,7 @@ jQuery(function($) {
 
     wc_ezdefi_qrcode.prototype.checkOrderStatus = function() {
         var self = this;
-        setInterval(function () {
+        self.checkOrderLoop = setInterval(function () {
             $.ajax({
                 url: wc_ezdefi_data.ajax_url,
                 method: 'post',
