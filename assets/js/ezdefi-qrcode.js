@@ -124,44 +124,41 @@ jQuery(function($) {
         var index = self.$tabs.tabs( "option", "active" );
         var active = self.$tabs.find(selectors.panel + ':eq('+index+')');
         var method = active.attr('id');
-        self.$currencySelect.hide();
-        self.$tabs.hide();
-        self.$submitBtn.prop('disabled', true).text('Loading...');
-        $.blockUI({message: null});
-        var paymentid = self.$tabs.find('#amount_id .ezdefi-payment').attr('data-paymentid');
-        self.setAmountIdValid.call(self, paymentid).done(function() {
-            $.ajax({
-                url: wc_ezdefi_data.ajax_url,
-                method: 'post',
-                data: {
-                    action: 'wc_ezdefi_create_payment',
-                    uoid: self.paymentData.uoid,
-                    symbol: symbol,
-                    method: method
-                },
-                beforeSend: function() {
-                    $.each(self.xhrPool, function(index, jqXHR) {
-                        jqXHR.abort();
-                    });
-                },
-                success:function(response) {
-                    self.$tabs.find(selectors.panel).empty();
-                    if(response.success) {
-                        active.html($(response.data));
-                    } else {
-                        active.html(response.data);
-                    }
-                    var endTime = active.find('.count-down').attr('data-endtime');
-                    self.setTimeRemaining.call(self, endTime);
-                    $.unblockUI();
-                    self.$tabs.show();
-                    self.$submitBtn.prop('disabled', false).text('Confirm').hide();
-                    self.checkOrderStatus.call(self);
-                },
-                error: function(e) {
-                    console.log(e);
+        $.ajax({
+            url: wc_ezdefi_data.ajax_url,
+            method: 'post',
+            data: {
+                action: 'wc_ezdefi_create_payment',
+                uoid: self.paymentData.uoid,
+                symbol: symbol,
+                method: method
+            },
+            beforeSend: function() {
+                self.$currencySelect.hide();
+                self.$tabs.hide();
+                self.$submitBtn.prop('disabled', true).text('Loading...');
+                $.blockUI({message: null});
+                $.each(self.xhrPool, function(index, jqXHR) {
+                    jqXHR.abort();
+                });
+            },
+            success:function(response) {
+                self.$tabs.find(selectors.panel).empty();
+                if(response.success) {
+                    active.html($(response.data));
+                } else {
+                    active.html(response.data);
                 }
-            });
+                var endTime = active.find('.count-down').attr('data-endtime');
+                self.setTimeRemaining.call(self, endTime);
+                $.unblockUI();
+                self.$tabs.show();
+                self.$submitBtn.prop('disabled', false).text('Confirm').hide();
+                self.checkOrderStatus.call(self);
+            },
+            error: function(e) {
+                console.log(e);
+            }
         });
     };
 
