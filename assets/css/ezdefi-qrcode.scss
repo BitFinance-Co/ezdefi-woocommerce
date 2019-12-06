@@ -174,14 +174,10 @@
           text-decoration: none;
 
           &#tab-ezdefi_wallet {
-            display: flex;
-            align-items: center;
-
-            img {
-              float: left;
-              margin-right: 6px;
-              height: 18px;
-            }
+            background-size: 18px 18px;
+            background-position: 18px center;
+            background-repeat: no-repeat;
+            padding-left: 44px;
           }
         }
       }

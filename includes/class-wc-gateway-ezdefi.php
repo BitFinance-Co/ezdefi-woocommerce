@@ -707,13 +707,13 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                     <ul>
                         <?php
                             foreach( $this->payment_method as $key => $value ) {
-                                echo '<li><a href="#'.$key.'" id="tab-'.$key.'">';
+                                echo '<li>';
                                 switch ($key) {
                                     case 'amount_id' :
-                                        echo '<span>' . __( 'Simple method', 'woocommerce-gateway-ezdefi' ) . '</span>';
+                                        echo '<a href="#'.$key.'" id="tab-'.$key.'"><span>' . __( 'Simple method', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
                                         break;
                                     case 'ezdefi_wallet' :
-                                        echo '<img width="18" src="'.plugins_url( 'assets/images/ezdefi-icon.png', WC_EZDEFI_MAIN_FILE ).'"> <span> ' . __( 'Pay with ezDeFi wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a></li>';
+                                        echo '<a href="#'.$key.'" id="tab-'.$key.'" style="background-image: url('.plugins_url( 'assets/images/ezdefi-icon.png', WC_EZDEFI_MAIN_FILE ).')"><span> ' . __( 'Pay with ezDeFi wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
                                         break;
                                 }
                                 echo '</a></li>';
