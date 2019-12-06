@@ -320,7 +320,7 @@ class WC_Ezdefi_Ajax
 			    </p>
 			    <?php if( $payment['amountId'] === true ) : ?>
                     <p>
-                        <strong><?php _e( 'Pay Manually', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['chain']['name'] . ' ' . $payment['chain']['symbol']; ?><br/>
+                        <strong><?php _e( 'Pay Manually', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['token']['name'] . ' ' . $payment['token']['symbol']; ?><br/>
                         <strong><?php _e( 'Address', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['to']; ?><br/>
                         <strong><?php _e( 'Amount', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['originValue']; ?><br/>
                     </p>
