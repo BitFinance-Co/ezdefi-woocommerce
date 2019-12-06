@@ -105,18 +105,14 @@ class WC_Ezdefi {
 			CREATE EVENT IF NOT EXISTS `wc_ezdefi_clear_amount_table`
 			ON SCHEDULE EVERY 3 DAY
 			DO
-			BEGIN
 				DELETE FROM $table_name;
-			END
 		" );
 
 		$wpdb->query( "
 			CREATE EVENT IF NOT EXISTS `wc_ezdefi_clear_exception_table`
 			ON SCHEDULE EVERY 7 DAY
 			DO
-			BEGIN
 				DELETE FROM $exception_table_name;
-			END
 		" );
 	}
 
