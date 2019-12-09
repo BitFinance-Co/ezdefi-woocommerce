@@ -13,8 +13,6 @@ jQuery(function($) {
     var wc_ezdefi_assign = function() {
         this.$table = $(selectors.table);
         this.$select = this.$table.find(selectors.select);
-        this.$amountIdInput = this.$table.find(selectors.amountIdInput);
-        this.$currencyInput = this.$table.find(selectors.currencyInput);
 
         var init = this.init.bind(this);
         var onAssign = this.onAssign.bind(this);
@@ -77,17 +75,24 @@ jQuery(function($) {
 
     wc_ezdefi_assign.prototype.onAssign = function(e) {
         e.preventDefault();
+        var self = this;
         var row = $(e.target).closest('tr');
-        var order_id = this.$select.val();
-        var amount_id = this.$amountIdInput.val();
-        var currency = this.$currencyInput.val();
+        var order_id = row.find(selectors.select).val();
+        var amount_id = row.find(selectors.amountIdInput).val();
+        var currency = row.find(selectors.currencyInput).val();
         var data = {
             action: 'wc_ezdefi_assign_amount_id',
             order_id: order_id,
             amount_id: amount_id,
             currency: currency
         };
-        this.callAjax.call(this, data, row);
+        this.callAjax.call(this, data).success(function() {
+            self.$table.unblock();
+            self.$table.find('tr select').each(function() {
+                $(this).find('option[value="' + order_id + '"]').remove();
+            });
+            row.remove();
+        });
     };
 
     wc_ezdefi_assign.prototype.onRemove = function(e) {
@@ -95,29 +100,29 @@ jQuery(function($) {
         if(!confirm('Do you want to delete this amount ID')) {
             return false;
         }
+        var self = this;
         var row = $(e.target).closest('tr');
-        var amount_id = this.$amountIdInput.val();
-        var currency = this.$currencyInput.val();
+        var amount_id = row.find(selectors.amountIdInput).val();
+        var currency = row.find(selectors.currencyInput).val();
         var data = {
             action: 'wc_ezdefi_delete_amount_id',
             amount_id: amount_id,
             currency: currency
         };
-        this.callAjax.call(this, data, row);
+        this.callAjax.call(this, data).success(function() {
+            self.$table.unblock();
+            row.remove();
+        });
     };
 
-    wc_ezdefi_assign.prototype.callAjax = function(data, row) {
+    wc_ezdefi_assign.prototype.callAjax = function(data) {
         var self = this;
-        $.ajax({
+        return $.ajax({
             url: wc_ezdefi_data.ajax_url,
             method: 'post',
             data: data,
             beforeSend: function() {
                 self.$table.block({message: 'Waiting...'});
-            },
-            success:function(response) {
-                self.$table.unblock();
-                row.remove();
             },
             error: function(e) {
                 self.$table.block({message: 'Something wrong happend.'});

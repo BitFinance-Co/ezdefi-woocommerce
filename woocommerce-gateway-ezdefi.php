@@ -75,7 +75,7 @@ class WC_Ezdefi {
 		$wpdb->query("DROP PROCEDURE IF EXISTS `wc_ezdefi_generate_amount_id`" );
 		$wpdb->query("
 	        CREATE PROCEDURE `wc_ezdefi_generate_amount_id`(
-	            IN value DECIMAl(12,10),
+	            IN value DECIMAl(18,10),
 			    IN token VARCHAR(10),
 			    IN decimal_number INT(2),
 			    IN life_time INT(11),
