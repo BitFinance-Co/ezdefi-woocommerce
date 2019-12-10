@@ -248,6 +248,20 @@
     span.currency {
       text-transform: uppercase;
     }
+
+    .app-link-list {
+      a {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 20px;
+          margin-right: 5px;
+        }
+      }
+    }
   }
 
   button.submitBtn {

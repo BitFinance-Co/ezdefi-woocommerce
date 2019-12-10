@@ -328,9 +328,9 @@ class WC_Ezdefi_Ajax
 					    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'edd-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
                     </p>
 			    <?php else : ?>
-				    <p>
-					    <a href=""><?php echo __( 'Download ezDeFi for IOS', 'woocommerce-gateway-ezdefi' ); ?></a><br />
-					    <a href=""><?php echo __( 'Download ezDeFi for Android', 'woocommerce-gateway-ezdefi' ); ?></a>
+				    <p class="app-link-list">
+					    <a href=""><img src="<?php echo plugins_url( 'assets/images/android-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /><?php _e( 'Download ezDefi for IOS', 'edd-ezdefi' ); ?></a>
+					    <a href=""><img src="<?php echo plugins_url( 'assets/images/ios-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /><?php _e( 'Download ezDefi for Android', 'edd-ezdefi' ); ?></a>
 				    </p>
 			    <?php endif; ?>
 		    <?php endif; ?>

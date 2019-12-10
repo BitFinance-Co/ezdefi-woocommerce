@@ -206,6 +206,16 @@
 #wc_ezdefi_qrcode .ezdefi-payment span.currency {
   text-transform: uppercase;
 }
+#wc_ezdefi_qrcode .ezdefi-payment .app-link-list a {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .app-link-list a img {
+  width: 20px;
+  margin-right: 5px;
+}
 #wc_ezdefi_qrcode button.submitBtn {
   margin-bottom: 20px;
 }
