@@ -764,7 +764,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 
 		$payment = $payment['data'];
 
-		$status = strtolower( $payment['status'] );
+		$status = $payment['status'];
 
 		$amount_id = $payment['value'] / pow( 10, $payment['decimal'] );
 

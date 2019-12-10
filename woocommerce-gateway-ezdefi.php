@@ -84,19 +84,22 @@ class WC_Ezdefi {
 			BEGIN
 			    DECLARE unique_id INT(11) DEFAULT 0;
 			    IF EXISTS (SELECT 1 FROM $table_name WHERE `currency` = token AND `price` = value) THEN
-			        SELECT MIN(t1.amount_key+1) INTO unique_id FROM $table_name t1 LEFT JOIN $table_name t2 ON t1.amount_key + 1 = t2.amount_key AND t2.price = value AND t2.currency = token AND t2.expired_time > NOW() WHERE t2.amount_key IS NULL;
-			        IF((unique_id % 2) = 0) THEN
-			            SET amount_id = value + ((unique_id / 2) / POW(10, decimal_number));
+			        IF EXISTS (SELECT 1 FROM `wp_woocommerce_ezdefi_amount` WHERE `currency` = token AND `price` = value AND `amount_key` = 0 AND `expired_time` > NOW() THEN
+				        SELECT MIN(t1.amount_key+1) INTO unique_id FROM $table_name t1 LEFT JOIN $table_name t2 ON t1.amount_key + 1 = t2.amount_key AND t2.price = value AND t2.currency = token AND t2.expired_time > NOW() WHERE t2.amount_key IS NULL;
+				        IF((unique_id % 2) = 0) THEN
+				            SET amount_id = value + ((unique_id / 2) / POW(10, decimal_number));
+				        ELSE
+				            SET amount_id = value - ((unique_id - (unique_id DIV 2)) / POW(10, decimal_number));
+				        END IF;
 			        ELSE
-			            SET amount_id = value - ((unique_id - (unique_id DIV 2)) / POW(10, decimal_number));
-			        END IF;
+			            SET amount_id = value;
+			        ENDIF;
 			    ELSE
 			        SET amount_id = value;
 			    END IF;
 			    INSERT INTO $table_name (amount_key, price, amount_id, currency, expired_time) 
 			        VALUES (unique_id, value, amount_id, token, NOW() + INTERVAL life_time SECOND)
                     ON DUPLICATE KEY UPDATE `expired_time` = NOW() + INTERVAL life_time SECOND;
-                INSERT INTO $exception_table_name (amount_id, currency) VALUES (amount_id, token);
 			END
 		" );
 
