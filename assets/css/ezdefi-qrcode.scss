@@ -217,9 +217,32 @@
       font-weight: bold;
     }
 
-    img.qrcode {
-      display: block;
-      margin: 0 auto;
+    .qrcode {
+      display: inline-block;
+
+      img {
+        display: block;
+        margin: 0 auto;
+      }
+
+      .blockUI::before {
+        display: none;
+      }
+
+      .blockMsg {
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .amount {
+      text-transform: uppercase;
+    }
+
+    .note {
+      color: #f73f2e;
+      font-weight: bold;
     }
 
     span.currency {

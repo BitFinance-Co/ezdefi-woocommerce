@@ -518,6 +518,18 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    );
     }
 
+    public function get_icon() {
+        $icon_html = '<div id="wc-ezdefi-icon">';
+	    foreach( $this->currency as $i => $c ) {
+	        if($i < 3) {
+		        $icon_html .= '<img src="' . $c['logo'] . '" />';
+	        }
+        }
+        $icon_html .= '</div>';
+
+	    return apply_filters( 'woocommerce_gateway_icon', $icon_html, $this->id );
+    }
+
 	/**
 	 * Add payment field on checkout page
 	 */

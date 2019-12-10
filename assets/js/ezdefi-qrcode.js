@@ -76,7 +76,7 @@ jQuery(function($) {
                 $.each(self.xhrPool, function(index, jqXHR) {
                     jqXHR.abort();
                 });
-                $.blockUI({message: null});
+                self.$container.block({message: null});
             },
             success:function(response) {
                 if(response.success) {
@@ -86,7 +86,7 @@ jQuery(function($) {
                 }
                 var endTime = panel.find('.count-down').attr('data-endtime');
                 self.setTimeRemaining.call(self, endTime);
-                $.unblockUI();
+                self.$container.unblock();
                 self.checkOrderStatus.call(self);
             },
             error: function(e) {
@@ -139,7 +139,7 @@ jQuery(function($) {
                 self.$currencySelect.hide();
                 self.$tabs.hide();
                 self.$submitBtn.prop('disabled', true).text('Loading...');
-                $.blockUI({message: null});
+                self.$container.block({message: null});
                 clearInterval(self.checkOrderLoop);
                 $.each(self.xhrPool, function(index, jqXHR) {
                     jqXHR.abort();
@@ -154,7 +154,7 @@ jQuery(function($) {
                 }
                 var endTime = active.find('.count-down').attr('data-endtime');
                 self.setTimeRemaining.call(self, endTime);
-                $.unblockUI();
+                self.$container.unblock();
                 self.$tabs.show();
                 self.$submitBtn.prop('disabled', false).text('Confirm').hide();
                 self.checkOrderStatus.call(self);
@@ -173,27 +173,28 @@ jQuery(function($) {
 
     wc_ezdefi_qrcode.prototype.checkOrderStatus = function() {
         var self = this;
-        self.checkOrderLoop = setInterval(function () {
-            $.ajax({
-                url: wc_ezdefi_data.ajax_url,
-                method: 'post',
-                data: {
-                    action: 'wc_ezdefi_check_order_status',
-                    order_id: self.paymentData.uoid
-                },
-                beforeSend: function(jqXHR) {
-                    self.xhrPool.push(jqXHR);
-                },
-                success: function (response) {
-                    if (response == 'completed') {
-                        $.each(self.xhrPool, function(index, jqXHR) {
-                            jqXHR.abort();
-                        });
-                        self.success();
-                    }
-                }
-            });
-        }, 600);
+
+        // self.checkOrderLoop = setInterval(function () {
+        //     $.ajax({
+        //         url: wc_ezdefi_data.ajax_url,
+        //         method: 'post',
+        //         data: {
+        //             action: 'wc_ezdefi_check_order_status',
+        //             order_id: self.paymentData.uoid
+        //         },
+        //         beforeSend: function(jqXHR) {
+        //             self.xhrPool.push(jqXHR);
+        //         },
+        //         success: function (response) {
+        //             if (response == 'completed') {
+        //                 $.each(self.xhrPool, function(index, jqXHR) {
+        //                     jqXHR.abort();
+        //                 });
+        //                 self.success();
+        //             }
+        //         }
+        //     });
+        // }, 600);
     };
 
     wc_ezdefi_qrcode.prototype.setTimeRemaining = function(endTime) {
@@ -229,21 +230,21 @@ jQuery(function($) {
 
     wc_ezdefi_qrcode.prototype.timeout = function() {
         var self = this;
-
-        var $content = $(
-            "<p>Timeout. You will be redirect to checkout page in 3 seconds. If it does not, click " +
-            "<a href='" + wc_ezdefi_data.checkout_url + "'>here</a>" +
-            "</p>"
-        );
-
-        self.$container.empty();
-        self.$container.append($content);
-
-        $.each(self.xhrPool, function(index, jqXHR) {
-            jqXHR.abort();
+        var panel = self.$tabs.find('div.ui-tabs-panel[aria-hidden="false"]');
+        panel.find('.qrcode').block({
+            message: 'Expired',
+            cursor: 'default',
+            css: {
+                border: 'none',
+                background: 'none',
+                color: '#f73f2e',
+                fontWeight: 'bold'
+            },
+            overlayCSS:  {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+            },
         });
-
-        window.location = wc_ezdefi_data.checkout_url;
     };
 
     new wc_ezdefi_qrcode();

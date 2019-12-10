@@ -314,17 +314,16 @@ class WC_Ezdefi_Ajax
 			    </p>
 			    <p><?php echo __( 'You have', 'woocommerce-gateway-ezdefi' ); ?> <span class="count-down" data-endtime="<?php echo $payment['expiredTime']; ?>"></span> <?php echo __( 'to scan this QR Code', 'woocommerce-gateway-ezdefi' ); ?></p>
 			    <p>
-				    <a href="<?php echo $payment['deepLink']; ?>">
-					    <img class="qrcode" src="<?php echo $payment['qr']; ?>" />
+				    <a class="qrcode" href="<?php echo $payment['deepLink']; ?>">
+                        <img src="<?php echo $payment['qr']; ?>" />
 				    </a>
 			    </p>
 			    <?php if( $payment['amountId'] === true ) : ?>
                     <p>
-                        <strong><?php _e( 'Pay Manually', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['token']['name'] . ' ' . $payment['token']['symbol']; ?><br/>
                         <strong><?php _e( 'Address', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['to']; ?><br/>
-                        <strong><?php _e( 'Amount', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['originValue']; ?><br/>
+                        <strong><?php _e( 'Amount', 'edd-ezdefi' ); ?>:</strong> <span class="amount"><?php echo $payment['originValue'] . ' ' . $payment['token']['symbol'] ?></span><br/>
                     </p>
-                    <p>
+                    <p class="note">
 					    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'edd-ezdefi' ); ?><br/>
 					    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'edd-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
                     </p>

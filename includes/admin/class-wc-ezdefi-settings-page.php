@@ -84,7 +84,7 @@ class WC_Ezdefi_Settings_Page
                     <th>#</th>
 					<th><?php _e( 'Received Amount', 'woocommerce-gateway-ezdefi' ); ?></th>
                     <th><?php _e( 'Currency', 'woocommerce-gateway-ezdefi' ); ?></th>
-					<th><?php _e( 'Received At', 'woocommerce-gateway-ezdefi' ); ?></th>
+					<th><?php _e( 'Order Created At', 'woocommerce-gateway-ezdefi' ); ?></th>
 					<th><?php _e( 'Assign To', 'woocommerce-gateway-ezdefi' ); ?></th>
 					<th></th>
 				</thead>

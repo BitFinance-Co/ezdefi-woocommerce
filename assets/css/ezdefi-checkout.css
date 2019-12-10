@@ -1,3 +1,13 @@
+#wc-ezdefi-icon {
+  float: right;
+  margin-top: 3px;
+}
+#wc-ezdefi-icon img {
+  float: none;
+  width: 18px;
+  margin-left: 2px;
+}
+
 #wc-ezdefi-checkout #wc-ezdefi-currency-select {
   font-size: 100% !important;
 }
