@@ -27,9 +27,6 @@ class WC_Ezdefi_Ajax
         add_action( 'wp_ajax_wc_ezdefi_get_currency', array( $this, 'wc_ezdefi_get_currency_ajax_callback' ) );
         add_action( 'wp_ajax_nopriv_wc_ezdefi_get_currency', array( $this, 'wc_ezdefi_get_currency_ajax_callback' ) );
 
-        add_action( 'wp_ajax_wc_ezdefi_check_wallet', array( $this, 'wc_ezdefi_check_wallet_ajax_callback' ) );
-        add_action( 'wp_ajax_nopriv_wc_ezdefi_check_wallet', array( $this, 'wc_ezdefi_check_wallet_ajax_callback' ) );
-
 	    add_action( 'wp_ajax_wc_ezdefi_get_payment', array( $this, 'wc_ezdefi_get_payment_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_get_payment', array( $this, 'wc_ezdefi_get_payment_ajax_callback' ) );
 
@@ -67,51 +64,6 @@ class WC_Ezdefi_Ajax
         $currency = $response['data'];
 
         wp_send_json_success( $currency );
-    }
-
-    /**
-     * Check wallet address ajax callback
-     */
-    public function wc_ezdefi_check_wallet_ajax_callback()
-    {
-	    if( ! isset( $_POST['address'] ) || ! isset( $_POST['api_url'] ) || ! isset( $_POST['api_key'] ) ) {
-		    wp_die( 'false' );
-	    }
-
-	    $address = $_POST['address'];
-        $api_url = $_POST['api_url'];
-        $api_key = $_POST['api_key'];
-	    $currency_chain = strtolower( $_POST['currency_chain'] );
-
-        $api = new WC_Ezdefi_Api( $api_url, $api_key );
-
-	    $response = $api->get_list_wallet();
-
-	    if( is_wp_error( $response ) ) {
-		    wp_die( 'false' );
-	    }
-
-        $response = json_decode( $response['body'], true );
-
-        $list_wallet = $response['data'];
-
-	    $key = array_search( strtolower( $address ), array_column( $list_wallet, 'address' ) );
-
-	    if( $key === false ) {
-		    wp_die( 'false' );
-	    }
-
-	    $wallet = $list_wallet[$key];
-
-	    $status = strtolower( $wallet['status'] );
-
-	    $wallet_type = strtolower( $wallet['walletType'] );
-
-	    if( $status === 'active' && $wallet_type === $currency_chain ) {
-		    wp_die( 'true' );
-	    } else {
-		    wp_die( 'false' );
-	    }
     }
 
 	/**
@@ -306,6 +258,7 @@ class WC_Ezdefi_Ajax
 		    <?php if( ! $payment ) : ?>
 			    <span><?php echo __( 'Can not get payment', 'woocommerce-gateway-ezdefi' ); ?></span>
 		    <?php else : ?>
+                <?php echo $payment['_id']; ?>
 			    <?php $value = $payment['value'] / pow( 10, $payment['decimal'] ); ?>
 			    <p class="exchange">
 				    <span><?php echo $order->get_currency(); ?> <?php echo $total; ?></span>
@@ -318,7 +271,7 @@ class WC_Ezdefi_Ajax
                         <img src="<?php echo $payment['qr']; ?>" />
 				    </a>
 			    </p>
-			    <?php if( $payment['amountId'] === true ) : ?>
+			    <?php if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) : ?>
                     <p>
                         <strong><?php _e( 'Address', 'edd-ezdefi' ); ?>:</strong> <?php echo $payment['to']; ?><br/>
                         <strong><?php _e( 'Amount', 'edd-ezdefi' ); ?>:</strong> <span class="amount"><?php echo $payment['originValue'] . ' ' . $payment['token']['symbol'] ?></span><br/>

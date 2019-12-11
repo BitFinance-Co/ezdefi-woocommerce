@@ -57,8 +57,8 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
     protected function set_general_property()
     {
 	    $this->id = 'ezdefi';
-	    $this->method_title = __( 'Ezdefi', 'woocommerce-gateway-ezdefi' );
-	    $this->method_description = __( 'Payment Without Middleman', 'woocommerce-gateway-ezdefi' );
+	    $this->method_title = __( 'ezDeFi', 'woocommerce-gateway-ezdefi' );
+	    $this->method_description = __( 'Using BTC, ETH or any kinds of cryptocurrency. Handle by ezDeFi', 'woocommerce-gateway-ezdefi' );
 	    $this->has_fields = true;
     }
 
@@ -239,7 +239,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                             <th scope="col" class="logo"></th>
                             <th scope="col" class="name"><?php echo __( 'Name', 'woocommerce-gateway-ezdefi' ); ?></th>
                             <th scope="col" class="discount"><?php echo __( 'Discount', 'woocommerce-gateway-ezdefi' ); ?></th>
-                            <th scope="col" class="lifetime"><?php echo __( 'Payment Lifetime', 'woocommerce-gateway-ezdefi' ); ?></th>
+                            <th scope="col" class="lifetime"><?php echo __( 'Expiration (seconds)', 'woocommerce-gateway-ezdefi' ); ?></th>
                             <th scope="col" class="wallet"><?php echo __( 'Wallet Address', 'woocommerce-gateway-ezdefi' ); ?></th>
                             <th scope="col" class="block-confirm"><?php echo __( 'Block Confirmation', 'woocommerce-gateway-ezdefi' ); ?></th>
                             <th scope="col" class="decimal"><?php echo __( 'Decimal', 'woocommerce-gateway-ezdefi' ); ?></th>
@@ -293,7 +293,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                             <?php echo isset( $c['lifetime'] ) ? $c['lifetime'] . 's' : '' ;?>
                                         </div>
                                         <div class="edit">
-                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? $c['lifetime'] : '' ;?>"><span> s</span>
+                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? $c['lifetime'] : '' ;?>"><span> seconds</span>
                                         </div>
                                     </td>
                                     <td class="wallet">
@@ -785,9 +785,9 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		if( $status === 'DONE' ) {
 			$order->update_status( 'completed' );
 			$woocommerce->cart->empty_cart();
-			$this->db->delete_amount_id_exception( $amount_id, $currency );
+//			$this->db->delete_amount_id_exception( $amount_id, $currency );
 		} elseif( $status === 'EXPIRED_DONE' ) {
-			$this->db->add_uoid_to_exception( $amount_id, $currency, $order_id );
+//			$this->db->add_uoid_to_exception( $amount_id, $currency, $order_id );
         }
 
 		wp_die();

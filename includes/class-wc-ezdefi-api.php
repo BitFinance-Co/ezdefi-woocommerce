@@ -160,7 +160,7 @@ class WC_Ezdefi_Api
 	        'ucid' => rand(2, 100),
 		    'duration' => ( isset( $currency_data['lifetime'] ) ) ? $currency_data['lifetime'] : '',
 //		    'callback' => home_url() . '/?wc-api=ezdefi',
-	        'callback' => 'http://f97fbea7.ngrok.io/?wc-api=ezdefi',
+	        'callback' => 'http://36b52192.ngrok.io/?wc-api=ezdefi',
 	    ];
 
 	    if( $amountId ) {

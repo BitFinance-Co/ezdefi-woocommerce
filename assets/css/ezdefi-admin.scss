@@ -127,6 +127,8 @@ form {
           }
 
           &.name {
+            min-width: 200px;
+
             .view {
               span {
                 text-transform: capitalize;

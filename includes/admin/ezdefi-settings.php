@@ -23,7 +23,7 @@ return apply_filters(
         ),
         'description' => array(
 	        'title' => __( 'Description', 'woocommerce-gateway-ezdefi' ),
-	        'type' => 'textarea',
+	        'type' => 'text',
 	        'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce-gateway-stripe' ),
 	        'default' => __( 'Pay with ezDeFi', 'woocommerce-gateway-stripe' ),
 	        'desc_tip' => true,
@@ -32,6 +32,7 @@ return apply_filters(
             'title' => __( 'Gateway API Url', 'woocommerce-gateway-ezdefi' ),
             'type' => 'text',
             'description' => __( 'Description' ),
+            'default' => 'https://merchant-api.ezdefi.com/v1/',
             'desc_tip' => true,
         ),
         'api_key' => array(

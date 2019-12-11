@@ -28,7 +28,6 @@ jQuery(function($) {
         var addCurrency = this.addCurrency.bind(this);
         var removeCurrency = this.removeCurrency.bind(this);
         var toggleEdit = this.toggleEdit.bind(this);
-        var checkWalletAddress = this.checkWalletAddress.bind(this);
         var toggleAmountSetting = this.toggleAmountSetting.bind(this);
         var onChangeDecimal = this.onChangeDecimal.bind(this);
         var onBlurDecimal = this.onBlurDecimal.bind(this);
@@ -40,7 +39,6 @@ jQuery(function($) {
             .on('click', selectors.cancelBtn, toggleEdit)
             .on('click', selectors.addBtn, addCurrency)
             .on('click', selectors.deleteBtn, removeCurrency)
-            .on('keyup', selectors.walletInput, checkWalletAddress)
             .on('change', selectors.amountIdCheckbox, toggleAmountSetting)
             .on('focus', selectors.decimalInput, onChangeDecimal)
             .on('blur', selectors.decimalInput, onBlurDecimal);
@@ -208,69 +206,6 @@ jQuery(function($) {
                 $(this).hide();
             });
         }
-    };
-
-    wc_ezdefi_admin.prototype.checkWalletAddress = function(e) {
-        var self = this;
-        var api_url = self.$form.find('#woocommerce_ezdefi_api_url').val();
-        var api_key = self.$form.find('#woocommerce_ezdefi_api_key').val();
-        var $input = $(e.target);
-        var $row = $(e.target).closest('tr');
-        var currency_chain = $row.find('.currency-chain').val();
-        var $checking = $(
-            "<div class='checking'><span class='text'>Checking wallet address</span>" +
-            "<div class='dots'>" +
-            "<div class='dot'></div>" +
-            "<div class='dot'></div>" +
-            "<div class='dot'></div>" +
-            "</div>" +
-            "</div>"
-        );
-        $input.rules('add', {
-            remote: {
-                depends: function(element) {
-                    return api_url !== '' && api_key !== '' && currency_chain !== '';
-                },
-                param: {
-                    url: wc_ezdefi_data.ajax_url,
-                    type: 'POST',
-                    data: {
-                        action: 'wc_ezdefi_check_wallet',
-                        address: function () {
-                            return $input.val();
-                        },
-                        api_url: function() {
-                            return api_url;
-                        },
-                        api_key: function() {
-                            return api_key;
-                        },
-                        currency_chain: function() {
-                            return currency_chain;
-                        }
-                    },
-                    beforeSend: function() {
-                        $input.closest('td').find('.error').hide();
-                        $input.closest('.edit').append($checking);
-                    },
-                    complete: function (data) {
-                        var response = data.responseText;
-                        var $inputWrapper = $input.closest('td');
-                        if (response === 'true') {
-                            $inputWrapper.find('.checking').empty().append('<span class="correct">Correct</span>');
-                            window.setTimeout(function () {
-                                $inputWrapper.find('.checking').remove();
-                            }, 1000);
-                        } else {
-                            $inputWrapper.find('.checking').remove();
-                        }
-                    }
-                }
-            },
-            messages: {
-                remote: "This address is not active. Please check again in <a href='http://163.172.170.35/profile/info'>your profile</a>."
-            }
-        });
     };
 
     wc_ezdefi_admin.prototype.initCurrencySelect = function(element) {

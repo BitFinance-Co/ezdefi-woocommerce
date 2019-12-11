@@ -85,6 +85,9 @@ form #wc-ezdefi-currency-settings-table tbody tr td.logo img {
   display: block;
   width: 32px;
 }
+form #wc-ezdefi-currency-settings-table tbody tr td.name {
+  min-width: 200px;
+}
 form #wc-ezdefi-currency-settings-table tbody tr td.name .view span {
   text-transform: capitalize;
 }
