@@ -282,7 +282,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     </td>
                                     <td class="discount">
                                         <div class="view">
-                                            <?php echo isset( $c['discount'] ) ? $c['discount'] . '%' : '' ;?>
+                                            <?php echo ( isset( $c['discount'] ) && ! empty( $c['discount'] ) ) ? $c['discount'] : '0' ;?>%
                                         </div>
                                         <div class="edit">
                                             <input type="number" name="<?php echo $field_key . '[' . $index . '][discount]'; ?>" value="<?php echo isset( $c['discount'] ) ? $c['discount'] : 0 ;?>"><span> %</span>

@@ -17,6 +17,9 @@ form tr#amount_clear_next_run .custom input[type=radio] {
 form tr#amount_clear_next_run .custom span {
   margin-right: 4px;
 }
+form input#woocommerce_ezdefi_acceptable_variation {
+  width: 80px;
+}
 form #wc-ezdefi-currency-settings-table {
   display: block;
   overflow-x: auto;

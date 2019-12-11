@@ -183,6 +183,31 @@
 }
 #wc_ezdefi_qrcode .ezdefi-payment .qrcode {
   display: inline-block;
+  position: relative;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .qrcode.expired:before {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.6);
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .qrcode.expired:after {
+  content: "Expired";
+  color: #f73f2e;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .qrcode.expired img {
+  opacity: 0.5;
 }
 #wc_ezdefi_qrcode .ezdefi-payment .qrcode img {
   display: block;

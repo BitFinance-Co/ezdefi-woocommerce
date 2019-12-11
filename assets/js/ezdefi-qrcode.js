@@ -206,10 +206,11 @@ jQuery(function($) {
 
             if(t.total < 0) {
                 clearInterval(self.timeLoop);
+                countDown.text('0:0');
                 self.timeout();
+            } else {
+                countDown.text(t.minutes + ':' + t.seconds);
             }
-
-            countDown.text(t.minutes + ':' + t.seconds);
         }, 1000);
     };
 
@@ -231,20 +232,7 @@ jQuery(function($) {
     wc_ezdefi_qrcode.prototype.timeout = function() {
         var self = this;
         var panel = self.$tabs.find('div.ui-tabs-panel[aria-hidden="false"]');
-        panel.find('.qrcode').block({
-            message: 'Expired',
-            cursor: 'default',
-            css: {
-                border: 'none',
-                background: 'none',
-                color: '#f73f2e',
-                fontWeight: 'bold'
-            },
-            overlayCSS:  {
-                backgroundColor: '#fff',
-                opacity: 0.8,
-            },
-        });
+        panel.find('.qrcode').addClass('expired');
     };
 
     new wc_ezdefi_qrcode();

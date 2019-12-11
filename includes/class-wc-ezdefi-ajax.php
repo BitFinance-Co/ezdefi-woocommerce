@@ -267,7 +267,7 @@ class WC_Ezdefi_Ajax
 			    </p>
 			    <p><?php echo __( 'You have', 'woocommerce-gateway-ezdefi' ); ?> <span class="count-down" data-endtime="<?php echo $payment['expiredTime']; ?>"></span> <?php echo __( 'to scan this QR Code', 'woocommerce-gateway-ezdefi' ); ?></p>
 			    <p>
-				    <a class="qrcode" href="<?php echo $payment['deepLink']; ?>">
+				    <a class="qrcode <?php echo (time() > strtotime($payment['expiredTime'])) ? 'expired' : ''; ?>" href="<?php echo $payment['deepLink']; ?>">
                         <img src="<?php echo $payment['qr']; ?>" />
 				    </a>
 			    </p>

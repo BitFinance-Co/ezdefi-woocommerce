@@ -27,6 +27,10 @@ form {
     }
   }
 
+  input#woocommerce_ezdefi_acceptable_variation {
+    width: 80px;
+  }
+
   #wc-ezdefi-currency-settings-table {
     display: block;
     overflow-x: auto;

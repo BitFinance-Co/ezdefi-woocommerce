@@ -50,9 +50,9 @@ return apply_filters(
         'acceptable_variation' => array(
 	        'title' => __( 'Acceptable price variation', 'woocommerce-gateway-ezdefi' ),
 	        'type' => 'number',
-	        'description' => __( 'Description' ),
-	        'desc_tip' => true,
-	        'default' => 0.01
+	        'description' => __( 'Allowable amount variation (%)' ),
+	        'default' => 0.01,
+	        'placeholder' => '0.01%'
         ),
         'currency' => array(
             'title' => __( 'Accepted Currency', 'woocommerce-gateway-ezdefi' ),
