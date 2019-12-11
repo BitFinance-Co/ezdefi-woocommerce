@@ -84,7 +84,7 @@ class WC_Ezdefi {
 			BEGIN
 			    DECLARE unique_id INT(11) DEFAULT 0;
 			    IF EXISTS (SELECT 1 FROM $table_name WHERE `currency` = token AND `price` = value) THEN
-			        IF EXISTS (SELECT 1 FROM `wp_woocommerce_ezdefi_amount` WHERE `currency` = token AND `price` = value AND `amount_key` = 0 AND `expired_time` > NOW() THEN
+			        IF EXISTS (SELECT 1 FROM $table_name WHERE `currency` = token AND `price` = value AND `amount_key` = 0 AND `expired_time` > NOW()) THEN
 				        SELECT MIN(t1.amount_key+1) INTO unique_id FROM $table_name t1 LEFT JOIN $table_name t2 ON t1.amount_key + 1 = t2.amount_key AND t2.price = value AND t2.currency = token AND t2.expired_time > NOW() WHERE t2.amount_key IS NULL;
 				        IF((unique_id % 2) = 0) THEN
 				            SET amount_id = value + ((unique_id / 2) / POW(10, decimal_number));
@@ -93,7 +93,7 @@ class WC_Ezdefi {
 				        END IF;
 			        ELSE
 			            SET amount_id = value;
-			        ENDIF;
+			        END IF;
 			    ELSE
 			        SET amount_id = value;
 			    END IF;
