@@ -506,6 +506,8 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 
 	    wp_register_style( 'wc_ezdefi_checkout', plugins_url( 'assets/css/ezdefi-checkout.css', WC_EZDEFI_MAIN_FILE ), array(), WC_EZDEFI_VERSION );
 	    wp_enqueue_style( 'wc_ezdefi_checkout' );
+	    wp_register_script( 'wc_ezdefi_checkout', plugins_url( 'assets/js/ezdefi-checkout.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION );
+	    wp_enqueue_script( 'wc_ezdefi_checkout' );
 
 	    wp_register_script( 'wc_ezdefi_blockui', plugins_url( 'assets/js/jquery.blockUI.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION );
 	    wp_register_style( 'wc_ezdefi_qrcode', plugins_url( 'assets/css/ezdefi-qrcode.css', WC_EZDEFI_MAIN_FILE ), array(), WC_EZDEFI_VERSION );
@@ -537,32 +539,16 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         $description = $this->get_description();
 
         ob_start(); ?>
-        <div id="wc-ezdefi-checkout">
-            <?php echo wpautop( wp_kses_post( $description ) ); ?>
-            <fieldset id="wc-ezdefi-currency-select" class="wc-payment-form">
-                <?php foreach( $this->currency as $c ) : ?>
-                    <div class="form-row form-row-wide">
-                        <div class="wc-ezdefi-currency">
-                        <input required type="radio" name="wc_ezdefi_currency" id="<?php echo $c['symbol']; ?>" value="<?php echo $c['symbol']; ?>">
-                        <label for="<?php echo $c['symbol']; ?>">
-                            <div class="left">
-                                <img class="logo" src="<?php echo $c['logo']; ?>" alt="">
-                                <span class="symbol"><?php echo $c['symbol']; ?></span>
-                            </div>
-                            <div class="right">
-                                <span class="name"><?php echo $c['name']; ?></span>
-                                <span class="discount"><?php echo __( 'Discount', 'woocommerce-gateway-ezdefi' ); ?>: <?php echo ( intval($c['discount']) > 0) ? $c['discount'] : 0; ?>%</span>
-                                <span class="more">
-                                    <?php if( isset($c['desc']) && $c['desc'] != '') : ?>
-                                        <span class="tooltip"><?php echo $c['desc']; ?></span>
-                                    <?php endif; ?>
-                                </span>
-                            </div>
-                        </label>
-                    </div>
-                    </div>
-                <?php endforeach; ?>
-            </fieldset>
+        <div id="wc-wzdefi-checkout">
+            <?php
+                $cart = WC()->cart;
+                $total = $cart->get_totals()['total'];
+                $currency = get_woocommerce_currency();
+
+                echo wpautop( wp_kses_post( $description ) );
+                echo $this->currency_select_html( $total, $currency  );
+            ?>
+            <input type="hidden" name="wc_ezdefi_currency" id="wc_ezdefi_currency">
         </div>
 	    <?php echo ob_get_clean();
     }
@@ -679,43 +665,9 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         ob_start();?>
             <div id="wc_ezdefi_qrcode">
                 <script type="application/json" id="payment-data"><?php echo json_encode( $payment_data ); ?></script>
-                <div class="selected-currency">
-                    <div class="left">
-                        <div class="logo">
-                            <img class="logo" src="<?php echo $selected_currency['logo']; ?>" alt="">
-                        </div>
-                        <div class="text">
-                            <span class="symbol"><?php echo $selected_currency['symbol']; ?></span>/<span class="name"><?php echo $selected_currency['name']; ?></span><br/>
-                            <span class="desc"><?php echo $selected_currency['desc']; ?></span>
-                        </div>
-                    </div>
-                    <div>
-                        <a href="" class="changeBtn"><?php _e( 'Change', 'woocommerce-gateway-ezdefi' ); ?></a>
-                    </div>
-                </div>
-                <div class="currency-select">
-	                <?php foreach( $this->currency as $c ) : ?>
-                        <div class="currency-item">
-                            <input <?php echo ($c['symbol'] === $selected_currency['symbol']) ? 'checked' : ''; ?> type="radio" name="currency" id="<?php echo $c['symbol']; ?>">
-                            <label for="<?php echo $c['symbol']; ?>">
-                                <div class="left">
-                                    <img class="logo" src="<?php echo $c['logo']; ?>" alt="">
-                                    <span class="symbol"><?php echo $c['symbol']; ?></span>
-                                </div>
-                                <div class="right">
-                                    <span class="name"><?php echo $c['name']; ?></span>
-                                    <span class="discount"><?php echo __( 'Discount', 'woocommerce-gateway-ezdefi' ); ?>: <?php echo ( intval($c['discount']) > 0) ? $c['discount'] : 0; ?>%</span>
-                                    <span class="more">
-                                    <?php if( isset($c['desc']) && $c['desc'] != '') : ?>
-                                        <span class="tooltip desc"><?php echo $c['desc']; ?></span>
-                                    <?php endif; ?>
-                                </span>
-                                </div>
-                            </label>
-                        </div>
-		            <?php endforeach; ?>
-                </div>
-                <div class="ezdefi-payment-tabs">
+                <?php echo $this->currency_select_html( $order->get_total(), $order->get_currency(), $selected_currency ); ?>
+                <div class="wc-ezdefi-loader"></div>
+                <div class="ezdefi-payment-tabs" style="display: none">
                     <ul>
                         <?php
                             foreach( $this->payment_method as $key => $value ) {
@@ -736,9 +688,51 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                         <div id="<?php echo $key;?>" class="ezdefi-payment-panel"></div>
 	                <?php endforeach; ?>
                 </div>
-                <button class="submitBtn" style="display: none"><?php _e( 'Confirm', 'woocommerce-gateway-ezdefi' ); ?></button>
             </div>
         <?php echo ob_get_clean();
+    }
+
+    public function currency_select_html( $total, $currency, $selected_currency = array() )
+    {
+        ob_start(); ?>
+        <div class="currency-select">
+		    <?php
+		    $to = implode(',', array_map(function ( $currency ) {
+			    return $currency['symbol'];
+		    }, $this->currency ) );
+		    $exchanges = $this->api->get_token_exchanges(
+			    $total,
+			    $currency,
+			    $to
+		    );
+		    ?>
+		    <?php foreach( $this->currency as $c ) : ?>
+                <div class="currency-item__wrap">
+                    <div class="currency-item <?php echo ( ! empty( $selected_currency['symbol'] ) && $c['symbol'] === $selected_currency['symbol'] ) ? 'selected' : ''; ?>" data-symbol="<?php echo $c['symbol']; ?>" >
+                        <div class="item__logo">
+                            <img src="<?php echo $c['logo']; ?>" alt="">
+                        </div>
+                        <div class="item__text">
+                            <div class="item__price">
+							    <?php
+							    $index = array_search( $c['symbol'], array_column( $exchanges, 'token' ) );
+							    echo round( $exchanges[$index]['amount'], 8 );
+							    ?>
+                            </div>
+                            <div class="item__info">
+                                <div class="item__symbol">
+								    <?php echo $c['symbol']; ?>
+                                </div>
+                                <div class="item__discount">
+                                    - <?php echo ( intval($c['discount']) > 0) ? $c['discount'] : 0; ?>%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+		    <?php endforeach; ?>
+        </div>
+        <?php return ob_get_clean();
     }
 
 	/**
