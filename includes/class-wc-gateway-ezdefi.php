@@ -301,7 +301,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                             <?php echo isset( $c['wallet'] ) ? $c['wallet'] : '' ;?>
                                         </div>
                                         <div class="edit">
-                                            <input type="text" class="currency-wallet" name="<?php echo $field_key . '[' . $index . '][wallet]'; ?>" value="<?php echo isset( $c['wallet'] ) ? $c['wallet'] : '' ;?>">
+                                            <input type="text" class="currency-wallet" placeholder="Wallet Address" name="<?php echo $field_key . '[' . $index . '][wallet]'; ?>" value="<?php echo isset( $c['wallet'] ) ? $c['wallet'] : '' ;?>">
                                         </div>
                                     </td>
                                     <td class="block_confirm">
@@ -371,7 +371,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     <div class="view">
                                     </div>
                                     <div class="edit">
-                                        <input type="text" class="currency-wallet" name="<?php echo $field_key . '[0][wallet]'; ?>" value="">
+                                        <input type="text" class="currency-wallet" placeholder="Wallet Address" name="<?php echo $field_key . '[0][wallet]'; ?>" value="">
                                     </div>
                                 </td>
                                 <td class="block_confirm">
@@ -437,7 +437,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     <div class="view">
                                     </div>
                                     <div class="edit">
-                                        <input type="text" class="currency-wallet" name="<?php echo $field_key . '[1][wallet]'; ?>" value="">
+                                        <input type="text" class="currency-wallet" placeholder="Wallet Address" name="<?php echo $field_key . '[1][wallet]'; ?>" value="">
                                     </div>
                                 </td>
                                 <td class="block_confirm">

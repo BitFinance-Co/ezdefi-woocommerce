@@ -142,6 +142,7 @@ jQuery(function($) {
 
             if(name.indexOf('discount') > 0) {
                 $('input[name="'+name+'"]').rules('add', {
+                    min: 0,
                     max: 100
                 });
             }
@@ -361,7 +362,9 @@ jQuery(function($) {
         var input = $(e.target);
         if(input.val().length > 0) {
             var td = $(e.target).closest('td');
-            td.find('.edit').append('<span class="error">Changing decimal can cause to payment interruption</span>');
+            if(td.find('span.error').length === 0) {
+                td.find('.edit').append('<span class="error">Changing decimal can cause to payment interruption</span>');
+            }
         }
     };
 
