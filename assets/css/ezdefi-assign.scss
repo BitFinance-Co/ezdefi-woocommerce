@@ -1,14 +1,53 @@
 #wc-ezdefi-order-assign {
   tbody {
     tr {
+      &.spinner-row {
+        text-align: center;
+
+        .spinner {
+          float: none;
+        }
+      }
       td {
-        vertical-align: middle;
-        &.order-select {
-          width: 30%;
+        span.symbol {
+          text-transform: uppercase;
+        }
+
+        &.order-column {
+          .saved-order, .select-order {
+            margin-bottom: 8px;
+          }
         }
       }
     }
   }
+}
+
+#wc-ezdefi-exception-table-filter {
+  margin-bottom: 6px;
+
+  .filter-container {
+    display:flex;
+    flex-wrap: wrap;
+
+    .filter-rows {
+      width: 50%;
+      display: flex;
+      align-items: center;
+
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+
+      label {
+        width: 110px;
+      }
+    }
+  }
+}
+
+.select2-search {
+  display: none;
 }
 
 .select2-order {

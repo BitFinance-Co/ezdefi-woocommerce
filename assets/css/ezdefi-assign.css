@@ -1,8 +1,37 @@
-#wc-ezdefi-order-assign tbody tr td {
-  vertical-align: middle;
+#wc-ezdefi-order-assign tbody tr.spinner-row {
+  text-align: center;
 }
-#wc-ezdefi-order-assign tbody tr td.order-select {
-  width: 30%;
+#wc-ezdefi-order-assign tbody tr.spinner-row .spinner {
+  float: none;
+}
+#wc-ezdefi-order-assign tbody tr td span.symbol {
+  text-transform: uppercase;
+}
+#wc-ezdefi-order-assign tbody tr td.order-column .saved-order, #wc-ezdefi-order-assign tbody tr td.order-column .select-order {
+  margin-bottom: 8px;
+}
+
+#wc-ezdefi-exception-table-filter {
+  margin-bottom: 6px;
+}
+#wc-ezdefi-exception-table-filter .filter-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+#wc-ezdefi-exception-table-filter .filter-container .filter-rows {
+  width: 50%;
+  display: flex;
+  align-items: center;
+}
+#wc-ezdefi-exception-table-filter .filter-container .filter-rows:not(:last-child) {
+  margin-bottom: 10px;
+}
+#wc-ezdefi-exception-table-filter .filter-container .filter-rows label {
+  width: 110px;
+}
+
+.select2-search {
+  display: none;
 }
 
 .select2-order .select2-order__row {

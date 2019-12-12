@@ -36,8 +36,17 @@ class WC_Ezdefi_Ajax
 	    add_action( 'wp_ajax_wc_ezdefi_check_order_status', array( $this, 'wc_ezdefi_check_order_status_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_check_order_status', array( $this, 'wc_ezdefi_check_order_status_ajax_callback' ) );
 
+	    add_action( 'wp_ajax_wc_ezdefi_get_order', array( $this, 'wc_ezdefi_get_order_ajax_callback' ) );
+	    add_action( 'wp_ajax_nopriv_wc_ezdefi_get_order', array( $this, 'wc_ezdefi_get_order_ajax_callback' ) );
+
+	    add_action( 'wp_ajax_wc_ezdefi_get_exception', array( $this, 'wc_ezdefi_get_exception_ajax_callback' ) );
+	    add_action( 'wp_ajax_nopriv_wc_ezdefi_get_exception', array( $this, 'wc_ezdefi_get_exception_ajax_callback' ) );
+
 	    add_action( 'wp_ajax_wc_ezdefi_assign_amount_id', array( $this, 'wc_ezdefi_assign_amount_id_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_assign_amount_id', array( $this, 'wc_ezdefi_assign_amount_id_ajax_callback' ) );
+
+	    add_action( 'wp_ajax_wc_ezdefi_reverse_order', array( $this, 'wc_ezdefi_reverse_order_ajax_callback' ) );
+	    add_action( 'wp_ajax_nopriv_wc_ezdefi_reverse_order', array( $this, 'wc_ezdefi_reverse_order_ajax_callback' ) );
 
 	    add_action( 'wp_ajax_wc_ezdefi_delete_amount_id', array( $this, 'wc_ezdefi_delete_amount_id_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_delete_amount_id', array( $this, 'wc_ezdefi_delete_amount_id_ajax_callback' ) );
@@ -224,6 +233,16 @@ class WC_Ezdefi_Ajax
 
 	    $payment = $response['data'];
 
+	    $data = array(
+            'amount_id' => $payment['value'] / pow( 10, $payment['decimal'] ),
+            'currency' => $symbol,
+            'order_id' => substr( $payment['uoid'], 0, strpos( $payment['uoid'],'-' ) ),
+            'status' => 'not_paid',
+            'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet'
+        );
+
+	    $this->db->add_exception( $data );
+
 	    $html = $this->generate_payment_html( $payment, $order );
 
 	    if( $clear_meta_data ) {
@@ -303,6 +322,58 @@ class WC_Ezdefi_Ajax
     	wp_die( $status );
     }
 
+    public function wc_ezdefi_get_exception_ajax_callback()
+    {
+        $offset = 0;
+
+        $per_page = 15;
+
+        if( isset( $_POST['page'] ) && $_POST['page'] > 1 ) {
+            $offset = $per_page * ( $_POST['page'] - 1 );
+        }
+
+        $data = $this->db->get_exception( $_POST, $offset, $per_page );
+
+        $total = $this->db->get_exception_total()[0]->total;
+        $total_pages = ceil($total / $per_page );
+
+        $response = array(
+            'data' => $data,
+            'meta_data' => array(
+                'current_page' => ( isset( $_POST['page'] ) ) ? (int) $_POST['page'] : 1 ,
+                'total' => (int) $total,
+                'total_pages' => $total_pages
+            )
+        );
+
+        wp_send_json_success( $response );
+    }
+
+    public function wc_ezdefi_get_order_ajax_callback()
+    {
+        $args = array(
+            'status' => 'on-hold'
+        );
+
+	    $orders = wc_get_orders( $args );
+
+	    $data = array();
+
+	    foreach ($orders as $order) {
+		    $data[] = array(
+			    'id' => $order->get_order_number(),
+			    'total' => $order->get_total(),
+			    'currency' => $order->get_currency(),
+			    'billing_email' => $order->get_billing_email(),
+			    'amount_id' => $order->get_meta( 'ezdefi_amount_id' ),
+			    'token' => $order->get_meta( 'ezdefi_currency' ),
+			    'date_created' => $order->get_date_created()->format ('Y-m-d H:i:s')
+		    );
+	    }
+
+        wp_send_json_success( $data );
+    }
+
     public function wc_ezdefi_assign_amount_id_ajax_callback()
     {
         if( ! isset( $_POST['amount_id'] ) || ! isset( $_POST['order_id'] ) || ! isset( $_POST['currency'] ) ) {
@@ -321,20 +392,47 @@ class WC_Ezdefi_Ajax
 		    wp_send_json_error();
 	    }
 
-        $this->db->delete_amount_id_exception( $amount_id, $currency );
+        $this->db->delete_amount_id_exception( $amount_id, $currency, $order_id );
 
 	    $order->update_status( 'completed' );
 
 	    wp_send_json_success();
     }
 
+	public function wc_ezdefi_reverse_order_ajax_callback()
+	{
+		if( ! isset( $_POST['amount_id'] ) || ! isset( $_POST['order_id'] ) || ! isset( $_POST['currency'] ) ) {
+			wp_send_json_error();
+		}
+
+		$amount_id = $_POST['amount_id'];
+
+		$currency = $_POST['currency'];
+
+		$order_id = $_POST['order_id'];
+
+		$order = wc_get_order( $order_id );
+
+		if( ! $order ) {
+			wp_send_json_error();
+		}
+
+		$this->db->delete_amount_id_exception( $amount_id, $currency, $order_id );
+
+		$order->update_status( 'on-hold' );
+
+		wp_send_json_success();
+	}
+
     public function wc_ezdefi_delete_amount_id_ajax_callback()
     {
 	    $amount_id = $_POST['amount_id'];
 
+	    $order_id = $_POST['order_id'];
+
 	    $currency = $_POST['currency'];
 
-	    $this->db->delete_amount_id_exception( $amount_id, $currency );
+	    $this->db->delete_amount_id_exception( $amount_id, $currency, $order_id );
     }
 }
 

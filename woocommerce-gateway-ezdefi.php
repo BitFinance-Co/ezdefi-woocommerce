@@ -63,8 +63,9 @@ class WC_Ezdefi {
 			id int(11) NOT NULL AUTO_INCREMENT,
 			amount_id decimal(18,10) NOT NULL,
 			currency varchar(10) NOT NULL,
-			order_id int(11) NULL,
-			created_at timestamp default current_timestamp,
+			order_id int(11) NOT NULL,
+			status varchar(20) DEFAULT 'not_paid',
+			payment_method varchar(100)	 NOT NULL,
 			PRIMARY KEY (id)
 		) $charset_collate;";
 
@@ -128,7 +129,7 @@ class WC_Ezdefi {
 		require_once dirname( __FILE__ ) . '/includes/class-wc-ezdefi-api.php';
 		require_once dirname( __FILE__ ) . '/includes/class-wc-ezdefi-ajax.php';
 		require_once dirname( __FILE__ ) . '/includes/admin/class-wc-ezdefi-admin-notices.php';
-		require_once dirname( __FILE__ ) . '/includes/admin/class-wc-ezdefi-settings-page.php';
+		require_once dirname( __FILE__ ) . '/includes/admin/class-wc-ezdefi-exception-page.php';
 		require_once dirname( __FILE__ ) . '/includes/class-wc-gateway-ezdefi.php';
 	}
 

@@ -782,12 +782,16 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 
 		$currency = $payment['currency'];
 
+		if( ! isset ( $payment['amount_id'] ) ) {
+			$amount_id = round( $amount_id, 10 );
+        }
+
 		if( $status === 'DONE' ) {
 			$order->update_status( 'completed' );
 			$woocommerce->cart->empty_cart();
-//			$this->db->delete_amount_id_exception( $amount_id, $currency );
+			$this->db->update_exception_status( $amount_id, $currency, $order_id, strtolower($status) );
 		} elseif( $status === 'EXPIRED_DONE' ) {
-//			$this->db->add_uoid_to_exception( $amount_id, $currency, $order_id );
+		    $this->db->update_exception_status( $amount_id, $currency, $order_id, strtolower($status) );
         }
 
 		wp_die();

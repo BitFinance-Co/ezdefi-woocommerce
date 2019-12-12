@@ -152,28 +152,85 @@ class WC_Ezdefi_Db
 		return $wpdb->prefix . 'woocommerce_ezdefi_amount';
 	}
 
-	public function delete_amount_id_exception($amount_id, $currency)
+	public function delete_amount_id_exception($amount_id, $currency, $order_id)
 	{
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
 
-		$wpdb->delete( $table_name, array( 'amount_id' => $amount_id, 'currency' => $currency ) );
+		$wpdb->delete( $table_name, array( 'amount_id' => $amount_id, 'currency' => $currency, 'order_id' => $order_id ) );
 	}
 
-	public function add_uoid_to_exception($amount_id, $currency, $uoid)
+	public function add_exception( $data )
 	{
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+		extract( $data );
 
-		$wpdb->update(
-			$table_name,
-			array( 'order_id' => $uoid ),
-			array(
-				'amount_id' => $amount_id,
-				'currency' => $currency
-			)
+		$exception_table = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+		$query = "INSERT INTO $exception_table (amount_id, currency, order_id, status, payment_method) VALUES ($amount_id, '$currency', $order_id, '$status', '$payment_method')";
+
+		return $wpdb->query($query);
+	}
+
+	public function get_exception( $params = array(), $offset = 0, $per_page = 15 )
+	{
+		global $wpdb;
+
+		$exception_table = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+		$meta_table = $wpdb->prefix . 'postmeta';
+
+		$default = array(
+			'amount_id' => '',
+			'currency' => '',
+			'order_id' => '',
+			'email' => '',
+			'payment_method' => '',
+			'status' => ''
 		);
+
+		$params = array_merge( $default, $params );
+
+		$query = "SELECT t1.*, t2.billing_email FROM $exception_table t1 INNER JOIN ( SELECT post_id as order_id, meta_value as billing_email FROM $meta_table WHERE `meta_key` = '_billing_email' ) t2 ON t1.order_id = t2.order_id";
+
+		$sql = array();
+
+		foreach( $params as $column => $param ) {
+			if( ! empty( $param ) && in_array( $column, array_keys( $default ) ) ) {
+				$sql[] = " $column = '$param' ";
+			}
+		}
+
+		if( ! empty( $sql ) ) {
+			$query .= ' WHERE ' . implode( $sql, 'AND' );
+		}
+
+		$query .= " ORDER BY id DESC LIMIT $offset, $per_page";
+
+		return $wpdb->get_results( $query );
+	}
+
+	public function get_exception_total()
+	{
+		global $wpdb;
+
+		$exception_table = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+		$query = "SELECT COUNT(*) as total FROM $exception_table";
+
+		return $wpdb->get_results( $query );
+	}
+
+	public function update_exception_status( $amount_id, $currency, $order_id, $status = 'not_paid' )
+	{
+		global $wpdb;
+
+		$exception_table = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+		$query = "UPDATE $exception_table SET status = '$status' WHERE amount_id = $amount_id AND currency = '$currency' AND order_id = $order_id";
+
+		return $wpdb->query( $query );
 	}
 }
