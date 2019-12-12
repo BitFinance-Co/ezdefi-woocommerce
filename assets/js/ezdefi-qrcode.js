@@ -44,14 +44,16 @@ jQuery(function($) {
             activate: function(event, ui) {
                 if(!ui.newPanel || ui.newPanel.is(':empty')) {
                     var method = ui.newPanel.attr('id');
+                    console.log(method);
                     self.getEzdefiPayment.call(self, method, ui.newPanel);
                 }
             }
         });
 
-        var index = self.$tabs.tabs('option', 'active');
-        var active = self.$tabs.find(selectors.panel + ':eq('+index+')');
+        var active = self.$tabs.find('div.ui-tabs-panel[aria-hidden="false"]');
         var method = active.attr('id');
+
+        console.log(method);
 
         self.getEzdefiPayment.call(self, method, active);
     };
@@ -84,8 +86,7 @@ jQuery(function($) {
                 } else {
                     panel.html(response.data);
                 }
-                var endTime = panel.find('.count-down').attr('data-endtime');
-                self.setTimeRemaining.call(self, endTime);
+                self.setTimeRemaining.call(self, panel);
                 self.$container.unblock();
                 self.checkOrderStatus.call(self);
             },
@@ -152,8 +153,7 @@ jQuery(function($) {
                 } else {
                     active.html(response.data);
                 }
-                var endTime = active.find('.count-down').attr('data-endtime');
-                self.setTimeRemaining.call(self, endTime);
+                self.setTimeRemaining.call(self, active);
                 self.$container.unblock();
                 self.$tabs.show();
                 self.$submitBtn.prop('disabled', false).text('Confirm').hide();
@@ -197,17 +197,17 @@ jQuery(function($) {
         }, 600);
     };
 
-    wc_ezdefi_qrcode.prototype.setTimeRemaining = function(endTime) {
+    wc_ezdefi_qrcode.prototype.setTimeRemaining = function(panel) {
         var self = this;
-        clearInterval(self.timeLoop);
-        self.timeLoop = setInterval(function() {
+        var timeLoop = setInterval(function() {
+            var endTime = panel.find('.count-down').attr('data-endtime');
             var t = self.getTimeRemaining(endTime);
-            var countDown = self.$container.find(selectors.ezdefiPayment).find('.count-down');
+            var countDown = panel.find(selectors.ezdefiPayment).find('.count-down');
 
             if(t.total < 0) {
-                clearInterval(self.timeLoop);
+                clearInterval(timeLoop);
                 countDown.text('0:0');
-                self.timeout();
+                self.timeout(panel);
             } else {
                 countDown.text(t.minutes + ':' + t.seconds);
             }
@@ -229,9 +229,7 @@ jQuery(function($) {
         location.reload(true)
     };
 
-    wc_ezdefi_qrcode.prototype.timeout = function() {
-        var self = this;
-        var panel = self.$tabs.find('div.ui-tabs-panel[aria-hidden="false"]');
+    wc_ezdefi_qrcode.prototype.timeout = function(panel) {
         panel.find('.qrcode').addClass('expired');
     };
 
