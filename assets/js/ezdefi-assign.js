@@ -146,9 +146,18 @@ jQuery(function($) {
             return false;
         }
 
+        var current_page = parseInt(this.$nav.find('.tablenav-paging-text .number').text());
+        var page;
+
+        if(button.is('.prev-page')) {
+            page = current_page - 1;
+        } else {
+            page = current_page + 1;
+        }
+
         var data = {
             'action': 'wc_ezdefi_get_exception',
-            'page': parseInt(this.$nav.find('.tablenav-paging-text .number').text()) + 1
+            'page': page
         };
 
         this.getException.call(this, data);
