@@ -35,7 +35,7 @@ class WC_Ezdefi {
 	/**
 	 * Run when activate plugin
 	 */
-	public function activate()
+	public static function activate()
 	{
 		global $wpdb;
 
@@ -49,8 +49,8 @@ class WC_Ezdefi {
 		$sql[] = "CREATE TABLE $table_name (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			amount_key int(11) NOT NULL,
-			price decimal(18,10) NOT NULL,
-			amount_id decimal(18,10) NOT NULL,
+			price decimal(20,12) NOT NULL,
+			amount_id decimal(20,12) NOT NULL,
 			currency varchar(10) NOT NULL,
 			expired_time timestamp default current_timestamp,
 			PRIMARY KEY (id),
@@ -61,7 +61,7 @@ class WC_Ezdefi {
 
 		$sql[] = "CREATE TABLE $exception_table_name (
 			id int(11) NOT NULL AUTO_INCREMENT,
-			amount_id decimal(18,10) NOT NULL,
+			amount_id decimal(20,12) NOT NULL,
 			currency varchar(10) NOT NULL,
 			order_id int(11) NOT NULL,
 			status varchar(20) DEFAULT 'not_paid',
@@ -76,11 +76,11 @@ class WC_Ezdefi {
 		$wpdb->query("DROP PROCEDURE IF EXISTS `wc_ezdefi_generate_amount_id`" );
 		$wpdb->query("
 	        CREATE PROCEDURE `wc_ezdefi_generate_amount_id`(
-	            IN value DECIMAl(18,10),
+	            IN value DECIMAl(20,12),
 			    IN token VARCHAR(10),
 			    IN decimal_number INT(2),
 			    IN life_time INT(11),
-			    OUT amount_id DECIMAL(18,10)
+			    OUT amount_id DECIMAL(20,12)
 			)
 			BEGIN
 			    DECLARE unique_id INT(11) DEFAULT 0;

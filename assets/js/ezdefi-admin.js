@@ -201,9 +201,10 @@ jQuery(function($) {
                 $input.rules('add', {
                     required: true,
                     min: 2,
+                    max: 12,
                     messages: {
                         required: 'Please enter number of decimal',
-                        min: 'Please enter number equal or greater than 2'
+                        min: 'Please enter number equal or greater than 2',
                     }
                 });
             }
