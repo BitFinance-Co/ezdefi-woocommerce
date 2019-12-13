@@ -547,7 +547,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                 $currency = get_woocommerce_currency();
 
                 echo wpautop( wp_kses_post( $description ) );
-                echo $this->currency_select_html( $total, $currency  );
+                echo $this->currency_select_html( $total, $currency );
             ?>
             <input type="hidden" name="wc_ezdefi_currency" id="wc_ezdefi_currency">
         </div>
@@ -717,7 +717,9 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                             <div class="item__price">
 							    <?php
 							    $index = array_search( $c['symbol'], array_column( $exchanges, 'token' ) );
-							    echo round( $exchanges[$index]['amount'], 8 );
+							    $amount = $exchanges[$index]['amount'];
+							    $amount = $amount - ( $amount * ( $c['discount'] / 100 ) );
+							    echo round( $amount, 8 );
 							    ?>
                             </div>
                             <div class="item__info">
@@ -778,7 +780,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		$currency = $payment['currency'];
 
 		if( ! isset ( $payment['amount_id'] ) ) {
-			$amount_id = round( $amount_id, 10 );
+			$amount_id = round( $amount_id, 12 );
         }
 
 		if( $status === 'DONE' ) {
