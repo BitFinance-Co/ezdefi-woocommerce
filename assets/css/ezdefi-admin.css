@@ -23,6 +23,7 @@ form input#woocommerce_ezdefi_acceptable_variation {
 form #wc-ezdefi-currency-settings-table {
   display: block;
   overflow-x: auto;
+  margin-bottom: 4px;
 }
 form #wc-ezdefi-currency-settings-table thead th {
   padding: 15px 10px;

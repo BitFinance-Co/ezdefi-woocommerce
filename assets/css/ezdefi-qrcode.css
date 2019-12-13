@@ -27,7 +27,7 @@
   }
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item {
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.125);
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -37,7 +37,7 @@
   cursor: pointer;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item:hover, #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item.selected {
-  border-color: #333;
+  border-color: #c3e6cb;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__logo {
   margin-right: 10px;
@@ -67,7 +67,7 @@
   margin: 0;
   padding: 0;
   text-align: left;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 #wc_ezdefi_qrcode .ezdefi-payment-tabs ul li {
   display: inline-block;
@@ -75,7 +75,7 @@
   margin-left: 0 !important;
 }
 #wc_ezdefi_qrcode .ezdefi-payment-tabs ul li.ui-tabs-active a {
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.125);
   border-bottom-color: transparent;
 }
 #wc_ezdefi_qrcode .ezdefi-payment-tabs ul li a {
@@ -92,7 +92,7 @@
 }
 #wc_ezdefi_qrcode .ezdefi-payment-tabs .ezdefi-payment-panel {
   padding: 10px 20px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.125);
   border-top: none;
 }
 #wc_ezdefi_qrcode .ezdefi-payment {

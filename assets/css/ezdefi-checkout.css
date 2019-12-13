@@ -19,7 +19,7 @@
   margin-bottom: 10px;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item {
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.125);
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -29,7 +29,7 @@
   cursor: pointer;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item:hover, #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item.selected {
-  border-color: #333;
+  border-color: #c3e6cb;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__logo {
   margin-right: 10px;

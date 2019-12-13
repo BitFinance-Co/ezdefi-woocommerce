@@ -108,6 +108,14 @@ jQuery(function($) {
                             return ! self.$form.find(selectors.amountIdCheckbox).is(':checked');
                         }
                     }
+                },
+                'wc_ezdefi_has_currency': {
+                    min: 1
+                }
+            },
+            messages: {
+                'wc_ezdefi_has_currency': {
+                    min: 'Please select accepted currency'
                 }
             }
         });
@@ -171,6 +179,13 @@ jQuery(function($) {
                     messages: {
                         required: 'Please enter wallet address'
                     }
+                });
+            }
+
+            if(name.indexOf('lifetime') > 0) {
+                var $input = $('input[name="'+name+'"]');
+                $input.rules('add', {
+                    min: 0
                 });
             }
 
@@ -247,6 +262,19 @@ jQuery(function($) {
             return currency.text;
         }
 
+        var excludes = [];
+
+        $(selectors.currencyTable).find('tbody tr').each(function() {
+            var symbol = $(this).find(selectors.symbolInput).val();
+            if(symbol && symbol.length > 0) {
+                excludes.push(symbol);
+            }
+        });
+
+        if(excludes.includes(currency.symbol)) {
+            return;
+        }
+
         var $container = $(
             "<div class='select2-currency'>" +
             "<div class='select2-currency__icon'><img src='" + currency.logo + "' /></div>" +
@@ -276,7 +304,7 @@ jQuery(function($) {
 
     wc_ezdefi_admin.prototype.addCurrency = function(e) {
         e.preventDefault();
-
+        $('input#wc_ezdefi_has_currency').val(1);
         var $row = this.$table.find('tbody tr:last');
         var $clone = $row.clone();
         var count = this.$table.find('tbody tr').length;
@@ -285,9 +313,15 @@ jQuery(function($) {
 
         $clone.find('select, .select2-container').remove();
         $clone.find('.logo img').attr('src', '');
-        $clone.find('.name .view span').remove();
+        $clone.find('.name .view span').empty();
         $clone.find('.name .edit').prepend($select);
-        $clone.find('input').val('');
+        $clone.find('input').each(function() {
+            $(this).val('');
+            var td = $(this).closest('td');
+            if(!td.hasClass('name')) {
+                td.find('.view').empty();
+            }
+        });
         $clone.find('td').each(function() {
             $(this).removeClass('form-invalid');
             $(this).find('.error').remove();
@@ -323,6 +357,9 @@ jQuery(function($) {
                 var number = rowIndex - 1;
                 self.updateAttr(row, number);
             });
+            if( $(e.target).closest('tbody').find('tr').length === 0 ) {
+                $('input#wc_ezdefi_has_currency').val(0);
+            }
         }
         return false;
     };

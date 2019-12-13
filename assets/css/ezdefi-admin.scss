@@ -34,6 +34,7 @@ form {
   #wc-ezdefi-currency-settings-table {
     display: block;
     overflow-x: auto;
+    margin-bottom: 4px;
     thead {
       th {
         padding: 15px 10px;
@@ -62,14 +63,6 @@ form {
         &.name {
           min-width: 120px;
         }
-
-        //&.discount, &.lifetime, &.block-confirm {
-        //  width: 100px;
-        //}
-        //
-        //&.wallet {
-        //  width: 180px;
-        //}
       }
     }
 

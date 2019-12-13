@@ -230,6 +230,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                 <label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
             </th>
             <td class="forminp">
+                <input type="hidden" id="wc_ezdefi_has_currency" name="wc_ezdefi_has_currency" value="1">
                 <table id="wc-ezdefi-currency-settings-table" class="widefat striped">
                     <thead>
                         <tr>
