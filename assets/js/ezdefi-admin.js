@@ -108,14 +108,6 @@ jQuery(function($) {
                             return ! self.$form.find(selectors.amountIdCheckbox).is(':checked');
                         }
                     }
-                },
-                'wc_ezdefi_has_currency': {
-                    min: 1
-                }
-            },
-            messages: {
-                'wc_ezdefi_has_currency': {
-                    min: 'Please select accepted currency'
                 }
             }
         });
@@ -305,7 +297,6 @@ jQuery(function($) {
 
     wc_ezdefi_admin.prototype.addCurrency = function(e) {
         e.preventDefault();
-        $('input#wc_ezdefi_has_currency').val(1);
         var $row = this.$table.find('tbody tr:last');
         var $clone = $row.clone();
         var count = this.$table.find('tbody tr').length;
@@ -341,6 +332,11 @@ jQuery(function($) {
 
         var self = this;
 
+        if(self.$table.find('tbody tr').length === 1) {
+            alert('You must select at least 1 accepted currency');
+            return false;
+        }
+
         if(confirm('Do you want to delete this row')) {
             $(e.target).closest('tr').remove();
             self.$table.find('tr').each(function (rowIndex) {
@@ -358,9 +354,6 @@ jQuery(function($) {
                 var number = rowIndex - 1;
                 self.updateAttr(row, number);
             });
-            if( $(e.target).closest('tbody').find('tr').length === 0 ) {
-                $('input#wc_ezdefi_has_currency').val(0);
-            }
         }
         return false;
     };
