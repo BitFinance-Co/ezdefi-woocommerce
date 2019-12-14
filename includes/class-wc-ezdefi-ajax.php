@@ -238,7 +238,7 @@ class WC_Ezdefi_Ajax
             'currency' => $symbol,
             'order_id' => substr( $payment['uoid'], 0, strpos( $payment['uoid'],'-' ) ),
             'status' => 'not_paid',
-            'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet'
+            'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet',
         );
 
 	    $this->db->add_exception( $data );

@@ -13,6 +13,12 @@
           text-transform: uppercase;
         }
 
+        &.amount-id-column {
+          .explorer-url {
+            display: block;
+          }
+        }
+
         &.order-column {
           .saved-order, .select-order {
             margin-bottom: 8px;

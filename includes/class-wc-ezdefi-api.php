@@ -160,7 +160,7 @@ class WC_Ezdefi_Api
 	        'ucid' => rand(2, 100),
 		    'duration' => ( isset( $currency_data['lifetime'] ) ) ? $currency_data['lifetime'] : '',
 //		    'callback' => home_url() . '/?wc-api=ezdefi',
-	        'callback' => 'http://7ae80340.ngrok.io/?wc-api=ezdefi',
+	        'callback' => 'http://96273913.ngrok.io/?wc-api=ezdefi',
 	    ];
 
 	    if( $amountId ) {
@@ -308,6 +308,15 @@ class WC_Ezdefi_Api
 	{
 		$response = $this->call( 'token/list', 'get', array(
 			'keyword' => $keyword
+		) );
+
+		return $response;
+	}
+
+	public function get_transaction( $id )
+	{
+		$response = $this->call( 'transaction/get', 'get', array(
+			'id' => $id
 		) );
 
 		return $response;

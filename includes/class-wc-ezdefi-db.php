@@ -165,11 +165,17 @@ class WC_Ezdefi_Db
 	{
 		global $wpdb;
 
-		extract( $data );
+		$keys = array();
+		$values = array();
+
+		foreach ( $data as $key => $value ) {
+			$keys[] = "$key";
+			$values[] = "'$value'";
+		}
 
 		$exception_table = $wpdb->prefix . 'woocommerce_ezdefi_exception';
 
-		$query = "INSERT INTO $exception_table (amount_id, currency, order_id, status, payment_method) VALUES ($amount_id, '$currency', $order_id, '$status', '$payment_method')";
+		$query = "INSERT INTO $exception_table (" . implode( ',', $keys ) . ") VALUES (" . implode( ',', $values ) . ")";
 
 		return $wpdb->query($query);
 	}
@@ -193,7 +199,7 @@ class WC_Ezdefi_Db
 
 		$params = array_merge( $default, $params );
 
-		$query = "SELECT t1.*, t2.billing_email FROM $exception_table t1 INNER JOIN ( SELECT post_id as order_id, meta_value as billing_email FROM $meta_table WHERE `meta_key` = '_billing_email' ) t2 ON t1.order_id = t2.order_id";
+		$query = "SELECT t1.*, t2.billing_email FROM $exception_table t1 LEFT JOIN ( SELECT post_id as order_id, meta_value as billing_email FROM $meta_table WHERE `meta_key` = '_billing_email' ) t2 ON t1.order_id = t2.order_id";
 
 		$sql = array();
 
@@ -223,13 +229,50 @@ class WC_Ezdefi_Db
 		return $wpdb->get_results( $query );
 	}
 
-	public function update_exception_status( $amount_id, $currency, $order_id, $status = 'not_paid' )
+	public function update_exception( $wheres = array(), $data = array() )
 	{
 		global $wpdb;
 
 		$exception_table = $wpdb->prefix . 'woocommerce_ezdefi_exception';
 
-		$query = "UPDATE $exception_table SET status = '$status' WHERE amount_id = $amount_id AND currency = '$currency' AND order_id = $order_id";
+		if( empty( $data ) || empty( $wheres ) ) {
+			return;
+		}
+
+		$query = "UPDATE $exception_table SET";
+
+		$comma = " ";
+
+		foreach ( $data as $column => $value ) {
+			$query .= $comma . $column . " = '" . $value . "'";
+			$comma = ", ";
+		}
+
+		$conditions = array();
+
+		foreach( $wheres as $column => $value ) {
+			if( ! empty( $value ) ) {
+				$type = gettype( $value );
+				switch ($type) {
+					case 'double' :
+						$conditions[] = " $column = $value ";
+						break;
+					case 'integer' :
+						$conditions[] = " $column = $value ";
+						break;
+					case 'string' :
+						$conditions[] = " $column = '$value' ";
+						break;
+					case 'NULL' :
+						$conditions[] = " $column IS NULL ";
+						break;
+				}
+			}
+		}
+
+		if( ! empty( $conditions ) ) {
+			$query .= ' WHERE ' . implode( $conditions, 'AND' );
+		}
 
 		return $wpdb->query( $query );
 	}

@@ -29,9 +29,10 @@
         padding: 10px;
         transition: all .3s;
         cursor: pointer;
+        color: #212529;
 
         &:hover, &.selected {
-          border-color: #c3e6cb;
+          border-color: #46b450;
         }
 
         .item__logo {

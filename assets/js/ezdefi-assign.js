@@ -17,7 +17,7 @@ jQuery(function($) {
         showSelectBtn: '.showSelectBtn',
         hideSelectBtn: '.hideSelectBtn',
         savedOrder: '.saved-order',
-        selectOrder: '.select-order'
+        selectOrder: '.select-order',
     };
 
     var wc_ezdefi_assign = function() {
@@ -56,7 +56,6 @@ jQuery(function($) {
 
     wc_ezdefi_assign.prototype.onShowOrderSelect = function(e) {
         e.preventDefault();
-        var self = this;
         var column = $(e.target).closest('td');
 
         column.find(selectors.showSelectBtn).hide();
@@ -64,7 +63,12 @@ jQuery(function($) {
         column.find(selectors.savedOrder).hide();
         column.find(selectors.selectOrder).show();
 
-        column.find('select').select2({
+        this.initSelect2.call(this, column.find('select'));
+    };
+
+    wc_ezdefi_assign.prototype.initSelect2 = function(select) {
+        var self = this;
+        select.select2({
             width: '100%',
             ajax: {
                 url: wc_ezdefi_data.ajax_url,
@@ -89,7 +93,7 @@ jQuery(function($) {
             templateSelection: self.formatOrderSelection,
             minimumResultsForSearch: Infinity
         });
-        column.find('select').on('select2:select', this.onSelect2Select);
+        select.on('select2:select', this.onSelect2Select);
     };
 
     wc_ezdefi_assign.prototype.onSelect2Select = function(e) {
@@ -188,6 +192,7 @@ jQuery(function($) {
         }
         for(var i=0;i<data.length;i++) {
             var row = data[i];
+            console.log(row);
             var status;
             var payment_method;
             switch (row['status']) {
@@ -211,7 +216,10 @@ jQuery(function($) {
             }
             var html = $(
                 "<tr>" +
-                "<td>" + row['amount_id'] + "<input type='hidden' class='amount-id-input' value='" + row['amount_id'] + "' >" + "</td>" +
+                "<td class='amount-id-column'>" +
+                    "<span>" + row['amount_id'] + "</span>" +
+                    "<input type='hidden' class='amount-id-input' value='" + row['amount_id'] + "' >" +
+                "</td>" +
                 "<td>" +
                     "<span class='symbol'>" + row['currency'] + "</span>" +
                     "<input type='hidden' class='currency-input' value='" + row['currency'] + "' >" +
@@ -234,7 +242,19 @@ jQuery(function($) {
                 "</td>" +
                 "</tr>"
             );
+            if(row['explorer_url'] && row['explorer_url'].length > 0) {
+                var explore = $("<a class='explorer-url' href='" + row['explorer_url'] + "'>View Transaction Detail</a>");
+                html.find('td.amount-id-column').append(explore);
+            }
+
+            if(row['order_id'] == null) {
+                html.find('td.order-column .saved-order, td.order-column .actions').remove();
+                html.find('td.order-column .select-order').show();
+                self.initSelect2.call(self, html.find('td.order-column select'));
+            }
+
             var last_td;
+
             if(row['status'] === 'done') {
                 last_td = $(
                     "<td>" +
@@ -365,7 +385,7 @@ jQuery(function($) {
         var amount_id = row.find(selectors.amountIdInput).val();
         var currency = row.find(selectors.currencyInput).val();
         var data = {
-            action: 'wc_ezdefi_assign_amount_id',
+            action: 'wc_ezdefi_delete_amount_id',
             order_id: order_id,
             amount_id: amount_id,
             currency: currency

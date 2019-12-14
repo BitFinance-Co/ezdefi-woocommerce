@@ -15,6 +15,8 @@ if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
  */
 class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 {
+    const EXPLORER_URL = 'https://explorer.nexty.io/tx/';
+
     public $api_url;
 
     public $api_key;
@@ -743,54 +745,124 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	 */
 	public function gateway_callback_handle()
 	{
-		global $woocommerce;
+	    if( isset( $_GET['uoid'] ) && isset( $_GET['paymentid'] ) ) {
+		    $order_id = $_GET['uoid'];
+		    $paymentid = $_GET['paymentid'];
 
-		if( ! isset( $_GET['uoid'] ) || ! isset( $_GET['paymentid'] ) ) {
-		    wp_die();
+		    return $this->process_payment_callback( $order_id, $paymentid );
         }
 
-		$order_id = $_GET['uoid'];
-		$order_id = substr( $order_id, 0, strpos( $order_id,'-' ) );
-		$order = wc_get_order( $order_id );
+		if(
+            isset( $_GET['value'] ) && isset( $_GET['explorerUrl'] ) &&
+            isset( $_GET['currency'] ) && isset( $_GET['id'] ) &&
+            isset( $_GET['decimal'] )
+		) {
+			$value = $_GET['value'];
+			$decimal = $_GET['decimal'];
+			$value = $value / pow( 10, $decimal );
+			$explorerUrl = $_GET['explorerUrl'];
+			$currency = $_GET['currency'];
+			$id = $_GET['id'];
 
-		if( ! $order ) {
-		    wp_die();
-        }
-
-		$paymentid = $_GET['paymentid'];
-
-		$response = $this->api->get_ezdefi_payment( $paymentid );
-
-		if( is_wp_error( $response ) ) {
-			wp_die();
-		}
-
-		$payment = json_decode( $response['body'], true );
-
-		if( $payment['code'] < 0 ) {
-		    wp_die();
-        }
-
-		$payment = $payment['data'];
-
-		$status = $payment['status'];
-
-		$amount_id = $payment['value'] / pow( 10, $payment['decimal'] );
-
-		$currency = $payment['currency'];
-
-		if( ! isset ( $payment['amount_id'] ) ) {
-			$amount_id = round( $amount_id, 12 );
-        }
-
-		if( $status === 'DONE' ) {
-			$order->update_status( 'completed' );
-			$woocommerce->cart->empty_cart();
-			$this->db->update_exception_status( $amount_id, $currency, $order_id, strtolower($status) );
-		} elseif( $status === 'EXPIRED_DONE' ) {
-		    $this->db->update_exception_status( $amount_id, $currency, $order_id, strtolower($status) );
+			return $this->process_transaction_callback( $value, $explorerUrl, $currency, $id);
         }
 
 		wp_die();
 	}
+
+	public function process_transaction_callback( $value, $explorerUrl, $currency, $id )
+    {
+        $response = $this->api->get_transaction( $id );
+
+	    if( is_wp_error( $response ) ) {
+		    wp_die();
+	    }
+
+	    $response = json_decode( $response['body'], true );
+
+	    if( $response['code'] != 1 ) {
+	        wp_die();
+        }
+
+	    $transaction = $response['data'];
+
+	    if( $transaction['status'] != 'ACCEPTED' ) {
+	        wp_die();
+        }
+
+	    $data = array(
+            'amount_id' => number_format( $value, 12 ),
+            'currency' => $currency,
+            'explorer_url' => $explorerUrl,
+        );
+
+        $this->db->add_exception( $data );
+    }
+
+    public function process_payment_callback( $order_id, $paymentid )
+    {
+	    global $woocommerce;
+
+	    $order_id = substr( $order_id, 0, strpos( $order_id,'-' ) );
+	    $order = wc_get_order( $order_id );
+
+	    if( ! $order ) {
+		    wp_die();
+	    }
+
+	    $response = $this->api->get_ezdefi_payment( $paymentid );
+
+	    if( is_wp_error( $response ) ) {
+		    wp_die();
+	    }
+
+	    $payment = json_decode( $response['body'], true );
+
+	    if( $payment['code'] < 0 ) {
+		    wp_die();
+	    }
+
+	    $payment = $payment['data'];
+
+	    $status = $payment['status'];
+
+	    if( $status === 'PENDING' || $status === 'EXPIRED' ) {
+	        wp_die();
+        }
+
+	    $amount_id = $payment['value'] / pow( 10, $payment['decimal'] );
+
+	    $currency = $payment['currency'];
+
+	    if( ! isset ( $payment['amount_id'] ) ) {
+		    $amount_id = round( $amount_id, 12 );
+	    }
+
+	    $exception_data = array(
+		    'status' => strtolower($status),
+		    'explorer_url' => (string) self::EXPLORER_URL . $payment['transactionHash']
+	    );
+
+	    $wheres = array(
+		    'amount_id' => (float) $amount_id,
+		    'currency' => (string) $currency,
+		    'order_id' => (int) $order_id
+	    );
+
+	    if( isset( $payment['amountId'] ) && $payment['amountId'] = true ) {
+		    $wheres['payment_method'] = 'amount_id';
+	    } else {
+		    $wheres['payment_method'] = 'ezdefi_wallet';
+	    }
+
+	    if( $status === 'DONE' ) {
+		    $order->update_status( 'completed' );
+		    $woocommerce->cart->empty_cart();
+		    $this->db->update_exception( $wheres, $exception_data );
+	    } elseif( $status === 'EXPIRED_DONE' ) {
+		    $this->db->update_exception( $wheres, $exception_data );
+	    }
+
+	    wp_die();
+    }
 }
