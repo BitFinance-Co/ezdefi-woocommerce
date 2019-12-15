@@ -248,6 +248,7 @@ jQuery(function($) {
             }
 
             if(row['order_id'] == null) {
+                html.attr('data-unknown-transaction', 1);
                 html.find('td.order-column .saved-order, td.order-column .actions').remove();
                 html.find('td.order-column .select-order').show();
                 self.initSelect2.call(self, html.find('td.order-column select'));
@@ -341,6 +342,9 @@ jQuery(function($) {
             amount_id: amount_id,
             currency: currency
         };
+        if(row.attr('data-unknown-transaction') == 1) {
+            data.type = 'unknown_transaction'
+        }
         this.$table.find('tbody tr').not('.spinner-row').remove();
         this.$table.find('tbody tr.spinner-row').show();
         this.callAjax.call(this, data).success(function() {

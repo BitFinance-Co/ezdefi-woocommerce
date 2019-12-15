@@ -158,7 +158,11 @@ class WC_Ezdefi_Db
 
 		$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
 
-		$wpdb->delete( $table_name, array( 'amount_id' => $amount_id, 'currency' => $currency, 'order_id' => $order_id ) );
+		if( is_null( $order_id ) ) {
+			return $wpdb->query( "DELETE FROM $table_name WHERE amount_id = $amount_id AND currency = '$currency' AND order_id IS NULL" );
+		}
+
+		return $wpdb->query( "DELETE FROM $table_name WHERE amount_id = $amount_id AND currency = '$currency' AND order_id = $order_id" );
 	}
 
 	public function add_exception( $data )
