@@ -7,6 +7,7 @@ jQuery(function($) {
         amountIdInput: '.amount-id-input',
         currencyInput: '.currency-input',
         orderIdInput: '.order-id-input',
+        oldOrderIdInput: '.old-order-id-input',
         assignBtn: '.assignBtn',
         removeBtn: '.removeBtn',
         reverseBtn: '.reverseBtn',
@@ -225,7 +226,8 @@ jQuery(function($) {
                     "<input type='hidden' class='currency-input' value='" + row['currency'] + "' >" +
                 "</td>" +
                 "<td class='order-column'>" +
-                    "<input type='hidden' class='order-id-input' value='" + row['order_id'] + "' >" +
+                    "<input type='hidden' class='old-order-id-input' value='" + ( (row['order_id']) ? row['order_id'] : '' ) + "' >" +
+                    "<input type='hidden' class='order-id-input' value='" + ( (row['order_id']) ? row['order_id'] : '' ) + "' >" +
                     "<div class='saved-order'>" +
                         "<div>Order ID: <span id='saved-order-id'>" + row['order_id'] + "</span></div>" +
                         "<div>Email: " + row['billing_email'] + "</div>" +
@@ -248,7 +250,6 @@ jQuery(function($) {
             }
 
             if(row['order_id'] == null) {
-                html.attr('data-unknown-transaction', 1);
                 html.find('td.order-column .saved-order, td.order-column .actions').remove();
                 html.find('td.order-column .select-order').show();
                 self.initSelect2.call(self, html.find('td.order-column select'));
@@ -333,18 +334,17 @@ jQuery(function($) {
         e.preventDefault();
         var self = this;
         var row = $(e.target).closest('tr');
+        var old_order_id = row.find(selectors.oldOrderIdInput).val();
         var order_id = row.find(selectors.orderIdInput).val();
         var amount_id = row.find(selectors.amountIdInput).val();
         var currency = row.find(selectors.currencyInput).val();
         var data = {
             action: 'wc_ezdefi_assign_amount_id',
+            old_order_id: old_order_id,
             order_id: order_id,
             amount_id: amount_id,
             currency: currency
         };
-        if(row.attr('data-unknown-transaction') == 1) {
-            data.type = 'unknown_transaction'
-        }
         this.$table.find('tbody tr').not('.spinner-row').remove();
         this.$table.find('tbody tr.spinner-row').show();
         this.callAjax.call(this, data).success(function() {

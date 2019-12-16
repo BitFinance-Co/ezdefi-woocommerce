@@ -384,6 +384,8 @@ class WC_Ezdefi_Ajax
 
         $currency = $_POST['currency'];
 
+	    $old_order_id = ( $_POST['old_order_id'] && ! empty( $_POST['old_order_id'] ) ) ? $_POST['old_order_id'] : null;
+
         $order_id = $_POST['order_id'];
 
 	    $order = wc_get_order( $order_id );
@@ -392,11 +394,7 @@ class WC_Ezdefi_Ajax
 		    wp_send_json_error();
 	    }
 
-	    if( isset( $_POST['type'] ) && $_POST['type'] === 'unknown_transaction' ) {
-			$order_id = null;
-		}
-
-        $this->db->delete_amount_id_exception( $amount_id, $currency, $order_id );
+        $this->db->delete_amount_id_exception( $amount_id, $currency, $old_order_id );
 
 	    $order->update_status( 'completed' );
 
