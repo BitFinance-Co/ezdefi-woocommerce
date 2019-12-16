@@ -97,15 +97,14 @@ class WC_Ezdefi_Db
 		global $wpdb;
 
 		$decimal = $currency_data['decimal'];
-		$life_time = $currency_data['lifetime'];
 		$symbol = $currency_data['symbol'];
 
 		$price = round( $price, $decimal );
 
 		$wpdb->query(
 			$wpdb->prepare("
-				CALL wc_ezdefi_generate_amount_id(%s, %s, %d, %d, @amount_id)
-			", $price, $symbol, $decimal, $life_time)
+				CALL wc_ezdefi_generate_amount_id(%s, %s, %d, @amount_id)
+			", $price, $symbol, $decimal)
 		);
 
 		$result = $wpdb->get_row( "SELECT @amount_id", ARRAY_A );
