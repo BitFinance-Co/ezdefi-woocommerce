@@ -511,7 +511,6 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    wp_register_script( 'wc_ezdefi_checkout', plugins_url( 'assets/js/ezdefi-checkout.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION );
 	    wp_enqueue_script( 'wc_ezdefi_checkout' );
 
-	    wp_register_script( 'wc_ezdefi_blockui', plugins_url( 'assets/js/jquery.blockUI.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION );
 	    wp_register_style( 'wc_ezdefi_qrcode', plugins_url( 'assets/css/ezdefi-qrcode.css', WC_EZDEFI_MAIN_FILE ), array(), WC_EZDEFI_VERSION );
 	    wp_register_script( 'wc_ezdefi_qrcode', plugins_url( 'assets/js/ezdefi-qrcode.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery', 'jquery-ui-tabs' ), WC_EZDEFI_VERSION );
 	    wp_localize_script( 'wc_ezdefi_qrcode', 'wc_ezdefi_data',
@@ -725,7 +724,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 							    $index = array_search( $c['symbol'], array_column( $exchanges, 'token' ) );
 							    $amount = $exchanges[$index]['amount'];
 							    $amount = $amount - ( $amount * ( $c['discount'] / 100 ) );
-							    echo round( $amount, 8 );
+							    echo number_format( $amount, 8 );
 							    ?>
                             </div>
                             <div class="item__info">

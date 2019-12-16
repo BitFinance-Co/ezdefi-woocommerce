@@ -24,7 +24,8 @@
   font-size: 16px;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item:hover, #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item.selected {
-  border-color: #46b450;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__logo {
   margin-right: 5px;
@@ -117,6 +118,7 @@
 #wc_ezdefi_qrcode .ezdefi-payment {
   padding: 20px 20px 0 20px;
   text-align: center;
+  color: #212529;
 }
 #wc_ezdefi_qrcode .ezdefi-payment .exchange {
   text-transform: uppercase;
@@ -152,7 +154,7 @@
   z-index: 10;
 }
 #wc_ezdefi_qrcode .ezdefi-payment .qrcode.expired:after {
-  content: "Expired";
+  content: "Expired. Click to renew";
   color: #f73f2e;
   font-weight: bold;
   position: absolute;
@@ -160,6 +162,8 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 11;
+  width: 100%;
+  text-align: center;
 }
 #wc_ezdefi_qrcode .ezdefi-payment .qrcode.expired img {
   opacity: 0.5;
@@ -178,6 +182,59 @@
 }
 #wc_ezdefi_qrcode .ezdefi-payment .amount {
   text-transform: uppercase;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard {
+  padding: 1px 22px 1px 6px;
+  background-color: rgba(0, 0, 0, 0.03);
+  position: relative;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard:before {
+  content: "";
+  display: none;
+  position: absolute;
+  z-index: 9998;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #333;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard:after {
+  content: "Copy to Clipboard";
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  top: calc(100% + 5px);
+  left: 50%;
+  width: 100px;
+  height: auto;
+  color: #fff;
+  font-size: 12px;
+  transform: translateX(-50%);
+  padding: 3px 6px;
+  text-align: center;
+  background: #333;
+  border-radius: 3px;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard:hover:before, #wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard:hover:after {
+  display: block;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard.copied:after {
+  content: "Copied!";
+  width: auto;
+}
+#wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard img {
+  width: 14px;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 3px;
 }
 #wc_ezdefi_qrcode .ezdefi-payment .note {
   color: #f73f2e;
@@ -213,6 +270,19 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+#tiptip_holder.tip_bottom #tiptip_arrow_inner {
+  border-bottom-color: #333;
+}
+#tiptip_holder.tip_top #tiptip_arrow_inner {
+  border-top-color: #333;
+}
+#tiptip_holder #tiptip_content {
+  background: #333;
+  box-shadow: none;
+  color: #fff;
+  border: none;
 }
 
 /*# sourceMappingURL=ezdefi-qrcode.css.map */

@@ -31,7 +31,8 @@
   font-size: 16px;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item:hover, #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item.selected {
-  border-color: #46b450;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__logo {
   margin-right: 5px;
