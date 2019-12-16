@@ -292,12 +292,12 @@ class WC_Ezdefi_Ajax
 			    </p>
 			    <?php if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) : ?>
                     <p>
-                        <strong><?php _e( 'Address', 'edd-ezdefi' ); ?>:</strong> <span class="copy-to-clipboard" title="Copy to clipboard"><span class="copy-content"><?php echo $payment['to']; ?></span> <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" /></span><br/>
-                        <strong><?php _e( 'Amount', 'edd-ezdefi' ); ?>:</strong> <span class="copy-to-clipboard" title="Copy to clipboard"><span class="copy-content"><?php echo $payment['originValue']; ?></span> <span class="amount"><?php echo $payment['token']['symbol'] ?></span> <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" /></span><br/>
+                        <strong><?php _e( 'Address', 'woocommerce-gateway-ezdefi' ); ?>:</strong> <span class="copy-to-clipboard" title="Copy to clipboard"><span class="copy-content"><?php echo $payment['to']; ?></span> <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" /></span><br/>
+                        <strong><?php _e( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong> <span class="copy-to-clipboard" title="Copy to clipboard"><span class="copy-content"><?php echo $payment['originValue']; ?></span> <span class="amount"><?php echo $payment['token']['symbol'] ?></span> <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" /></span><br/>
                     </p>
                     <p class="note">
-					    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'edd-ezdefi' ); ?><br/>
-					    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'edd-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
+					    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'woocommerce-gateway-ezdefi' ); ?><br/>
+					    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'woocommerce-gateway-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
                     </p>
 			    <?php else : ?>
 				    <p class="app-link-list">
