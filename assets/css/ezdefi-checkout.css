@@ -14,7 +14,7 @@
   margin: 20px -2.5px 0 -2.5px;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap {
-  width: 50%;
+  width: 140px;
   padding: 0 5px;
   margin-bottom: 10px;
 }
@@ -24,20 +24,50 @@
   -moz-border-radius: 4px;
   border-radius: 4px;
   display: flex;
-  padding: 10px;
+  padding: 5px;
   transition: all 0.3s;
   cursor: pointer;
   color: #212529;
+  font-size: 16px;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item:hover, #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item.selected {
   border-color: #46b450;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__logo {
-  margin-right: 10px;
+  margin-right: 5px;
+  position: relative;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__logo img {
   width: 20px;
   margin-top: 8px;
+}
+#wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__logo .item__desc {
+  text-align: left;
+  position: absolute;
+  max-width: 200px;
+  min-width: 160px;
+  font-size: 13px;
+  color: #fff;
+  background: #343a40;
+  left: 25px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  top: 4px;
+  display: none;
+  z-index: 99;
+}
+#wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__logo .item__desc:after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #343a40 transparent transparent;
+}
+#wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__logo:hover .item__desc {
+  display: initial;
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__text {
   text-align: left;
@@ -52,6 +82,9 @@
 }
 #wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__text .item__info .item__symbol {
   text-transform: uppercase;
+}
+#wc-wzdefi-checkout .currency-select .currency-item__wrap .currency-item .item__text .item__info .item__discount {
+  color: #dc3545;
 }
 
 /*# sourceMappingURL=ezdefi-checkout.css.map */

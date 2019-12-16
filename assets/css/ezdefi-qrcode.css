@@ -4,27 +4,12 @@
 #wc_ezdefi_qrcode .currency-select {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -10px;
+  margin: 0 -5px;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap {
-  width: 50%;
-  padding: 0 10px;
+  width: 140px;
+  padding: 0 5px;
   margin-bottom: 20px;
-}
-@media screen and (min-width: 768px) {
-  #wc_ezdefi_qrcode .currency-select .currency-item__wrap {
-    width: 33%;
-  }
-}
-@media screen and (min-width: 992px) {
-  #wc_ezdefi_qrcode .currency-select .currency-item__wrap {
-    width: 25%;
-  }
-}
-@media screen and (min-width: 1200px) {
-  #wc_ezdefi_qrcode .currency-select .currency-item__wrap {
-    width: 20%;
-  }
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item {
   border: 1px solid rgba(0, 0, 0, 0.125);
@@ -32,20 +17,50 @@
   -moz-border-radius: 4px;
   border-radius: 4px;
   display: flex;
-  padding: 10px;
+  padding: 5px;
   transition: all 0.3s;
   cursor: pointer;
   color: #212529;
+  font-size: 16px;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item:hover, #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item.selected {
   border-color: #46b450;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__logo {
-  margin-right: 10px;
+  margin-right: 5px;
+  position: relative;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__logo img {
   width: 22px;
   margin-top: 6px;
+}
+#wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__logo .item__desc {
+  text-align: left;
+  position: absolute;
+  max-width: 200px;
+  min-width: 160px;
+  font-size: 13px;
+  color: #fff;
+  background: #343a40;
+  left: 25px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  top: 4px;
+  display: none;
+  z-index: 99;
+}
+#wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__logo .item__desc:after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #343a40 transparent transparent;
+}
+#wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__logo:hover .item__desc {
+  display: initial;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__text {
   text-align: left;
@@ -60,6 +75,9 @@
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__text .item__info .item__symbol {
   text-transform: uppercase;
+}
+#wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__text .item__info .item__discount {
+  color: #dc3545;
 }
 #wc_ezdefi_qrcode .ezdefi-payment-tabs {
   margin-bottom: 20px;
