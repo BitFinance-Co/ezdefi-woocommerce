@@ -511,6 +511,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    wp_register_script( 'wc_ezdefi_checkout', plugins_url( 'assets/js/ezdefi-checkout.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION );
 	    wp_enqueue_script( 'wc_ezdefi_checkout' );
 
+	    wp_register_script( 'wc_ezdefi_clipboard', plugins_url( 'assets/js/clipboard.min.js', WC_EZDEFI_MAIN_FILE ), array(), WC_EZDEFI_VERSION );
 	    wp_register_style( 'wc_ezdefi_qrcode', plugins_url( 'assets/css/ezdefi-qrcode.css', WC_EZDEFI_MAIN_FILE ), array(), WC_EZDEFI_VERSION );
 	    wp_register_script( 'wc_ezdefi_qrcode', plugins_url( 'assets/js/ezdefi-qrcode.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery', 'jquery-ui-tabs' ), WC_EZDEFI_VERSION );
 	    wp_localize_script( 'wc_ezdefi_qrcode', 'wc_ezdefi_data',
@@ -660,6 +661,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		    'ezdefi_payment' => ( $order->get_meta( 'ezdefi_payment' ) ) ? $order->get_meta( 'ezdefi_payment' ) : ''
 	    );
 
+	    wp_enqueue_script( 'wc_ezdefi_clipboard' );
 	    wp_enqueue_style( 'wc_ezdefi_qrcode' );
 	    wp_enqueue_script( 'wc_ezdefi_qrcode' );
 

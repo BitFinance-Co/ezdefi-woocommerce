@@ -284,6 +284,14 @@
 
     .payment-amount {
       margin-bottom: .5rem;
+
+      span.copy-content {
+        display: inline-block;
+      }
+
+      span.amount {
+        padding-left: 2px;
+      }
     }
 
     @media screen and (max-width: 575.98px) {
@@ -298,6 +306,10 @@
 
       .payment-amount {
         margin-bottom: 1rem;
+
+        span.copy-content {
+          max-width: 100px;
+        }
       }
     }
 
@@ -309,15 +321,16 @@
       cursor: pointer;
 
       @media screen and (max-width: 575.98px) {
-        width: 160px;
+        max-width: 160px;
         display: inline-block;
 
         span.copy-content {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          width: 100%;
-          display: block;
+          max-width: 100%;
+          display: inline-block;
+          float: left;
         }
       }
 
@@ -343,7 +356,7 @@
         z-index: 9999;
         top: calc(100% + 5px);
         left: 50%;
-        width: 100px;
+        width: 130px;
         height: auto;
         color: #fff;
         font-size: 12px;

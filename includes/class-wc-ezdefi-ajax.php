@@ -292,14 +292,14 @@ class WC_Ezdefi_Ajax
 			    <?php if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) : ?>
                     <p class="receive-address">
                         <strong><?php _e( 'Address', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
-                        <span class="copy-to-clipboard" title="Copy to clipboard">
+                        <span class="copy-to-clipboard" data-clipboard-text="<?php echo $payment['to']; ?>" title="Copy to clipboard">
                             <span class="copy-content"><?php echo $payment['to']; ?></span>
                             <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
                         </span>
                     </p>
                     <p class="payment-amount">
                         <strong><?php _e( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
-                        <span class="copy-to-clipboard" title="Copy to clipboard">
+                        <span class="copy-to-clipboard" data-clipboard-text="<?php echo $payment['originValue']; ?>" title="Copy to clipboard">
                             <span class="copy-content"><?php echo $payment['originValue']; ?></span>
                             <span class="amount"><?php echo $payment['token']['symbol'] ?></span>
                             <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
