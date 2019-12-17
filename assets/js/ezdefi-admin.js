@@ -93,7 +93,8 @@ jQuery(function($) {
                             return self.$form.find(selectors.amountIdCheckbox).is(':checked');
                         }
                     },
-                    min: 0
+                    min: 0,
+                    max: 100
                 },
                 'woocommerce_ezdefi_payment_method[amount_id]': {
                     required: {
