@@ -675,10 +675,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 echo '<li>';
                                 switch ($key) {
                                     case 'amount_id' :
-                                        echo '<a href="#'.$key.'" id="tab-'.$key.'"><span>' . __( 'Pay with any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
+                                        echo '<a href="#'.$key.'" id="tab-'.$key.'"><span class="large-screen">' . __( 'Pay with any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span><span class="small-screen">' . __( 'Any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
                                         break;
                                     case 'ezdefi_wallet' :
-                                        echo '<a href="#'.$key.'" id="tab-'.$key.'" style="background-image: url('.plugins_url( 'assets/images/ezdefi-icon.png', WC_EZDEFI_MAIN_FILE ).')"><span> ' . __( 'Pay with ezDeFi wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
+                                        echo '<a href="#'.$key.'" id="tab-'.$key.'" style="background-image: url('.plugins_url( 'assets/images/ezdefi-icon.png', WC_EZDEFI_MAIN_FILE ).')"><span class="large-screen"> ' . __( 'Pay with ezDeFi wallet', 'woocommerce-gateway-ezdefi' ) . '</span><span class="small-screen"> ' . __( 'ezDeFi wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
                                         break;
                                 }
                                 echo '</a></li>';

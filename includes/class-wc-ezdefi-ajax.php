@@ -273,11 +273,10 @@ class WC_Ezdefi_Ajax
         $discount = $this->db->get_currency_option( $payment['currency'] )['discount'];
         $total = $total - ( $total * ( $discount / 100 ) );
 	    ob_start(); ?>
-	    <div class="ezdefi-payment" data-paymentid="<?php echo $payment['_id']; ?>">
+        <div class="ezdefi-payment" data-paymentid="<?php echo $payment['_id']; ?>">
 		    <?php if( ! $payment ) : ?>
 			    <span><?php echo __( 'Can not get payment', 'woocommerce-gateway-ezdefi' ); ?></span>
 		    <?php else : ?>
-                <?php echo $payment['_id']; ?>
 			    <?php $value = $payment['value'] / pow( 10, $payment['decimal'] ); ?>
 			    <p class="exchange">
 				    <span><?php echo $order->get_currency(); ?> <?php echo $total; ?></span>
@@ -291,13 +290,26 @@ class WC_Ezdefi_Ajax
 				    </a>
 			    </p>
 			    <?php if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) : ?>
-                    <p>
-                        <strong><?php _e( 'Address', 'woocommerce-gateway-ezdefi' ); ?>:</strong> <span class="copy-to-clipboard" title="Copy to clipboard"><span class="copy-content"><?php echo $payment['to']; ?></span> <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" /></span><br/>
-                        <strong><?php _e( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong> <span class="copy-to-clipboard" title="Copy to clipboard"><span class="copy-content"><?php echo $payment['originValue']; ?></span> <span class="amount"><?php echo $payment['token']['symbol'] ?></span> <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" /></span><br/>
+                    <p class="receive-address">
+                        <strong><?php _e( 'Address', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
+                        <span class="copy-to-clipboard" title="Copy to clipboard">
+                            <span class="copy-content"><?php echo $payment['to']; ?></span>
+                            <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
+                        </span>
+                    </p>
+                    <p class="payment-amount">
+                        <strong><?php _e( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
+                        <span class="copy-to-clipboard" title="Copy to clipboard">
+                            <span class="copy-content"><?php echo $payment['originValue']; ?></span>
+                            <span class="amount"><?php echo $payment['token']['symbol'] ?></span>
+                            <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
+                        </span>
                     </p>
                     <p class="note">
 					    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'woocommerce-gateway-ezdefi' ); ?><br/>
-					    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'woocommerce-gateway-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
+                    </p>
+                    <p class="note">
+	                    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'woocommerce-gateway-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
                     </p>
 			    <?php else : ?>
 				    <p class="app-link-list">
