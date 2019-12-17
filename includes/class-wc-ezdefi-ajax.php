@@ -346,11 +346,12 @@ class WC_Ezdefi_Ajax
 
         $data = $this->db->get_exception( $_POST, $offset, $per_page );
 
-        $total = $this->db->get_exception_total()[0]->total;
+        $total = $data['total'];
+
         $total_pages = ceil($total / $per_page );
 
         $response = array(
-            'data' => $data,
+            'data' => $data['data'],
             'meta_data' => array(
                 'current_page' => ( isset( $_POST['page'] ) ) ? (int) $_POST['page'] : 1 ,
                 'total' => (int) $total,

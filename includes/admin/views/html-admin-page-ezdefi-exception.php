@@ -14,11 +14,11 @@ defined( 'ABSPATH' ) or exit;
             <tr>
                 <td>
                     <form action="" id="wc-ezdefi-exception-table-filter-form">
-                        <input type="hidden" value="1">
+                        <input type="hidden" name="page" value="1">
                         <div class="filter-container">
                             <div class="filter-rows">
-                                <label for="">Amount ID</label>
-                                <input type="number" name="amount_id" placeholder="Amount ID">
+                                <label for="">Amount</label>
+                                <input type="number" name="amount_id" placeholder="Amount">
                             </div>
                             <div class="filter-rows">
                                 <label for="">Currency</label>
@@ -45,7 +45,7 @@ defined( 'ABSPATH' ) or exit;
                                 <select name="status" id="">
                                     <option value="" selected >Any Status</option>
                                     <option value="expired_done">Paid after expired</option>
-                                    <option value="expired">Expired</option>
+                                    <option value="not_paid">Not paid</option>
                                     <option value="done">Paid on time</option>
                                 </select>
                             </div>

@@ -143,6 +143,10 @@ jQuery(function($) {
         this.getException.call(this, data);
     };
 
+    wc_ezdefi_assign.prototype.getFilterValue = function(data) {
+
+    };
+
     wc_ezdefi_assign.prototype.onNavButtonClick = function(e) {
         e.preventDefault();
         var button = $(e.target);

@@ -203,13 +203,13 @@ class WC_Ezdefi_Db
 
 		$params = array_merge( $default, $params );
 
-		$query = "SELECT t1.*, t2.billing_email FROM $exception_table t1 LEFT JOIN ( SELECT post_id as order_id, meta_value as billing_email FROM $meta_table WHERE `meta_key` = '_billing_email' ) t2 ON t1.order_id = t2.order_id";
+		$query = "SELECT SQL_CALC_FOUND_ROWS t1.*, t2.billing_email FROM $exception_table t1 LEFT JOIN ( SELECT post_id as order_id, meta_value as billing_email FROM $meta_table WHERE `meta_key` = '_billing_email' ) t2 ON t1.order_id = t2.order_id";
 
 		$sql = array();
 
 		foreach( $params as $column => $param ) {
 			if( ! empty( $param ) && in_array( $column, array_keys( $default ) ) ) {
-				$sql[] = " $column = '$param' ";
+				$sql[] = ( $column === 'email' ) ? " t2.billing_email = '$param' " : " t1.$column = '$param' ";
 			}
 		}
 
@@ -219,18 +219,14 @@ class WC_Ezdefi_Db
 
 		$query .= " ORDER BY id DESC LIMIT $offset, $per_page";
 
-		return $wpdb->get_results( $query );
-	}
+		$data = $wpdb->get_results( $query );
 
-	public function get_exception_total()
-	{
-		global $wpdb;
+		$total = $wpdb->get_var( "SELECT FOUND_ROWS() as total;" );
 
-		$exception_table = $wpdb->prefix . 'woocommerce_ezdefi_exception';
-
-		$query = "SELECT COUNT(*) as total FROM $exception_table";
-
-		return $wpdb->get_results( $query );
+		return array(
+			'data' => $data,
+			'total' => $total
+		);
 	}
 
 	public function update_exception( $wheres = array(), $data = array() )
