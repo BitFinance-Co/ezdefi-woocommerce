@@ -23,7 +23,6 @@ jQuery(function($) {
         this.$loader = this.$container.find(selectors.loader);
         this.$tabs = this.$container.find(selectors.tabs);
         this.$currencySelect = this.$container.find(selectors.select);
-        this.$submitBtn = this.$container.find(selectors.submitBtn);
         this.paymentData = JSON.parse(this.$container.find(selectors.paymentData).text());
         this.xhrPool = [];
         this.checkOrderLoop;
@@ -66,7 +65,6 @@ jQuery(function($) {
     };
 
     wc_ezdefi_qrcode.prototype.onCopy = function(e) {
-        console.log('asfsa');
         var target = $(e.target);
         var element;
         if(target.hasClass(selectors.copy)) {
