@@ -135,7 +135,7 @@
           text-decoration: none;
 
           @media screen and (max-width: 575.98px) {
-            padding: 5px 10px;
+            padding: 5px;
             font-size: 15px;
             text-align: center;
           }
@@ -189,7 +189,7 @@
     }
 
     @media screen and (max-width: 575.98px) {
-      padding: 10px 10px 0 10px;
+      padding: 6px 6px 0 6px;
       font-size: 16px;
     }
 
@@ -203,10 +203,18 @@
 
       span {
         padding: 0 10px;
+
+        @media screen and (max-width: 575.98px) {
+          padding: 0 5px;
+        }
       }
 
       img {
         width: 16px;
+
+        @media screen and (max-width: 575.98px) {
+          width: 12px;
+        }
       }
     }
 
@@ -287,6 +295,10 @@
       .receive-address {
         margin-bottom: .5rem;
       }
+
+      .payment-amount {
+        margin-bottom: 1rem;
+      }
     }
 
     .copy-to-clipboard {
@@ -298,10 +310,15 @@
 
       @media screen and (max-width: 575.98px) {
         width: 160px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         display: inline-block;
+
+        span.copy-content {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          display: block;
+        }
       }
 
       &:before {

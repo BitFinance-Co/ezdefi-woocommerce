@@ -116,7 +116,7 @@
 }
 @media screen and (max-width: 575.98px) {
   #wc_ezdefi_qrcode .ezdefi-payment-tabs ul li a {
-    padding: 5px 10px;
+    padding: 5px;
     font-size: 15px;
     text-align: center;
   }
@@ -165,7 +165,7 @@
 }
 @media screen and (max-width: 575.98px) {
   #wc_ezdefi_qrcode .ezdefi-payment {
-    padding: 10px 10px 0 10px;
+    padding: 6px 6px 0 6px;
     font-size: 16px;
   }
 }
@@ -180,8 +180,18 @@
 #wc_ezdefi_qrcode .ezdefi-payment .exchange span {
   padding: 0 10px;
 }
+@media screen and (max-width: 575.98px) {
+  #wc_ezdefi_qrcode .ezdefi-payment .exchange span {
+    padding: 0 5px;
+  }
+}
 #wc_ezdefi_qrcode .ezdefi-payment .exchange img {
   width: 16px;
+}
+@media screen and (max-width: 575.98px) {
+  #wc_ezdefi_qrcode .ezdefi-payment .exchange img {
+    width: 12px;
+  }
 }
 #wc_ezdefi_qrcode .ezdefi-payment .count-down {
   color: #f73f2e;
@@ -246,6 +256,9 @@
   #wc_ezdefi_qrcode .ezdefi-payment .receive-address {
     margin-bottom: 0.5rem;
   }
+  #wc_ezdefi_qrcode .ezdefi-payment .payment-amount {
+    margin-bottom: 1rem;
+  }
 }
 #wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard {
   padding: 1px 22px 1px 6px;
@@ -257,10 +270,14 @@
 @media screen and (max-width: 575.98px) {
   #wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard {
     width: 160px;
+    display: inline-block;
+  }
+  #wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard span.copy-content {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: inline-block;
+    width: 100%;
+    display: block;
   }
 }
 #wc_ezdefi_qrcode .ezdefi-payment .copy-to-clipboard:before {
