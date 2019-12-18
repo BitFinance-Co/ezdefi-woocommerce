@@ -264,6 +264,7 @@ jQuery(function($) {
                 last_td = $(
                     "<td>" +
                     "<button class='button reverseBtn'>Reverse</button> " +
+                    "<button class='button removeBtn'>Remove</button>" +
                     "</td>"
                 );
             } else {
