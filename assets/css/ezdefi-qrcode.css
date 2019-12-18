@@ -154,6 +154,7 @@
   padding: 10px 0;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-top: none;
+  outline: none;
 }
 #wc_ezdefi_qrcode .ezdefi-payment {
   padding: 20px 20px 0 20px;
