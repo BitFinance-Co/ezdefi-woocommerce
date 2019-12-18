@@ -443,7 +443,7 @@ class WC_Ezdefi_Ajax
     {
 	    $amount_id = $_POST['amount_id'];
 
-	    $order_id = $_POST['order_id'];
+	    $order_id = ( ! empty( $_POST['order_id'] ) ) ? $_POST['order_id'] : null;
 
 	    $currency = $_POST['currency'];
 

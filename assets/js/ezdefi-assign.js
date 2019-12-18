@@ -347,12 +347,8 @@ jQuery(function($) {
             amount_id: amount_id,
             currency: currency
         };
-        this.$table.find('tbody tr').not('.spinner-row').remove();
-        this.$table.find('tbody tr.spinner-row').show();
         this.callAjax.call(this, data).success(function() {
-            var data = {
-                action: 'wc_ezdefi_get_exception',
-            };
+            var data = self.getAjaxData();
             self.getException(data);
         });
     };
@@ -370,12 +366,8 @@ jQuery(function($) {
             amount_id: amount_id,
             currency: currency
         };
-        this.$table.find('tbody tr').not('.spinner-row').remove();
-        this.$table.find('tbody tr.spinner-row').show();
         this.callAjax.call(this, data).success(function() {
-            var data = {
-                action: 'wc_ezdefi_get_exception',
-            };
+            var data = self.getAjaxData();
             self.getException(data);
         });
     };
@@ -396,21 +388,23 @@ jQuery(function($) {
             amount_id: amount_id,
             currency: currency
         };
-        this.$table.find('tbody tr').not('.spinner-row').remove();
-        this.$table.find('tbody tr.spinner-row').show();
         this.callAjax.call(this, data).success(function() {
-            var data = {
-                action: 'wc_ezdefi_get_exception',
-            };
+            var data = self.getAjaxData();
             self.getException(data);
         });
     };
 
     wc_ezdefi_assign.prototype.callAjax = function(data) {
+        var self = this;
         return $.ajax({
             url: wc_ezdefi_data.ajax_url,
             method: 'post',
             data: data,
+            beforeSend: function() {
+                self.$table.find('tbody tr').not('.spinner-row').remove();
+                self.$table.find('tbody tr.spinner-row').show();
+                self.$nav.hide();
+            }
         });
     };
 
