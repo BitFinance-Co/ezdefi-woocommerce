@@ -122,6 +122,11 @@ jQuery(function($) {
 
     wc_ezdefi_assign.prototype.onApplyFilter = function(e) {
         e.preventDefault();
+        var data = this.getAjaxData();
+        this.getException.call(this, data);
+    };
+
+    wc_ezdefi_assign.prototype.getAjaxData = function() {
         var form = $(selectors.filterForm);
         var data = {
             'action': 'wc_ezdefi_get_exception'
@@ -140,11 +145,7 @@ jQuery(function($) {
                 data[$(this).attr('name')] = $(this).val();
             }
         });
-        this.getException.call(this, data);
-    };
-
-    wc_ezdefi_assign.prototype.getFilterValue = function(data) {
-
+        return data;
     };
 
     wc_ezdefi_assign.prototype.onNavButtonClick = function(e) {
@@ -164,10 +165,8 @@ jQuery(function($) {
             page = current_page + 1;
         }
 
-        var data = {
-            'action': 'wc_ezdefi_get_exception',
-            'page': page
-        };
+        var data = this.getAjaxData();
+        data['page'] = page;
 
         this.getException.call(this, data);
     };
@@ -181,6 +180,7 @@ jQuery(function($) {
             beforeSend: function() {
                 self.$table.find('tbody tr').not('.spinner-row').remove();
                 self.$table.find('tbody tr.spinner-row').show();
+                self.$nav.hide();
             },
             success: function(response) {
                 self.$table.find('tbody tr.spinner-row').hide();
@@ -197,7 +197,6 @@ jQuery(function($) {
         }
         for(var i=0;i<data.length;i++) {
             var row = data[i];
-            console.log(row);
             var status;
             var payment_method;
             switch (row['status']) {
@@ -281,7 +280,6 @@ jQuery(function($) {
     };
 
     wc_ezdefi_assign.prototype.renderPagination = function(data) {
-        var self = this;
         this.$nav.show();
         this.$nav.find('.displaying-num .number').text(data['total']);
         this.$nav.find('.tablenav-paging-text .number').text(data['current_page']);
@@ -294,12 +292,12 @@ jQuery(function($) {
         }
 
         if( data['current_page'] === data['total_pages'] ) {
-            console.log('disabled');
             this.$nav.find('.next-page').addClass('disabled')
         } else {
-            console.log('not');
             this.$nav.find('.next-page').removeClass('disabled')
         }
+
+        this.$nav.show();
     };
 
     wc_ezdefi_assign.prototype.formatOrderOption = function(order) {

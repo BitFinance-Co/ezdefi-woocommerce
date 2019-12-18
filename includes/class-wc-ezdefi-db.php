@@ -159,7 +159,7 @@ class WC_Ezdefi_Db
 		$table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
 
 		if( is_null( $order_id ) ) {
-			return $wpdb->query( "DELETE FROM $table_name WHERE amount_id = $amount_id AND currency = '$currency' AND order_id IS NULL" );
+			return $wpdb->query( "DELETE FROM $table_name WHERE amount_id = $amount_id AND currency = '$currency' AND order_id IS NULL LIMIT 1" );
 		}
 
 		return $wpdb->query( "DELETE FROM $table_name WHERE amount_id = $amount_id AND currency = '$currency' AND order_id = $order_id" );
@@ -208,13 +208,23 @@ class WC_Ezdefi_Db
 		$sql = array();
 
 		foreach( $params as $column => $param ) {
-			if( ! empty( $param ) && in_array( $column, array_keys( $default ) ) ) {
+			if( ! empty( $param ) && in_array( $column, array_keys( $default ) ) && $column != 'amount_id' ) {
 				$sql[] = ( $column === 'email' ) ? " t2.billing_email = '$param' " : " t1.$column = '$param' ";
 			}
 		}
 
 		if( ! empty( $sql ) ) {
 			$query .= ' WHERE ' . implode( $sql, 'AND' );
+		}
+
+		if( ! empty( $params['amount_id'] ) ) {
+			$amount_id = $params['amount_id'];
+			if( ! empty( $sql ) ) {
+				$query .= " AND";
+			} else {
+				$query .= " WHERE";
+			}
+			$query .= " amount_id RLIKE '^$amount_id'";
 		}
 
 		$query .= " ORDER BY id DESC LIMIT $offset, $per_page";
