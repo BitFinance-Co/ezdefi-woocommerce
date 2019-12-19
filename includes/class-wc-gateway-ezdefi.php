@@ -840,7 +840,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    $currency = $payment['currency'];
 
 	    if( ! isset ( $payment['amount_id'] ) ) {
-		    $amount_id = round( $amount_id, 12 );
+		    $amount_id = number_format( $amount_id, 12 );
 	    }
 
 	    $exception_data = array(
@@ -864,6 +864,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		    $order->update_status( 'completed' );
 		    $woocommerce->cart->empty_cart();
 		    $this->db->update_exception( $wheres, $exception_data );
+
+		    if( ! isset( $payment['amountId'] ) || ( isset( $payment['amountId'] ) && $payment['amountId'] != true ) ) {
+		        $this->db->delete_exception_by_order_id( $wheres['order_id'] );
+            }
 	    } elseif( $status === 'EXPIRED_DONE' ) {
 		    $this->db->update_exception( $wheres, $exception_data );
 	    }
