@@ -184,30 +184,6 @@ class WC_Ezdefi_Db
 		return $wpdb->query($query);
 	}
 
-	public function add_or_update_exception( $data )
-	{
-		global $wpdb;
-
-		$keys = array();
-		$values = array();
-
-		foreach ( $data as $key => $value ) {
-			$keys[] = "$key";
-			$values[] = "'$value'";
-		}
-
-		$exception_table = $wpdb->prefix . 'woocommerce_ezdefi_exception';
-
-		$query = "INSERT INTO $exception_table (" . implode( ',', $keys ) . ") VALUES (" . implode( ',', $values ) . ")";
-
-		$currency = $data['currency'];
-		$amount_id = $data['amount_id'];
-
-		$query .= " ON DUPLICATE KEY UPDATE currency = '$currency', amount_id = '$amount_id'";
-
-		return $wpdb->query($query);
-	}
-
 	public function get_exception( $params = array(), $offset = 0, $per_page = 15 )
 	{
 		global $wpdb;

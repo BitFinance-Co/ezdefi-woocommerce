@@ -67,8 +67,7 @@ class WC_Ezdefi {
 			status varchar(20),
 			payment_method varchar(100),
 			explorer_url varchar(200),
-			PRIMARY KEY (id),
-			UNIQUE (order_id, payment_method)
+			PRIMARY KEY (id)
 		) $charset_collate;";
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
