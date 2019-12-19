@@ -233,15 +233,22 @@ class WC_Ezdefi_Ajax
 
 	    $payment = $response['data'];
 
+	    if( $amount_id ) {
+		    $value = $payment['originValue'];
+	    } else {
+		    $value = $payment['value'] / pow( 10, $payment['decimal'] );
+	    }
+	    $value = rtrim( number_format( $value, 12 ), '0' );
+
 	    $data = array(
-            'amount_id' => $payment['value'] / pow( 10, $payment['decimal'] ),
+            'amount_id' => $value,
             'currency' => $symbol,
             'order_id' => substr( $payment['uoid'], 0, strpos( $payment['uoid'],'-' ) ),
             'status' => 'not_paid',
             'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet',
         );
 
-	    $this->db->add_exception( $data );
+	    $this->db->add_or_update_exception( $data );
 
 	    $html = $this->generate_payment_html( $payment, $order );
 
@@ -277,7 +284,14 @@ class WC_Ezdefi_Ajax
 		    <?php if( ! $payment ) : ?>
 			    <span><?php echo __( 'Can not get payment', 'woocommerce-gateway-ezdefi' ); ?></span>
 		    <?php else : ?>
-			    <?php $value = $payment['value'] / pow( 10, $payment['decimal'] ); ?>
+			    <?php
+                    if( ( isset( $payment['amountId'] ) && $payment['amountId'] === true ) ) {
+	                    $value = $payment['originValue'];
+                    } else {
+	                    $value = $payment['value'] / pow( 10, $payment['decimal'] );
+                    }
+			        $value = rtrim( number_format( $value, 12 ), '0' );
+                ?>
 			    <p class="exchange">
 				    <span><?php echo $order->get_currency(); ?> <?php echo $total; ?></span>
 				    <img width="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfjChgQMyxZjA7+AAACP0lEQVRo3u2YvWsUQRTAf8nFQs5LCEY0aCGIB1ErRVMoFpYGTGNlo2AnBxHlrLQJKVSwiV//gqCV4gemEGJhiBYXRAtBDIhICiUGL8GP3Fjs7rs5vN0o5M1LsW+a2XkDv9/MvF12t4B2dDDODqbVOan46zgaVKzwN3A4O4VuarGAo8EZC4VeXnoKJruQK+QKa12hI2VyFyUFhY08Ymfcd1S49feU7VSZ5DPL4qrXGpxuhW/iJj8DgJutTrGJ38vHoPCobUnwg9QN8HeTItzGNP2yF7M85D11lTvhLAPSn2CYpah7R5zmOUmnChrgsrf6p6xPhvfRiAe/slsNnoqHcRketsDDbDw8ZYPvlsR5CzwMSGpICT+WhYdBSR4Ov3p9gbGV8Hr3PEAPx6XvPXZC7sBm3qSvPoRApJCB71KB+jHHERbab34YAZjLSuoW4T+EuYBNHJXC32W+A2taYAN9lgJFHjDZfGsNHUWe4XC8VVHwirD9hBLPZcpM+mN0NQTaHUGR+xySq3vpj1Gd8FfvuKjCyDiC5OyjdklpkSeE0N+aCLF6gNGY8IuCBb4zfklxzFjg4ZRQRi3wB/guB1AOjV9HhUXh3Ibo87zEYw7KpFqUWPUoUWaIrXL9gf18iRSeGPyamGdPYlI2wL/zflPQx4+g8CWu0tN6OiNBwL/5xAQjXhWQFCFc4IqMvOYY3xSKcIHlrPQ5z/UVvSr3wQqRK+QKuYIfVU9hSuGt+L924ZoFvqmgji+kZl6wSI2qtsAfm/EoPAbFFD0AAAAldEVYdGRhdGU6Y3JlYXRlADIwMTktMTAtMjRUMTY6NTE6NDQrMDA6MDBiAik3AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE5LTEwLTI0VDE2OjUxOjQ0KzAwOjAwE1+RiwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=" />
@@ -300,7 +314,7 @@ class WC_Ezdefi_Ajax
                     <p class="payment-amount">
                         <strong><?php _e( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
                         <span class="copy-to-clipboard" data-clipboard-text="<?php echo $payment['originValue']; ?>" title="Copy to clipboard">
-                            <span class="copy-content"><?php echo $payment['originValue']; ?></span>
+                            <span class="copy-content"><?php echo $value; ?></span>
                             <span class="amount"><?php echo $payment['token']['symbol'] ?></span>
                             <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
                         </span>
