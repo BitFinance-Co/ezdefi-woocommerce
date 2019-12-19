@@ -281,22 +281,51 @@ jQuery(function($) {
     };
 
     wc_ezdefi_assign.prototype.renderPagination = function(data) {
-        this.$nav.show();
         this.$nav.find('.displaying-num .number').text(data['total']);
-        this.$nav.find('.tablenav-paging-text .number').text(data['current_page']);
-        this.$nav.find('.tablenav-paging-text .total-pages').text(data['total_pages']);
+
+        var $links = this.$nav.find('.pagination-links');
+        var $prev;
+        var $current;
+        var $next;
+
+        $links.empty();
 
         if( data['current_page'] === 1 ) {
-            this.$nav.find('.prev-page').addClass('disabled')
+            $prev = $("<span class='tablenav-pages-navspan button disabled'>‹</span>")
         } else {
-            this.$nav.find('.prev-page').removeClass('disabled')
+            $prev = $(
+                "<a class='prev-page button'>" +
+                    "<span class='screen-reader-text'>Previous page</span>" +
+                "<span>‹</span>" +
+                "</a>"
+            );
         }
 
+        $links.append($prev);
+
+        $current = $(
+            "<span class='screen-reader-text'>Current Page</span>" +
+            "<span id='table-paging' class='paging-input'>" +
+                "<span class='tablenav-paging-text'>" +
+                "<span class='number'>" + data['current_page'] + "</span> of <span class='total-pages'>" + data['total_pages'] + "</span>" +
+            "</span>" +
+            "</span>"
+        );
+
+        $links.append($current);
+
         if( data['current_page'] === data['total_pages'] ) {
-            this.$nav.find('.next-page').addClass('disabled')
+            $next = $("<span class='tablenav-pages-navspan button disabled'>›</span>")
         } else {
-            this.$nav.find('.next-page').removeClass('disabled')
+            $next = $(
+                "<a class='next-page button'>" +
+                "<span class='screen-reader-text'>Next page</span>" +
+                "<span>›</span>" +
+                "</a>"
+            );
         }
+
+        $links.append($next);
 
         this.$nav.show();
     };
