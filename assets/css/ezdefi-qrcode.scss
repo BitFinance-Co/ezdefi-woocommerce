@@ -4,12 +4,25 @@
   .currency-select {
     display: flex;
     flex-wrap: wrap;
-    margin: 0 -5px;
+    margin: 0 -5px 20px -5px;
+    max-height: 170px;
+
+    @media screen and (max-width: 575.98px) {
+      max-height: 150px;
+    }
+
+    overflow-y: auto;
 
     .currency-item__wrap {
       width: 140px;
+
+      @media screen and (max-width: 575.98px) {
+        width: 50%;
+        min-width: 140px;
+      }
+
       padding: 0 5px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
 
       .currency-item {
         border: 1px solid rgba(0,0,0,.125);
@@ -74,6 +87,10 @@
         .item__text {
           text-align: left;
           flex-grow: 1;
+
+          @media screen and (max-width: 575.98px) {
+            font-size: 15px;
+          }
 
           .item__price {
 
@@ -147,9 +164,15 @@
             padding-left: 44px;
 
             @media screen and (max-width: 575.98px) {
-              background-size: 16px 16px;
-              background-position: 8px center;
-              padding-left: 20px;
+              background-image: none !important;
+              padding-left: 0 !important;
+
+              span.small-screen {
+                background-size: 16px 16px;
+                background-position: 0 center;
+                padding-left: 20px;
+                background-repeat: no-repeat;
+              }
             }
           }
 

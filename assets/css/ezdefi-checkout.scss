@@ -17,6 +17,12 @@
 
     .currency-item__wrap {
       width: 140px;
+
+      @media screen and (max-width: 575.98px) {
+        width: 50%;
+        min-width: 140px;
+      }
+
       padding: 0 5px;
       margin-bottom: 10px;
 
@@ -83,6 +89,10 @@
         .item__text {
           text-align: left;
           flex-grow: 1;
+
+          @media screen and (max-width: 575.98px) {
+            font-size: 15px;
+          }
 
           .item__price {
 
