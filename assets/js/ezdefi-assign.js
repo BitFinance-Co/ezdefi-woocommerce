@@ -230,7 +230,7 @@ jQuery(function($) {
                     payment_method = 'Pay with any crypto wallet';
                     break;
                 case 'ezdefi_wallet':
-                    payment_method = 'Pay with ezDeFi wallet';
+                    payment_method = '<strong>Pay with ezDeFi wallet</strong>';
                     break;
             }
             var html = $(
