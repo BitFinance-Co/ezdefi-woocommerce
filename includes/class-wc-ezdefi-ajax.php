@@ -378,9 +378,18 @@ class WC_Ezdefi_Ajax
 
     public function wc_ezdefi_get_order_ajax_callback()
     {
+        $allow_scopes = array( 'p', 'billing_email' );
+
         $args = array(
             'status' => 'on-hold'
         );
+
+        if(
+            isset( $_POST['scope'] ) && in_array( $_POST['scope'], $allow_scopes ) &&
+            isset( $_POST['keyword'] ) && ! empty( $_POST['keyword'] )
+        ) {
+            $args[$_POST['scope']] = (int) $_POST['keyword'];
+        }
 
 	    $orders = wc_get_orders( $args );
 

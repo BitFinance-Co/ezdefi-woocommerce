@@ -77,6 +77,8 @@ jQuery(function($) {
                 data: function(params) {
                     var query = {
                         action: 'wc_ezdefi_get_order',
+                        keyword: params.term,
+                        scope: $('.select2-search__scope').find('input[name="select2-search__scope"]:checked').val()
                     };
 
                     return query;
@@ -88,13 +90,26 @@ jQuery(function($) {
                 },
                 cache: true,
                 dataType: 'json',
+                delay: 250
             },
             placeholder: 'Select Order',
             templateResult: self.formatOrderOption,
             templateSelection: self.formatOrderSelection,
-            minimumResultsForSearch: Infinity
         });
         select.on('select2:select', this.onSelect2Select);
+        select.on('select2:opening', function(e) {
+            $(this).data('select2').$dropdown.find('.select2-search .select2-search__scope').remove();
+            var $fields = $(
+                "<span class='select2-search__scope'>" +
+                "<label for='parent'><input type='radio' name='select2-search__scope' id='parent' value='p' checked>Order ID</label>" +
+                "<label for='customer'><input type='radio' name='select2-search__scope' id='customer' value='billing_email'>Billing Email</label>" +
+                "</span>"
+            );
+            $(this).data('select2').$dropdown.find('.select2-search').append($fields);
+        });
+        select.on('select2:close', function(e) {
+            $(this).data('select2').$dropdown.find('.select2-search .select2-search__scope').remove();
+        });
     };
 
     wc_ezdefi_assign.prototype.onSelect2Select = function(e) {
