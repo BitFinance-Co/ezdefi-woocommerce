@@ -60,6 +60,7 @@ defined( 'ABSPATH' ) or exit;
     </table>
     <table class="widefat striped" id="wc-ezdefi-order-assign">
 		<thead>
+            <th><strong>#</strong></th>
             <th><strong><?php _e( 'Received Amount', 'woocommerce-gateway-ezdefi' ); ?></strong></th>
             <th><strong><?php _e( 'Currency', 'woocommerce-gateway-ezdefi' ); ?></strong></th>
             <th><strong><?php _e( 'Order', 'woocommerce-gateway-ezdefi' ); ?></strong></th>

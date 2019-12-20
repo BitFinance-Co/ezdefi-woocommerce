@@ -434,6 +434,7 @@ class WC_Ezdefi_Ajax
 
 	    if( is_null( $old_order_id ) ) {
 		    $this->db->delete_amount_id_exception( $amount_id, $currency, $old_order_id );
+		    $this->db->delete_exception_by_order_id( $order_id );
         } else {
 		    $this->db->delete_exception_by_order_id( $old_order_id );
 	    }

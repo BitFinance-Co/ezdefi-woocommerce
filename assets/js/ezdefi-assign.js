@@ -211,6 +211,7 @@ jQuery(function($) {
             self.$table.append("<tr><td colspan='4'>Not found</td></tr>")
         }
         for(var i=0;i<data.length;i++) {
+            var number = i + 1;
             var row = data[i];
             var status;
             var payment_method;
@@ -235,6 +236,7 @@ jQuery(function($) {
             }
             var html = $(
                 "<tr>" +
+                "<td>" + number + "</td>" +
                 "<td class='amount-id-column'>" +
                     "<span>" + row['amount_id'] + "</span>" +
                     "<input type='hidden' class='amount-id-input' value='" + row['amount_id'] + "' >" +
