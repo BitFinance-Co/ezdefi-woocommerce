@@ -100,8 +100,8 @@ class WC_Ezdefi {
 			        SET amount_id = value;
 			    END IF;
 			    INSERT INTO $table_name (amount_key, price, amount_id, currency, expired_time)
-                    VALUES (unique_id, value, amount_id, token, NOW() + INTERVAL life_time SECOND)
-                    ON DUPLICATE KEY UPDATE `expired_time` = NOW() + INTERVAL life_time SECOND; 
+                    VALUES (unique_id, value, amount_id, token, NOW() + INTERVAL life_time SECOND + INTERVAL 10 SECOND)
+                    ON DUPLICATE KEY UPDATE `expired_time` = NOW() + INTERVAL life_time SECOND + INTERVAL 10 SECOND; 
 			END
 		" );
 
