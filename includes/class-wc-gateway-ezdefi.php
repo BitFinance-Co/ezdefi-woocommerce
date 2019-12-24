@@ -723,9 +723,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                         <div class="item__text">
                             <div class="item__price">
 							    <?php
+							    $discount = ( intval($c['discount']) > 0) ? $c['discount'] : 0;
 							    $index = array_search( $c['symbol'], array_column( $exchanges, 'token' ) );
 							    $amount = $exchanges[$index]['amount'];
-							    $amount = $amount - ( $amount * ( $c['discount'] / 100 ) );
+							    $amount = $amount - ( $amount * ( $discount / 100 ) );
 							    echo number_format( $amount, 8 );
 							    ?>
                             </div>
@@ -734,7 +735,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 								    <?php echo $c['symbol']; ?>
                                 </div>
                                 <div class="item__discount">
-                                    - <?php echo ( intval($c['discount']) > 0) ? $c['discount'] : 0; ?>%
+                                    - <?php echo $discount; ?>%
                                 </div>
                             </div>
                         </div>

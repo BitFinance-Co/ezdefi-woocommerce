@@ -278,6 +278,7 @@ class WC_Ezdefi_Ajax
     public function generate_payment_html( $payment, $order ) {
         $total = $order->get_total();
         $discount = $this->db->get_currency_option( $payment['currency'] )['discount'];
+	    $discount = ( intval( $discount ) > 0 ) ? $discount : 0;
         $total = $total - ( $total * ( $discount / 100 ) );
 	    ob_start(); ?>
         <div class="ezdefi-payment" data-paymentid="<?php echo $payment['_id']; ?>">

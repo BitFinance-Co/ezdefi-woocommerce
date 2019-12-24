@@ -200,7 +200,11 @@ class WC_Ezdefi_Api
 	 */
     public function calculate_discounted_price( $price, $discount )
     {
-		return $price - ( $price * ( $discount / 100 ) );
+	    if( intval( $discount ) > 0) {
+		    return $price - ( $price * ( $discount / 100 ) );
+	    }
+
+	    return $price;
     }
 
 	/**
