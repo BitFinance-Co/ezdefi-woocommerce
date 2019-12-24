@@ -835,13 +835,15 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	        wp_die();
         }
 
-	    $amount_id = $payment['value'] / pow( 10, $payment['decimal'] );
+	    if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) {
+		    $amount_id = $payment['originValue'];
+	    } else {
+		    $amount_id = $payment['value'] / pow( 10, $payment['decimal'] );
+	    }
+
+	    $amount_id = number_format( $amount_id, 12 );
 
 	    $currency = $payment['currency'];
-
-	    if( ! isset ( $payment['amount_id'] ) ) {
-		    $amount_id = number_format( $amount_id, 12 );
-	    }
 
 	    $exception_data = array(
 		    'status' => strtolower($status),
@@ -849,7 +851,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    );
 
 	    $wheres = array(
-		    'amount_id' => (float) $amount_id,
+		    'amount_id' => $amount_id,
 		    'currency' => (string) $currency,
 		    'order_id' => (int) $order_id
 	    );

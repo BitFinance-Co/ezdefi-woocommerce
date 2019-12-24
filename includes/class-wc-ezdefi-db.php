@@ -279,17 +279,14 @@ class WC_Ezdefi_Db
 			if( ! empty( $value ) ) {
 				$type = gettype( $value );
 				switch ($type) {
-					case 'double' :
-						$conditions[] = " $column = $value ";
-						break;
 					case 'integer' :
 						$conditions[] = " $column = $value ";
 						break;
-					case 'string' :
-						$conditions[] = " $column = '$value' ";
-						break;
 					case 'NULL' :
 						$conditions[] = " $column IS NULL ";
+						break;
+					default :
+						$conditions[] = " $column = '$value' ";
 						break;
 				}
 			}
