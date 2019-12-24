@@ -49,7 +49,7 @@ defined( 'ABSPATH' ) or exit;
                                 </select>
                             </div>
                             <div class="filter-rows">
-                                <button class="button button-primary filterBtn">Apply</button>
+                                <button class="button button-primary filterBtn">Search</button>
                             </div>
                         </div>
                     </form>

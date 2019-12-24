@@ -47,6 +47,7 @@ jQuery(function($) {
     wc_ezdefi_admin.prototype.init = function() {
         var self = this;
 
+        self.customValidationRule();
         self.initValidation.call(this);
         self.initSort.call(this);
         self.initTiptip.call(this);
@@ -55,6 +56,12 @@ jQuery(function($) {
         this.$table.find('select').each(function() {
             self.initCurrencySelect($(this));
         });
+    };
+
+    wc_ezdefi_admin.prototype.customValidationRule = function() {
+        jQuery.validator.addMethod('greaterThanZero', function(value, element) {
+            return parseFloat(value) > 0;
+        }, 'Please enter a value greater than 0');
     };
 
     wc_ezdefi_admin.prototype.initValidation = function() {
@@ -93,7 +100,7 @@ jQuery(function($) {
                             return self.$form.find(selectors.amountIdCheckbox).is(':checked');
                         }
                     },
-                    min: 0,
+                    greaterThanZero: true,
                     max: 100
                 },
                 'woocommerce_ezdefi_payment_method[amount_id]': {
