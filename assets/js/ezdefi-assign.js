@@ -185,13 +185,13 @@ jQuery(function($) {
             },
             success: function(response) {
                 self.$table.find('tbody tr.spinner-row').hide();
-                self.renderHtml.call(self, response.data.data);
+                self.renderHtml.call(self, response.data.data, response.data.meta_data.offset);
                 self.renderPagination.call(self, response.data.meta_data);
             }
         });
     };
 
-    wc_ezdefi_assign.prototype.renderHtml = function(data) {
+    wc_ezdefi_assign.prototype.renderHtml = function(data, offset) {
         var self = this;
         if(data.length === 0) {
             self.$table.append("<tr><td colspan='5'>Not found</td></tr>")
@@ -222,7 +222,7 @@ jQuery(function($) {
             }
             var html = $(
                 "<tr>" +
-                "<td>" + number + "</td>" +
+                "<td>" + (number + offset) + "</td>" +
                 "<td class='amount-id-column'>" +
                     "<span>" + row['amount_id'] + "</span>" +
                     "<input type='hidden' class='amount-id-input' value='" + row['amount_id'] + "' >" +
