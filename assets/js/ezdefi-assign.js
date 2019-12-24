@@ -194,7 +194,7 @@ jQuery(function($) {
     wc_ezdefi_assign.prototype.renderHtml = function(data) {
         var self = this;
         if(data.length === 0) {
-            self.$table.append("<tr><td colspan='4'>Not found</td></tr>")
+            self.$table.append("<tr><td colspan='5'>Not found</td></tr>")
         }
         for(var i=0;i<data.length;i++) {
             var number = i + 1;
@@ -284,7 +284,14 @@ jQuery(function($) {
     };
 
     wc_ezdefi_assign.prototype.renderPagination = function(data) {
-        this.$nav.find('.displaying-num .number').text(data['total']);
+        var total = data['total'];
+
+        if(total == 0) {
+            this.$nav.hide();
+            return;
+        }
+
+        this.$nav.find('.displaying-num .number').text(total);
 
         var $links = this.$nav.find('.pagination-links');
         var $prev;

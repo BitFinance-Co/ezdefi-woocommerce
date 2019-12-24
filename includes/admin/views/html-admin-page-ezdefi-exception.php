@@ -68,7 +68,7 @@ defined( 'ABSPATH' ) or exit;
 		</thead>
         <tbody>
             <tr class="spinner-row">
-                <td colspan="4"><span class="spinner is-active"></span></td>
+                <td colspan="5"><span class="spinner is-active"></span></td>
             </tr>
         </tbody>
 	</table>
