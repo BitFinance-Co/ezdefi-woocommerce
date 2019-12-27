@@ -581,7 +581,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 
 	    $order->update_status('on-hold', __( 'Awaiting ezdefi payment', 'woocommerce-gateway-ezdefi' ) );
 
-	    $symbol = $_POST['wc_ezdefi_currency'];
+	    $symbol = sanitize_key( $_POST['wc_ezdefi_currency'] );
 
 	    $currency_data = $this->db->get_currency_option( $symbol );
 
