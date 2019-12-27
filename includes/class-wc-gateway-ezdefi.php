@@ -47,8 +47,6 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         $this->db = new WC_Ezdefi_Db();
 
         $this->init_hooks();
-
-        wp_die(sanitize_key('11-1'));
     }
 
     public function process_admin_options() {
