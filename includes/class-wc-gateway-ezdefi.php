@@ -330,16 +330,16 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     <span class="dashicons dashicons-menu"></span>
                                 </td>
                                 <td class="logo">
-                                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/2714.png" class="ezdefi-currency-logo" alt="">
+                                    <img src="<?php echo plugins_url( 'assets/images/newsd-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" class="ezdefi-currency-logo" alt="">
                                 </td>
                                 <td class="name">
-                                    <input class="currency-symbol" type="hidden" value="nusd" name="<?php echo $field_key . '[0][symbol]'; ?>]">
-                                    <input class="currency-name" type="hidden" value="nusd" name="<?php echo $field_key . '[0][name]'; ?>]">
-                                    <input class="currency-logo" type="hidden" value="https://s2.coinmarketcap.com/static/img/coins/64x64/2714.png" name="<?php echo $field_key . '[0][logo]'; ?>">
+                                    <input class="currency-symbol" type="hidden" value="newsd" name="<?php echo $field_key . '[0][symbol]'; ?>]">
+                                    <input class="currency-name" type="hidden" value="NewSD" name="<?php echo $field_key . '[0][name]'; ?>]">
+                                    <input class="currency-logo" type="hidden" value="<?php echo plugins_url( 'assets/images/newsd-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" name="<?php echo $field_key . '[0][logo]'; ?>">
                                     <input class="currency-desc" type="hidden" value="NewSD - Stablecoin token for payment" name="<?php echo $field_key . '[0][desc]'; ?>">
                                     <input class="currency-chain" type="hidden" value="eth" name="<?php echo $field_key . '[0][chain]'; ?>">
                                     <div class="view">
-                                        <span>Nusd</span>
+                                        <span>NewSD</span>
                                         <div class="actions">
                                             <a href="" class="editBtn">Edit</a>
                                             |
@@ -348,7 +348,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     </div>
                                     <div class="edit">
                                         <select name="<?php echo $field_key . '[0][select]'; ?>" class="select-select2">
-                                            <option value="nusd" selected="selected">nusd</option>
+                                            <option value="newsd" selected="selected">NewSD</option>
                                         </select>
                                         <div class="actions">
                                             <a href="" class="cancelBtn">Cancel</a>
@@ -396,28 +396,28 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     <span class="dashicons dashicons-menu"></span>
                                 </td>
                                 <td class="logo">
-                                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/2714.png" class="ezdefi-currency-logo" alt="">
+                                    <img src="<?php echo plugins_url( 'assets/images/bitcoin-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" class="ezdefi-currency-logo" alt="">
                                 </td>
                                 <td class="name">
-                                    <input class="currency-symbol" type="hidden" value="ntf" name="<?php echo $field_key . '[1][symbol]'; ?>]">
-                                    <input class="currency-name" type="hidden" value="ntf" name="<?php echo $field_key . '[1][name]'; ?>]">
-                                    <input class="currency-logo" type="hidden" value="https://s2.coinmarketcap.com/static/img/coins/64x64/2714.png" name="<?php echo $field_key . '[1][logo]'; ?>">
+                                    <input class="currency-symbol" type="hidden" value="btc" name="<?php echo $field_key . '[1][symbol]'; ?>]">
+                                    <input class="currency-name" type="hidden" value="Bitcoin" name="<?php echo $field_key . '[1][name]'; ?>]">
+                                    <input class="currency-logo" type="hidden" value="<?php echo plugins_url( 'assets/images/bitcoin-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" name="<?php echo $field_key . '[1][logo]'; ?>">
                                     <input class="currency-desc" type="hidden" value="" name="<?php echo $field_key . '[1][desc]'; ?>">
-                                    <input class="currency-chain" type="hidden" value="eth" name="<?php echo $field_key . '[1][chain]'; ?>">
+                                    <input class="currency-chain" type="hidden" value="btc" name="<?php echo $field_key . '[1][chain]'; ?>">
                                     <div class="view">
-                                        <span>Ntf</span>
+                                        <span>Bitcoin</span>
                                         <div class="actions">
-                                            <a href="" class="editBtn"><?php echo __( 'Edit', 'woocommerce-gateway-ezdefi' ); ?></a>
+                                            <a href="" class="editBtn">Edit</a>
                                             |
-                                            <a href="" class="deleteBtn"><?php echo __( 'Delete', 'woocommerce-gateway-ezdefi' ); ?></a>
+                                            <a href="" class="deleteBtn">Delete</a>
                                         </div>
                                     </div>
                                     <div class="edit">
                                         <select name="<?php echo $field_key . '[1][select]'; ?>" class="select-select2">
-                                            <option value="ntf" selected="selected">ntf</option>
+                                            <option value="btc" selected="selected">Bitcoin</option>
                                         </select>
                                         <div class="actions">
-                                            <a href="" class="cancelBtn"><?php echo __( 'Cancel', 'woocommerce-gateway-ezdefi' ); ?></a>
+                                            <a href="" class="cancelBtn">Cancel</a>
                                         </div>
                                     </div>
                                 </td>
@@ -454,6 +454,72 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     </div>
                                     <div class="edit">
                                         <input type="number" name="<?php echo $field_key . '[1][decimal]'; ?>" value="">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="editing">
+                                <td class="sortable-handle">
+                                    <span class="dashicons dashicons-menu"></span>
+                                </td>
+                                <td class="logo">
+                                    <img src="<?php echo plugins_url( 'assets/images/ethereum-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" class="ezdefi-currency-logo" alt="">
+                                </td>
+                                <td class="name">
+                                    <input class="currency-symbol" type="hidden" value="eth" name="<?php echo $field_key . '[2][symbol]'; ?>]">
+                                    <input class="currency-name" type="hidden" value="Ethereum" name="<?php echo $field_key . '[2][name]'; ?>]">
+                                    <input class="currency-logo" type="hidden" value="<?php echo plugins_url( 'assets/images/ethereum-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" name="<?php echo $field_key . '[2][logo]'; ?>">
+                                    <input class="currency-desc" type="hidden" value="" name="<?php echo $field_key . '[2][desc]'; ?>">
+                                    <input class="currency-chain" type="hidden" value="eth" name="<?php echo $field_key . '[2][chain]'; ?>">
+                                    <div class="view">
+                                        <span>Ethereum</span>
+                                        <div class="actions">
+                                            <a href="" class="editBtn">Edit</a>
+                                            |
+                                            <a href="" class="deleteBtn">Delete</a>
+                                        </div>
+                                    </div>
+                                    <div class="edit">
+                                        <select name="<?php echo $field_key . '[2][select]'; ?>" class="select-select2">
+                                            <option value="eth" selected="selected">Ethereum</option>
+                                        </select>
+                                        <div class="actions">
+                                            <a href="" class="cancelBtn">Cancel</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="discount">
+                                    <div class="view">
+                                    </div>
+                                    <div class="edit">
+                                        <input type="number" name="<?php echo $field_key . '[2][discount]'; ?>" value="0"><span> %</span>
+                                    </div>
+                                </td>
+                                <td class="lifetime">
+                                    <div class="view">
+                                    </div>
+                                    <div class="edit">
+                                        <input type="number" name="<?php echo $field_key . '[2][lifetime]'; ?>" value=""><span> s</span>
+                                    </div>
+                                </td>
+                                <td class="wallet">
+                                    <div class="view">
+                                    </div>
+                                    <div class="edit">
+                                        <input type="text" class="currency-wallet" placeholder="Wallet Address" name="<?php echo $field_key . '[2][wallet]'; ?>" value="">
+                                    </div>
+                                </td>
+                                <td class="block_confirm">
+                                    <div class="view">
+                                    </div>
+                                    <div class="edit">
+                                        <input type="number" name="<?php echo $field_key . '[2][block_confirm]'; ?>" value="">
+                                    </div>
+                                </td>
+                                <td class="decimal">
+                                    <div class="view">
+                                    </div>
+                                    <div class="edit">
+                                        <input type="number" name="<?php echo $field_key . '[2][decimal]'; ?>" value="">
                                     </div>
                                 </td>
                             </tr>
