@@ -752,8 +752,8 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	public function gateway_callback_handle()
 	{
 	    if( isset( $_GET['uoid'] ) && isset( $_GET['paymentid'] ) ) {
-		    $order_id = $_GET['uoid'];
-		    $paymentid = $_GET['paymentid'];
+		    $order_id = sanitize_key( $_GET['uoid'] );
+		    $paymentid = sanitize_key( $_GET['paymentid'] );
 
 		    return $this->process_payment_callback( $order_id, $paymentid );
         }
@@ -763,12 +763,12 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
             isset( $_GET['currency'] ) && isset( $_GET['id'] ) &&
             isset( $_GET['decimal'] )
 		) {
-			$value = $_GET['value'];
-			$decimal = $_GET['decimal'];
+			$value = sanitize_key( $_GET['value'] );
+			$decimal = sanitize_key( $_GET['decimal'] );
 			$value = $value / pow( 10, $decimal );
-			$explorerUrl = $_GET['explorerUrl'];
-			$currency = $_GET['currency'];
-			$id = $_GET['id'];
+			$explorerUrl = sanitize_text_field( $_GET['explorerUrl'] );
+			$currency = sanitize_key( $_GET['currency'] );
+			$id = sanitize_key( $_GET['id'] );
 
 			return $this->process_transaction_callback( $value, $explorerUrl, $currency, $id);
         }
