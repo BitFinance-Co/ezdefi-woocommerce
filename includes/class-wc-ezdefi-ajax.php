@@ -97,7 +97,7 @@ class WC_Ezdefi_Ajax
 			return $this->get_ezdefi_payment( $paymentid );
 		}
 
-		$symbol = $_POST['symbol'];
+		$symbol = sanitize_text_field( $_POST['symbol'] );
 
 		return $this->create_ezdefi_payment( $order, $symbol, $method );
 	}
@@ -109,7 +109,7 @@ class WC_Ezdefi_Ajax
     {
 	    $data = $this->validate_post_data( $_POST, __( 'Can not create payment', 'woocommerce-gateway-ezdefi' ) );
 
-	    $symbol = $_POST['symbol'];
+	    $symbol = sanitize_text_field( $_POST['symbol'] );
 
 	    return $this->create_ezdefi_payment( $data['order'], $symbol, $data['method'], true );
     }
@@ -426,9 +426,9 @@ class WC_Ezdefi_Ajax
             wp_send_json_error();
         }
 
-        $amount_id = sanitize_key( $_POST['amount_id'] );
+        $amount_id = sanitize_text_field( $_POST['amount_id'] );
 
-        $currency = sanitize_key( $_POST['currency'] );
+        $currency = sanitize_text_field( $_POST['currency'] );
 
 	    $old_order_id = ( $_POST['old_order_id'] && ! empty( $_POST['old_order_id'] ) ) ? sanitize_key( $_POST['old_order_id'] ) : null;
 
@@ -458,9 +458,9 @@ class WC_Ezdefi_Ajax
 			wp_send_json_error();
 		}
 
-		$amount_id = sanitize_key( $_POST['amount_id'] );
+		$amount_id = sanitize_text_field( $_POST['amount_id'] );
 
-		$currency = sanitize_key( $_POST['currency'] );
+		$currency = sanitize_text_field( $_POST['currency'] );
 
 		$order_id = sanitize_key( $_POST['order_id'] );
 
@@ -492,11 +492,11 @@ class WC_Ezdefi_Ajax
 
     public function wc_ezdefi_delete_amount_id_ajax_callback()
     {
-	    $amount_id = sanitize_key( $_POST['amount_id'] );
+	    $amount_id = sanitize_text_field( $_POST['amount_id'] );
 
 	    $order_id = ( ! empty( $_POST['order_id'] ) ) ? sanitize_key( $_POST['order_id'] ) : null;
 
-	    $currency = $_POST['currency'];
+	    $currency = sanitize_text_field( $_POST['currency'] );
 
 	    $this->db->delete_amount_id_exception( $amount_id, $currency, $order_id );
     }

@@ -47,6 +47,8 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         $this->db = new WC_Ezdefi_Db();
 
         $this->init_hooks();
+
+        wp_die(sanitize_key('11-1'));
     }
 
     public function process_admin_options() {
@@ -581,7 +583,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 
 	    $order->update_status('on-hold', __( 'Awaiting ezdefi payment', 'woocommerce-gateway-ezdefi' ) );
 
-	    $symbol = sanitize_key( $_POST['wc_ezdefi_currency'] );
+	    $symbol = sanitize_text_field( $_POST['wc_ezdefi_currency'] );
 
 	    $currency_data = $this->db->get_currency_option( $symbol );
 
@@ -767,7 +769,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 			$decimal = sanitize_key( $_GET['decimal'] );
 			$value = $value / pow( 10, $decimal );
 			$explorerUrl = sanitize_text_field( $_GET['explorerUrl'] );
-			$currency = sanitize_key( $_GET['currency'] );
+			$currency = sanitize_text_field( $_GET['currency'] );
 			$id = sanitize_key( $_GET['id'] );
 
 			return $this->process_transaction_callback( $value, $explorerUrl, $currency, $id);
