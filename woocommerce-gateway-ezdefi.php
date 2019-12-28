@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: WooCommerce Ezdefi Payment Gateway
+ * Plugin Name: ezDeFi - Bitcoin, Ethereum and Cryptocurrencies Payment Gateway for WooCommerce
  * Plugin URI: https://ezdefi.io/
- * Description: Ezdefi Gateway integration for Woocommerce
+ * Description: Accept Bitcoin, Ethereum and Cryptocurrencies on your Woocommerce store with ezDeFi
  * Version: 1.0.0
- * Author: Nexty Platform
- * Author URI: https://nexty.io/
+ * Author: ezDeFi
+ * Author URI: https://ezdefi.io/
  * License: GPLv2 or later
  * Text Domain: woocommerce-gateway-ezdefi
  * Domain Path: /languages
