@@ -78,12 +78,17 @@
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__text {
   text-align: left;
-  flex-grow: 1;
+  width: calc(100% - 28px);
 }
 @media screen and (max-width: 575.98px) {
   #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__text {
     font-size: 15px;
   }
+}
+#wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__text .item__price {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 #wc_ezdefi_qrcode .currency-select .currency-item__wrap .currency-item .item__text .item__info {
   flex-grow: 1;
