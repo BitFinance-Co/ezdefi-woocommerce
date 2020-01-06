@@ -236,6 +236,7 @@ jQuery(function($) {
                     var query = {
                         action: 'wc_ezdefi_get_currency',
                         api_url: self.$form.find('#woocommerce_ezdefi_api_url').val(),
+                        api_key: self.$form.find('#woocommerce_ezdefi_api_key').val(),
                         keyword: params.term
                     };
 

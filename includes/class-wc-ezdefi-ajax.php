@@ -57,14 +57,15 @@ class WC_Ezdefi_Ajax
      */
     public function wc_ezdefi_get_currency_ajax_callback()
     {
-        if( ! isset( $_POST['keyword'] ) || ! isset( $_POST['api_url'] ) ) {
+        if( ! isset( $_POST['keyword'] ) || ! isset( $_POST['api_url'] ) || ! isset( $_POST['api_key'] ) ) {
 	        wp_send_json_error( __( 'Can not get currency', 'woocommerce-gateway-ezdefi' ) );
         }
 
     	$keyword = sanitize_text_field( $_POST['keyword'] );
 	    $api_url = sanitize_text_field( $_POST['api_url'] );
+	    $api_key = sanitize_text_field( $_POST['api_key'] );
 
-	    $api = new WC_Ezdefi_Api( $api_url );
+	    $api = new WC_Ezdefi_Api( $api_url, $api_key );
 
 	    $response = $api->get_list_currency( $keyword );
 
