@@ -32,7 +32,7 @@ return apply_filters(
             'title' => __( 'Gateway API Url', 'woocommerce-gateway-ezdefi' ),
             'type' => 'text',
             'description' => __( 'Description' ),
-            'default' => 'https://merchant-api.ezdefi.com/',
+            'default' => 'https://merchant-api.ezdefi.com/api/',
             'desc_tip' => true,
         ),
         'api_key' => array(
