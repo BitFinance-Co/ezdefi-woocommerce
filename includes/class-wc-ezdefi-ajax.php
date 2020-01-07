@@ -328,10 +328,14 @@ class WC_Ezdefi_Ajax
                     } else {
 	                    $value = $payment['value'] / pow( 10, $payment['decimal'] );
                     }
-			        $value = rtrim( number_format( $value, 12, '.', '' ), '0' );
-                    if(substr($value, -1) == '.') {
-                    	$value = $value + 0;
-                    }
+
+				    $notation = explode('E', $value);
+
+				    if(count($notation) === 2){
+					    $exp = abs(end($notation)) + strlen($notation[0]);
+					    $decimal = number_format($value, $exp);
+					    $value = rtrim($decimal, '.0');
+				    }
                 ?>
 			    <p class="exchange">
 				    <span><?php echo $order->get_currency(); ?> <?php echo $total; ?></span>
