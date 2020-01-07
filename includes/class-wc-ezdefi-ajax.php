@@ -278,7 +278,7 @@ class WC_Ezdefi_Ajax
 	    $value = rtrim( number_format( $value, 12 ), '0' );
 
 	    $data = array(
-            'amount_id' => $value,
+            'amount_id' => str_replace( ',', '', $value),
             'currency' => $symbol,
             'order_id' => substr( $payment['uoid'], 0, strpos( $payment['uoid'],'-' ) ),
             'status' => 'not_paid',
