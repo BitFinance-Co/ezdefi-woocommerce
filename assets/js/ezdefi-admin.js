@@ -92,7 +92,30 @@ jQuery(function($) {
                     url: true
                 },
                 'woocommerce_ezdefi_api_key': {
-                    required: true
+                    required: true,
+                    remote: {
+                        url: wc_ezdefi_data.ajax_url,
+                        type: 'POST',
+                        data: {
+                            action: 'wc_ezdefi_check_api_key',
+                            api_url: function() {
+                                return self.$form.find('#woocommerce_ezdefi_api_url').val();
+                            },
+                            api_key: function() {
+                                return self.$form.find('#woocommerce_ezdefi_api_key').val()
+                            },
+                        },
+                        complete: function (data) {
+                            var response = data.responseText;
+                            var $inputWrapper = self.$form.find('#woocommerce_ezdefi_api_key').closest('td');
+                            if (response === 'true') {
+                                $inputWrapper.append('<span class="correct">Correct</span>');
+                                window.setTimeout(function () {
+                                    $inputWrapper.find('.correct').remove();
+                                }, 1000);
+                            }
+                        }
+                    }
                 },
                 'woocommerce_ezdefi_acceptable_variation': {
                     required: {
@@ -116,6 +139,11 @@ jQuery(function($) {
                             return ! self.$form.find(selectors.amountIdCheckbox).is(':checked');
                         }
                     }
+                }
+            },
+            messages: {
+                'woocommerce_ezdefi_api_key': {
+                    remote: 'API Key is not correct. Please check again'
                 }
             }
         });

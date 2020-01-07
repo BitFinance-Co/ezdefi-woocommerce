@@ -300,6 +300,13 @@ class WC_Ezdefi_Api
 	    return $response;
     }
 
+    public function check_api_key()
+    {
+    	$response = $this->call( 'user/show', 'get' );
+
+    	return $response;
+    }
+
 	/**
 	 * Get list token by keyword
 	 *
