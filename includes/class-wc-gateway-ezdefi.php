@@ -59,7 +59,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
     protected function set_general_property()
     {
 	    $this->id = 'ezdefi';
-	    $this->method_title = __( 'ezDeFi', 'woocommerce-gateway-ezdefi' );
+	    $this->method_title = __( 'Pay with cryptocurrency', 'woocommerce-gateway-ezdefi' );
 	    $this->method_description = __( 'Using BTC, ETH or any kinds of cryptocurrency. Handle by ezDeFi', 'woocommerce-gateway-ezdefi' );
 	    $this->has_fields = true;
     }
