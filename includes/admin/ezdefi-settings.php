@@ -38,8 +38,7 @@ return apply_filters(
         'api_key' => array(
             'title' => __( 'Gateway API Key', 'woocommerce-gateway-ezdefi' ),
             'type' => 'text',
-            'description' => __( 'Description' ),
-            'desc_tip' => true,
+            'description' => sprintf( __( '<a target="_blank" href="%s">Register to get API Key</a>', 'easy-digital-downloads' ), 'https://merchant.ezdefi.com/register?utm_source=woocommerce-download' ),
         ),
         'payment_method' => array(
             'title' => __( 'Payment Method', 'woocommerce-gateway-ezdefi' ),
