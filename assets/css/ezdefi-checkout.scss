@@ -88,14 +88,16 @@
 
         .item__text {
           text-align: left;
-          flex-grow: 1;
+          width: calc(100% - 28px);
 
           @media screen and (max-width: 575.98px) {
             font-size: 15px;
           }
 
           .item__price {
-
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
 
           .item__info {
