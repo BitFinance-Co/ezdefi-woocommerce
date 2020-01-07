@@ -385,9 +385,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="decimal">
                                     <div class="view">
+                                        4
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[0][decimal]'; ?>" value="">
+                                        <input type="number" name="<?php echo $field_key . '[0][decimal]'; ?>" value="4">
                                     </div>
                                 </td>
                             </tr>
@@ -451,9 +452,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="decimal">
                                     <div class="view">
+                                        8
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[1][decimal]'; ?>" value="">
+                                        <input type="number" name="<?php echo $field_key . '[1][decimal]'; ?>" value="8">
                                     </div>
                                 </td>
                             </tr>
@@ -517,9 +519,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="decimal">
                                     <div class="view">
+                                        8
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[2][decimal]'; ?>" value="">
+                                        <input type="number" name="<?php echo $field_key . '[2][decimal]'; ?>" value="8">
                                     </div>
                                 </td>
                             </tr>
