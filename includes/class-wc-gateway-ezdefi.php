@@ -295,7 +295,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                             <?php echo isset( $c['lifetime'] ) ? ($c['lifetime'] / 60) . 'm' : '' ;?>
                                         </div>
                                         <div class="edit">
-                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? $c['lifetime'] : '' ;?>"><span> minutes</span>
+                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? ($c['lifetime'] / 60) : '' ;?>"><span> minutes</span>
                                         </div>
                                     </td>
                                     <td class="wallet">
