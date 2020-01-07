@@ -840,8 +840,6 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 
 			return $this->process_transaction_callback( $value, $explorerUrl, $currency, $id);
         }
-
-		wp_die();
 	}
 
 	public function process_transaction_callback( $value, $explorerUrl, $currency, $id )
@@ -849,28 +847,30 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         $response = $this->api->get_transaction( $id );
 
 	    if( is_wp_error( $response ) ) {
-		    wp_die();
+		    wp_send_json_error();
 	    }
 
 	    $response = json_decode( $response['body'], true );
 
 	    if( $response['code'] != 1 ) {
-	        wp_die();
+	        wp_send_json_error();
         }
 
 	    $transaction = $response['data'];
 
 	    if( $transaction['status'] != 'ACCEPTED' ) {
-	        wp_die();
+	        wp_send_json_error();
         }
 
 	    $data = array(
-            'amount_id' => number_format( $value, 12 ),
+            'amount_id' => number_format( $value, 12, '.', '' ),
             'currency' => $currency,
             'explorer_url' => $explorerUrl,
         );
 
         $this->db->add_exception( $data );
+
+        wp_send_json_success();
     }
 
     public function process_payment_callback( $order_id, $paymentid )
@@ -881,19 +881,19 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    $order = wc_get_order( $order_id );
 
 	    if( ! $order ) {
-		    wp_die();
+		    wp_send_json_error();
 	    }
 
 	    $response = $this->api->get_ezdefi_payment( $paymentid );
 
 	    if( is_wp_error( $response ) ) {
-		    wp_die();
+		    wp_send_json_error();
 	    }
 
 	    $payment = json_decode( $response['body'], true );
 
 	    if( $payment['code'] < 0 ) {
-		    wp_die();
+		    wp_send_json_error();
 	    }
 
 	    $payment = $payment['data'];
@@ -901,7 +901,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    $status = $payment['status'];
 
 	    if( $status === 'PENDING' || $status === 'EXPIRED' ) {
-	        wp_die();
+	        wp_send_json_error();
         }
 
 	    if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) {
@@ -910,7 +910,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		    $amount_id = $payment['value'] / pow( 10, $payment['decimal'] );
 	    }
 
-	    $amount_id = number_format( $amount_id, 12 );
+	    $amount_id = number_format( $amount_id, 12, '.', '' );
 
 	    $currency = $payment['currency'];
 
@@ -943,6 +943,6 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		    $this->db->update_exception( $wheres, $exception_data );
 	    }
 
-	    wp_die();
+	    wp_send_json_success();
     }
 }
