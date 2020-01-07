@@ -241,7 +241,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                             <th scope="col" class="logo"></th>
                             <th scope="col" class="name"><?php echo __( 'Name', 'woocommerce-gateway-ezdefi' ); ?></th>
                             <th scope="col" class="discount"><?php echo __( 'Discount', 'woocommerce-gateway-ezdefi' ); ?></th>
-                            <th scope="col" class="lifetime"><?php echo __( 'Expiration (seconds)', 'woocommerce-gateway-ezdefi' ); ?></th>
+                            <th scope="col" class="lifetime"><?php echo __( 'Expiration (minutes)', 'woocommerce-gateway-ezdefi' ); ?></th>
                             <th scope="col" class="wallet"><?php echo __( 'Wallet Address', 'woocommerce-gateway-ezdefi' ); ?></th>
                             <th scope="col" class="block-confirm"><?php echo __( 'Block Confirmation', 'woocommerce-gateway-ezdefi' ); ?></th>
                             <th scope="col" class="decimal"><?php echo __( 'Decimal', 'woocommerce-gateway-ezdefi' ); ?></th>
@@ -292,10 +292,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     </td>
                                     <td class="lifetime">
                                         <div class="view">
-                                            <?php echo isset( $c['lifetime'] ) ? $c['lifetime'] . 's' : '' ;?>
+                                            <?php echo isset( $c['lifetime'] ) ? ($c['lifetime'] / 60) . 'm' : '' ;?>
                                         </div>
                                         <div class="edit">
-                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? $c['lifetime'] : '' ;?>"><span> seconds</span>
+                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? $c['lifetime'] : '' ;?>"><span> minutes</span>
                                         </div>
                                     </td>
                                     <td class="wallet">
@@ -366,7 +366,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     <div class="view">
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[0][lifetime]'; ?>" value=""><span> s</span>
+                                        <input type="number" name="<?php echo $field_key . '[0][lifetime]'; ?>" value=""><span> m</span>
                                     </div>
                                 </td>
                                 <td class="wallet">
@@ -433,7 +433,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     <div class="view">
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[1][lifetime]'; ?>" value=""><span> s</span>
+                                        <input type="number" name="<?php echo $field_key . '[1][lifetime]'; ?>" value=""><span> m</span>
                                     </div>
                                 </td>
                                 <td class="wallet">
@@ -500,7 +500,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                     <div class="view">
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[2][lifetime]'; ?>" value=""><span> s</span>
+                                        <input type="number" name="<?php echo $field_key . '[2][lifetime]'; ?>" value=""><span> m</span>
                                     </div>
                                 </td>
                                 <td class="wallet">
@@ -560,6 +560,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         }
 
         foreach( $value as $i => $v ) {
+            $v['lifetime'] = $v['lifetime'] * 60;
             $value[$i] = array_map( 'sanitize_text_field', $v );
         }
 
