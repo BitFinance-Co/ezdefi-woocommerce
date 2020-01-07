@@ -2,6 +2,7 @@ jQuery(function($) {
     'use strict';
 
     var selectors = {
+        apiKeyInput: '#woocommerce_ezdefi_api_key',
         amountIdCheckbox: 'input[name="woocommerce_ezdefi_payment_method[amount_id]"]',
         ezdefiWalletCheckbox: 'input[name="woocommerce_ezdefi_payment_method[ezdefi_wallet]"]',
         symbolInput: '.currency-symbol',
@@ -31,6 +32,7 @@ jQuery(function($) {
         var toggleAmountSetting = this.toggleAmountSetting.bind(this);
         var onChangeDecimal = this.onChangeDecimal.bind(this);
         var onBlurDecimal = this.onBlurDecimal.bind(this);
+        var onChangeApiKey = this.onChangeApiKey.bind(this);
 
         this.init.call(this);
 
@@ -41,7 +43,8 @@ jQuery(function($) {
             .on('click', selectors.deleteBtn, removeCurrency)
             .on('change', selectors.amountIdCheckbox, toggleAmountSetting)
             .on('focus', selectors.decimalInput, onChangeDecimal)
-            .on('blur', selectors.decimalInput, onBlurDecimal);
+            .on('blur', selectors.decimalInput, onBlurDecimal)
+            .on('change', selectors.apiKeyInput, onChangeApiKey);
     };
 
     wc_ezdefi_admin.prototype.init = function() {
@@ -93,29 +96,6 @@ jQuery(function($) {
                 },
                 'woocommerce_ezdefi_api_key': {
                     required: true,
-                    remote: {
-                        url: wc_ezdefi_data.ajax_url,
-                        type: 'POST',
-                        data: {
-                            action: 'wc_ezdefi_check_api_key',
-                            api_url: function() {
-                                return self.$form.find('#woocommerce_ezdefi_api_url').val();
-                            },
-                            api_key: function() {
-                                return self.$form.find('#woocommerce_ezdefi_api_key').val()
-                            },
-                        },
-                        complete: function (data) {
-                            var response = data.responseText;
-                            var $inputWrapper = self.$form.find('#woocommerce_ezdefi_api_key').closest('td');
-                            if (response === 'true') {
-                                $inputWrapper.append('<span class="correct">Correct</span>');
-                                window.setTimeout(function () {
-                                    $inputWrapper.find('.correct').remove();
-                                }, 1000);
-                            }
-                        }
-                    }
                 },
                 'woocommerce_ezdefi_acceptable_variation': {
                     required: {
@@ -139,11 +119,6 @@ jQuery(function($) {
                             return ! self.$form.find(selectors.amountIdCheckbox).is(':checked');
                         }
                     }
-                }
-            },
-            messages: {
-                'woocommerce_ezdefi_api_key': {
-                    remote: 'API Key is not correct. Please check again'
                 }
             }
         });
@@ -441,6 +416,39 @@ jQuery(function($) {
     wc_ezdefi_admin.prototype.onBlurDecimal = function(e) {
         var td = $(e.target).closest('td');
         td.find('.edit').find('.error').remove();
+    };
+
+    wc_ezdefi_admin.prototype.onChangeApiKey = function(e) {
+        var self = this;
+        var $input = $(e.target);
+        $input.rules('add', {
+            remote: {
+                url: wc_ezdefi_data.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'wc_ezdefi_check_api_key',
+                    api_url: function() {
+                        return self.$form.find('#woocommerce_ezdefi_api_url').val();
+                    },
+                    api_key: function() {
+                        return self.$form.find('#woocommerce_ezdefi_api_key').val()
+                    },
+                },
+                complete: function (data) {
+                    var response = data.responseText;
+                    var $inputWrapper = self.$form.find('#woocommerce_ezdefi_api_key').closest('td');
+                    if (response === 'true') {
+                        $inputWrapper.append('<span class="correct">Correct</span>');
+                        window.setTimeout(function () {
+                            $inputWrapper.find('.correct').remove();
+                        }, 1000);
+                    }
+                }
+            },
+            messages: {
+                remote: "API Key is not correct. Please check again"
+            }
+        });
     };
 
     new wc_ezdefi_admin();
