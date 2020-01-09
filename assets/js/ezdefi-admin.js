@@ -50,6 +50,8 @@ jQuery(function($) {
     wc_ezdefi_admin.prototype.init = function() {
         var self = this;
 
+        self.$form.find(selectors.apiKeyInput).attr('autocomplete', 'off');
+
         self.customValidationRule();
         self.initValidation.call(this);
         self.initSort.call(this);
