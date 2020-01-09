@@ -406,6 +406,12 @@
   width: 20px;
   margin-right: 5px;
 }
+#wc_ezdefi_qrcode #amount_id .ezdefi-payment .qrcode:not(.expired) {
+  padding-bottom: 12px;
+}
+#wc_ezdefi_qrcode #ezdefi_wallet .ezdefi-payment .qrcode:not(.expired) {
+  padding: 8px 8px 20px 8px !important;
+}
 #wc_ezdefi_qrcode .wc-ezdefi-loader {
   border: 3px solid #eee;
   -webkit-animation: spin 1s linear infinite;
