@@ -320,8 +320,17 @@ jQuery(function($) {
         $clone.find('.name .view span').empty();
         $clone.find('.name .edit').prepend($select);
         $clone.find('input').each(function() {
-            $(this).val('');
-            var td = $(this).closest('td');
+            var input = $(this);
+            var td = input.closest('td');
+            if(input.is('input[name*="discount"]')) {
+                input.val(0);
+            } else if(input.is('input[name*="lifetime"]')) {
+                input.val(15);
+            } else if(input.is('input[name*="block_confirm"]')) {
+                input.val(1);
+            } else {
+                input.val('');
+            }
             if(!td.hasClass('name')) {
                 td.find('.view').empty();
             }

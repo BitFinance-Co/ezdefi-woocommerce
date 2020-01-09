@@ -357,6 +357,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="discount">
                                     <div class="view">
+                                        0%
                                     </div>
                                     <div class="edit">
                                         <input type="number" name="<?php echo $field_key . '[0][discount]'; ?>" value="0"><span> %</span>
@@ -364,9 +365,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="lifetime">
                                     <div class="view">
+                                        15 minutes
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[0][lifetime]'; ?>" value=""><span> m</span>
+                                        <input type="number" name="<?php echo $field_key . '[0][lifetime]'; ?>" value="15"><span> m</span>
                                     </div>
                                 </td>
                                 <td class="wallet">
@@ -378,9 +380,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="block_confirm">
                                     <div class="view">
+                                        1
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[0][block_confirm]'; ?>" value="">
+                                        <input type="number" name="<?php echo $field_key . '[0][block_confirm]'; ?>" value="1">
                                     </div>
                                 </td>
                                 <td class="decimal">
@@ -424,6 +427,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="discount">
                                     <div class="view">
+                                        0%
                                     </div>
                                     <div class="edit">
                                         <input type="number" name="<?php echo $field_key . '[1][discount]'; ?>" value="0"><span> %</span>
@@ -431,9 +435,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="lifetime">
                                     <div class="view">
+                                        15 minutes
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[1][lifetime]'; ?>" value=""><span> m</span>
+                                        <input type="number" name="<?php echo $field_key . '[1][lifetime]'; ?>" value="15"><span> m</span>
                                     </div>
                                 </td>
                                 <td class="wallet">
@@ -445,9 +450,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="block_confirm">
                                     <div class="view">
+                                        1
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[1][block_confirm]'; ?>" value="">
+                                        <input type="number" name="<?php echo $field_key . '[1][block_confirm]'; ?>" value="1">
                                     </div>
                                 </td>
                                 <td class="decimal">
@@ -491,6 +497,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="discount">
                                     <div class="view">
+                                        0%
                                     </div>
                                     <div class="edit">
                                         <input type="number" name="<?php echo $field_key . '[2][discount]'; ?>" value="0"><span> %</span>
@@ -498,9 +505,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="lifetime">
                                     <div class="view">
+                                        15 minutes
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[2][lifetime]'; ?>" value=""><span> m</span>
+                                        <input type="number" name="<?php echo $field_key . '[2][lifetime]'; ?>" value="15"><span> m</span>
                                     </div>
                                 </td>
                                 <td class="wallet">
@@ -512,9 +520,10 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="block_confirm">
                                     <div class="view">
+                                        1
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[2][block_confirm]'; ?>" value="">
+                                        <input type="number" name="<?php echo $field_key . '[2][block_confirm]'; ?>" value="1">
                                     </div>
                                 </td>
                                 <td class="decimal">
