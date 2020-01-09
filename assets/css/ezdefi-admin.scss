@@ -244,20 +244,28 @@ form {
   }
 }
 
-.select2-currency {
-  display: flex;
-  align-items: center;
-
-  .select2-currency__icon {
-    margin-right: 10px;
-
-    img {
-      width: 24px;
-      display: block;
+.select2-container {
+  .select2-search--dropdown {
+    .select2-search__field {
+      padding-top: 0;
+      padding-bottom: 0;
     }
   }
+  .select2-currency {
+    display: flex;
+    align-items: center;
 
-  .select2-currency__name {
-    text-transform: capitalize;
+    .select2-currency__icon {
+      margin-right: 10px;
+
+      img {
+        width: 24px;
+        display: block;
+      }
+    }
+
+    .select2-currency__name {
+      text-transform: capitalize;
+    }
   }
 }

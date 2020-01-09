@@ -178,18 +178,22 @@ form #wc-ezdefi-currency-settings-table tbody tr.editing td.discount .edit span,
   margin-left: 2px;
 }
 
-.select2-currency {
+.select2-container .select2-search--dropdown .select2-search__field {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.select2-container .select2-currency {
   display: flex;
   align-items: center;
 }
-.select2-currency .select2-currency__icon {
+.select2-container .select2-currency .select2-currency__icon {
   margin-right: 10px;
 }
-.select2-currency .select2-currency__icon img {
+.select2-container .select2-currency .select2-currency__icon img {
   width: 24px;
   display: block;
 }
-.select2-currency .select2-currency__name {
+.select2-container .select2-currency .select2-currency__name {
   text-transform: capitalize;
 }
 
