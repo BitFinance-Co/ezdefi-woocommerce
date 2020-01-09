@@ -81,30 +81,8 @@ form {
 
     tbody {
       tr {
-        &.editing {
-          .view {
-            display: none;
-          }
-
-          .edit {
-            display: block;
-          }
-        }
-
         td {
           vertical-align: top;
-
-          .edit {
-            input, select {
-              margin: 1px;
-              padding: 3px 5px;
-              height: auto;
-            }
-
-            input[type=number] {
-              width: 65px;
-            }
-          }
 
           &.sortable-handle {
             cursor: move;
@@ -148,6 +126,7 @@ form {
             .edit {
               .select2-container {
                 min-width: auto !important;
+                margin-bottom: 0;
 
                 .select2-selection {
                   text-transform: capitalize;
@@ -157,11 +136,6 @@ form {
           }
 
           &.wallet {
-            .edit {
-              input {
-                width: 100%;
-              }
-            }
             .checking {
               display: flex;
               padding: 2px 0;
@@ -233,6 +207,36 @@ form {
 
           .edit {
             display: none;
+
+            input, select {
+              padding: 0px 5px;
+              height: auto;
+            }
+
+            input[type=number] {
+              width: 65px;
+            }
+          }
+        }
+
+        &.editing {
+          .view {
+            display: none;
+          }
+
+          .edit {
+            display: block;
+          }
+
+          td.discount, td.lifetime {
+            .edit {
+              display: flex !important;
+              align-items: center;
+
+              span {
+                margin-left: 2px;
+              }
+            }
           }
         }
       }
