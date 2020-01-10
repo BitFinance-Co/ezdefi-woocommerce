@@ -352,30 +352,42 @@ class WC_Ezdefi_Ajax
                     ?>
 				    <a class="qrcode <?php echo (time() > strtotime($payment['expiredTime'])) ? 'expired' : ''; ?>" href="<?php echo $deepLink; ?>">
                         <img src="<?php echo $payment['qr']; ?>" />
-				    </a>
+		                <?php if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) : ?>
+                            <img class="alt" style="display: none" src="<?php echo 'https://chart.googleapis.com/chart?cht=qr&chl='.$payment['to'].'&chs=200x200&chld=L|0'; ?>" alt="">
+                        <?php endif; ?>
+                    </a>
 			    </p>
 			    <?php if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) : ?>
-                    <p class="receive-address">
-                        <strong><?php _e( 'Address', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
-                        <span class="copy-to-clipboard" data-clipboard-text="<?php echo $payment['to']; ?>" title="Copy to clipboard">
+                    <div class="qrcode__info--main">
+                        <p class="note">
+                            <?php _e( 'If you get error when scanning this QR Code, please use', 'woocommerce-gateway-ezdefi' ); ?>
+                            <a href="" class="changeQrcodeBtn"><?php _e( 'alternative QR Code', 'woocommerce-gateway-ezdefi' ); ?></a>
+                        </p>
+                    </div>
+
+                    <div class="qrcode__info--alt" style="display: none">
+                        <p class="receive-address">
+                            <strong><?php _e( 'Address', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
+                            <span class="copy-to-clipboard" data-clipboard-text="<?php echo $payment['to']; ?>" title="Copy to clipboard">
                             <span class="copy-content"><?php echo $payment['to']; ?></span>
                             <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
                         </span>
-                    </p>
-                    <p class="payment-amount">
-                        <strong><?php _e( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
-                        <span class="copy-to-clipboard" data-clipboard-text="<?php echo $value; ?>" title="Copy to clipboard">
+                        </p>
+                        <p class="payment-amount">
+                            <strong><?php _e( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
+                            <span class="copy-to-clipboard" data-clipboard-text="<?php echo $value; ?>" title="Copy to clipboard">
                             <span class="copy-content"><?php echo $value; ?></span>
                             <span class="amount"><?php echo $payment['token']['symbol'] ?></span>
                             <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
                         </span>
-                    </p>
-                    <p class="note">
-					    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'woocommerce-gateway-ezdefi' ); ?><br/>
-                    </p>
-                    <p class="note">
-	                    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'woocommerce-gateway-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
-                    </p>
+                        </p>
+                        <p class="note">
+		                    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'woocommerce-gateway-ezdefi' ); ?><br/>
+                        </p>
+                        <p class="note">
+		                    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'woocommerce-gateway-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
+                        </p>
+                    </div>
 			    <?php else : ?>
 				    <p class="app-link-list">
 					    <a target="_blank" href="https://ezdefi.com/ios"><img src="<?php echo plugins_url( 'assets/images/ios-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /><?php _e( 'Download ezDefi for IOS', 'edd-ezdefi' ); ?></a>
