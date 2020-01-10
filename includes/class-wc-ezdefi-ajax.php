@@ -390,8 +390,8 @@ class WC_Ezdefi_Ajax
                     </div>
 			    <?php else : ?>
 				    <p class="app-link-list">
-					    <a target="_blank" href="https://ezdefi.com/ios"><img src="<?php echo plugins_url( 'assets/images/ios-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /><?php _e( 'Download ezDefi for IOS', 'edd-ezdefi' ); ?></a>
-					    <a target="_blank" href="https://ezdefi.com/android"><img src="<?php echo plugins_url( 'assets/images/android-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /><?php _e( 'Download ezDefi for Android', 'edd-ezdefi' ); ?></a>
+					    <a target="_blank" href="https://ezdefi.com/ios"><img src="<?php echo plugins_url( 'assets/images/ios-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /><?php _e( 'Download ezDefi for IOS', 'woocommerce-gateway-ezdefi' ); ?></a>
+					    <a target="_blank" href="https://ezdefi.com/android"><img src="<?php echo plugins_url( 'assets/images/android-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /><?php _e( 'Download ezDefi for Android', 'woocommerce-gateway-ezdefi' ); ?></a>
 				    </p>
 			    <?php endif; ?>
 		    <?php endif; ?>
