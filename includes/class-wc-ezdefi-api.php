@@ -316,8 +316,12 @@ class WC_Ezdefi_Api
 	 */
 	public function get_list_currency( $keyword = '' )
 	{
+		$version = get_bloginfo( 'version' );
+
 		$response = $this->call( 'token/list', 'get', array(
-			'keyword' => $keyword
+			'keyword' => $keyword,
+			'domain' => get_home_url(),
+			'platform' => 'wordpress v' . $version
 		) );
 
 		return $response;
