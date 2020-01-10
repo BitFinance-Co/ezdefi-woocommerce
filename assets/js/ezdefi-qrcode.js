@@ -77,7 +77,7 @@ jQuery(function($) {
         var self = this;
         var target = $(e.target);
         if(!target.hasClass('expired')) {
-            return false;
+            return;
         } else {
             e.preventDefault();
             self.$currencySelect.find('.selected').click();
