@@ -470,7 +470,10 @@ jQuery(function($) {
     tr.find(".currency-decimal").rules("remove", "max");
     tr.find(".currency-decimal-max").val(data.decimal);
     tr.find(".currency-decimal").rules("add", {
-      max: data.decimal
+      max: data.decimal,
+      messages: {
+        max: jQuery.validator.format("Max: {0}")
+      }
     });
     tr.find(".currency-decimal").valid();
     td.find(".view span").text(data.name);
