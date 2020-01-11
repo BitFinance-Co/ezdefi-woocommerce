@@ -250,7 +250,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                     <tbody>
                         <?php if( ! empty( $this->currency ) && is_array( $this->currency ) ) : ?>
                             <?php foreach( $this->currency as $index => $c ) : ?>
-                                <tr>
+                                <tr data-saved="1">
                                     <td class="sortable-handle">
                                         <span class="dashicons dashicons-menu"></span>
                                     </td>
@@ -295,7 +295,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                             <?php echo isset( $c['lifetime'] ) ? ($c['lifetime'] / 60) . 'm' : '' ;?>
                                         </div>
                                         <div class="edit">
-                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? ($c['lifetime'] / 60) : '' ;?>"><span> minutes</span>
+                                            <input type="number" name="<?php echo $field_key . '[' . $index . '][lifetime]'; ?>" value="<?php echo isset( $c['lifetime'] ) ? ($c['lifetime'] / 60) : '' ;?>"><span> m</span>
                                         </div>
                                     </td>
                                     <td class="wallet">
@@ -320,6 +320,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                         </div>
                                         <div class="edit">
                                             <input type="number" class="currency-decimal" name="<?php echo $field_key . '[' . $index . '][decimal]'; ?>" value="<?php echo isset( $c['decimal'] ) ? $c['decimal'] : '' ;?>">
+                                            <input type="hidden" class="currency-decimal-max" name="<?php echo $field_key . '[' . $index . '][decimal_max]'; ?>" value="<?php echo $c['decimal_max']; ?>">
                                         </div>
                                     </td>
                                 </tr>
@@ -365,7 +366,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="lifetime">
                                     <div class="view">
-                                        15 minutes
+                                        15m
                                     </div>
                                     <div class="edit">
                                         <input type="number" name="<?php echo $field_key . '[0][lifetime]'; ?>" value="15"><span> m</span>
@@ -391,7 +392,8 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                         4
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[0][decimal]'; ?>" value="4">
+                                        <input type="number" class="currency-decimal" name="<?php echo $field_key . '[0][decimal]'; ?>" value="4">
+                                        <input type="hidden" class="currency-decimal-max" name="<?php echo $field_key . '[0][decimal_max]'; ?>" value="6">
                                     </div>
                                 </td>
                             </tr>
@@ -435,7 +437,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="lifetime">
                                     <div class="view">
-                                        15 minutes
+                                        15m
                                     </div>
                                     <div class="edit">
                                         <input type="number" name="<?php echo $field_key . '[1][lifetime]'; ?>" value="15"><span> m</span>
@@ -461,7 +463,8 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                         8
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[1][decimal]'; ?>" value="8">
+                                        <input type="number" class="currency-decimal" name="<?php echo $field_key . '[1][decimal]'; ?>" value="8">
+                                        <input type="hidden" class="currency-decimal-max" name="<?php echo $field_key . '[1][decimal_max]'; ?>" value="8">
                                     </div>
                                 </td>
                             </tr>
@@ -505,7 +508,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                 </td>
                                 <td class="lifetime">
                                     <div class="view">
-                                        15 minutes
+                                        15m
                                     </div>
                                     <div class="edit">
                                         <input type="number" name="<?php echo $field_key . '[2][lifetime]'; ?>" value="15"><span> m</span>
@@ -531,7 +534,8 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                                         8
                                     </div>
                                     <div class="edit">
-                                        <input type="number" name="<?php echo $field_key . '[2][decimal]'; ?>" value="8">
+                                        <input type="number" class="currency-decimal" name="<?php echo $field_key . '[2][decimal]'; ?>" value="8">
+                                        <input type="hidden" class="currency-decimal-max" name="<?php echo $field_key . '[2][decimal_max]'; ?>" value="18">
                                     </div>
                                 </td>
                             </tr>
