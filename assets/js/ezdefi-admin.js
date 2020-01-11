@@ -250,7 +250,8 @@ jQuery(function($) {
           max: decimal_max,
           messages: {
             min: jQuery.validator.format("Min: {0}"),
-            max: jQuery.validator.format("Max: {0}")
+            max: jQuery.validator.format("Max: {0}"),
+            required: "Required"
           }
         });
       }
@@ -355,9 +356,9 @@ jQuery(function($) {
 
     if ($row.find(selectors.symbolInput).val() === "") {
       self.removeCurrency(e);
+    } else {
+      $row.toggleClass("editing");
     }
-
-    $row.toggleClass("editing");
   };
 
   wc_ezdefi_admin.prototype.addCurrency = function(e) {
