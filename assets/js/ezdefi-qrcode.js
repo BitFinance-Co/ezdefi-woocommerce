@@ -188,10 +188,10 @@ jQuery(function($) {
     wc_ezdefi_qrcode.prototype.onUseAltQrcode = function(e) {
         var self = this;
         e.preventDefault();
-        this.$tabs.find('.qrcode img').hide();
-        this.$tabs.find('.qrcode__info--main').hide();
-        this.$tabs.find('.qrcode img.alt').show();
-        this.$tabs.find('.qrcode__info--alt').show();
+        this.$tabs.find('.qrcode img.main').toggle();
+        this.$tabs.find('.qrcode__info--main').toggle();
+        this.$tabs.find('.qrcode img.alt').toggle();
+        this.$tabs.find('.qrcode__info--alt').toggle();
     };
 
     wc_ezdefi_qrcode.prototype.checkOrderStatus = function() {

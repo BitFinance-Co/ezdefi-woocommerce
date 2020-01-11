@@ -351,7 +351,7 @@ class WC_Ezdefi_Ajax
                         }
                     ?>
 				    <a class="qrcode <?php echo (time() > strtotime($payment['expiredTime'])) ? 'expired' : ''; ?>" href="<?php echo $deepLink; ?>">
-                        <img src="<?php echo $payment['qr']; ?>" />
+                        <img class="main" src="<?php echo $payment['qr']; ?>" />
 		                <?php if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) : ?>
                             <img class="alt" style="display: none" src="<?php echo 'https://chart.googleapis.com/chart?cht=qr&chl='.$payment['to'].'&chs=200x200&chld=L|0'; ?>" alt="">
                         <?php endif; ?>
@@ -380,6 +380,7 @@ class WC_Ezdefi_Ajax
                             <span class="amount"><?php echo $payment['token']['symbol'] ?></span>
                             <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
                         </span>
+                        <p class=""><a class="changeQrcodeBtn" href=""><strong>Use previous QR Code</strong></a></p>
                         </p>
                         <p class="note">
 		                    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'woocommerce-gateway-ezdefi' ); ?><br/>
