@@ -876,7 +876,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         }
 
 	    $data = array(
-            'amount_id' => number_format( $value, 12, '.', '' ),
+            'amount_id' => number_format( $value, 30, '.', '' ),
             'currency' => $currency,
             'explorer_url' => $explorerUrl,
         );
@@ -923,7 +923,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		    $amount_id = $payment['value'] / pow( 10, $payment['decimal'] );
 	    }
 
-	    $amount_id = number_format( $amount_id, 12, '.', '' );
+	    $amount_id = number_format( $amount_id, 30, '.', '' );
 
 	    $currency = $payment['currency'];
 
