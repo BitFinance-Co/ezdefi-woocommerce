@@ -136,6 +136,7 @@
   padding: 10px 20px;
   display: block;
   text-decoration: none;
+  outline: none !important;
 }
 @media screen and (max-width: 575.98px) {
   #wc_ezdefi_qrcode .ezdefi-payment-tabs ul li a {
