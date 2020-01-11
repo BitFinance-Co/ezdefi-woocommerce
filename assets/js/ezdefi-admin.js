@@ -163,6 +163,14 @@ jQuery(function($) {
             .each(function(rowIndex) {
               var row = $(this);
               self.updateAttr(row, rowIndex);
+              row.find(".currency-decimal").rules("remove", "max");
+              row.find(".currency-decimal").rules("add", {
+                max: parseInt(row.find('.currency-decimal-max').val()),
+                messages: {
+                  max: jQuery.validator.format("Max: {0}")
+                }
+              });
+              row.find(".currency-decimal").valid();
             });
         }
       })
