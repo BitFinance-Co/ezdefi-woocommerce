@@ -380,14 +380,17 @@ class WC_Ezdefi_Ajax
                             <span class="amount"><?php echo $payment['token']['symbol'] ?></span>
                             <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
                         </span>
-                        <p class=""><a class="changeQrcodeBtn" href=""><strong>Use previous QR Code</strong></a></p>
-                        </p>
                         <p class="note">
 		                    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'woocommerce-gateway-ezdefi' ); ?><br/>
                         </p>
                         <p class="note">
 		                    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'woocommerce-gateway-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
                         </p>
+	                    <p style="margin-top: 1rem">
+		                    <a class="changeQrcodeBtn" href="">
+			                    <strong>Use previous QR Code</strong>
+		                    </a>
+	                    </p>
                     </div>
 			    <?php else : ?>
 				    <p class="app-link-list">
