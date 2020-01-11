@@ -234,14 +234,14 @@
 }
 #wc_ezdefi_qrcode .ezdefi-payment .qrcode:not(.expired) {
   border: 1px solid rgba(0, 0, 0, 0.125);
-  padding-bottom: 12px;
 }
 #wc_ezdefi_qrcode .ezdefi-payment .qrcode:not(.expired):after {
-  content: "Click to pay";
+  content: "Scan QR Code or Click to pay";
   font-size: 14px;
   line-height: 12px;
   position: absolute;
-  bottom: 4px;
+  bottom: 6px;
+  width: 100%;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -407,7 +407,7 @@
   margin-right: 5px;
 }
 #wc_ezdefi_qrcode #amount_id .ezdefi-payment .qrcode:not(.expired) {
-  padding-bottom: 12px;
+  padding: 6px 6px 18px 6px;
 }
 #wc_ezdefi_qrcode #ezdefi_wallet .ezdefi-payment .qrcode:not(.expired) {
   padding: 8px 8px 20px 8px !important;
