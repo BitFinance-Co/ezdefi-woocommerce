@@ -73,11 +73,6 @@ jQuery(function($) {
       },
       "Please enter a value greater than 0"
     );
-    jQuery.extend(jQuery.validator.messages, {
-      min: jQuery.validator.format("Min: {0}"),
-      max: jQuery.validator.format("Max: {0}"),
-      required: "Required"
-    });
   };
 
   wc_ezdefi_admin.prototype.initValidation = function() {
@@ -186,7 +181,11 @@ jQuery(function($) {
       if (name.indexOf("discount") > 0) {
         $('input[name="' + name + '"]').rules("add", {
           min: 0,
-          max: 100
+          max: 100,
+          messages: {
+            min: jQuery.validator.format("Min: {0}"),
+            max: jQuery.validator.format("Max: {0}")
+          }
         });
       }
 
@@ -220,14 +219,20 @@ jQuery(function($) {
       if (name.indexOf("lifetime") > 0) {
         var $input = $('input[name="' + name + '"]');
         $input.rules("add", {
-          min: 0
+          min: 0,
+          messages: {
+            min: jQuery.validator.format("Min: {0}")
+          }
         });
       }
 
       if (name.indexOf("block_confirm") > 0) {
         var $input = $('input[name="' + name + '"]');
         $input.rules("add", {
-          min: 0
+          min: 0,
+          messages: {
+            min: jQuery.validator.format("Min: {0}")
+          }
         });
       }
 
@@ -242,7 +247,11 @@ jQuery(function($) {
         $input.rules("add", {
           required: true,
           min: 2,
-          max: decimal_max
+          max: decimal_max,
+          messages: {
+            min: jQuery.validator.format("Min: {0}"),
+            max: jQuery.validator.format("Max: {0}")
+          }
         });
       }
     });
