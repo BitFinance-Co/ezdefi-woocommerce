@@ -224,7 +224,7 @@ jQuery(function($) {
                 "<tr>" +
                 "<td>" + (number + offset) + "</td>" +
                 "<td class='amount-id-column'>" +
-                    "<span>" + row['amount_id'] + "</span>" +
+                    "<span>" + (row['amount_id'] * 1) + "</span>" +
                     "<input type='hidden' class='amount-id-input' value='" + row['amount_id'] + "' >" +
                 "</td>" +
                 "<td>" +
