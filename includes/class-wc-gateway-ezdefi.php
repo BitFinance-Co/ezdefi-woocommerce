@@ -847,6 +847,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 			$value = sanitize_key( $_GET['value'] );
 			$decimal = sanitize_key( $_GET['decimal'] );
 			$value = $value / pow( 10, $decimal );
+			$value = $this->sanitize_float_value( $value );
 			$explorerUrl = sanitize_text_field( $_GET['explorerUrl'] );
 			$currency = sanitize_text_field( $_GET['currency'] );
 			$id = sanitize_key( $_GET['id'] );
@@ -876,7 +877,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         }
 
 	    $data = array(
-            'amount_id' => number_format( $value, 30, '.', '' ),
+            'amount_id' => str_replace( ',', '', $value ),
             'currency' => $currency,
             'explorer_url' => $explorerUrl,
         );
@@ -923,8 +924,6 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		    $amount_id = $payment['value'] / pow( 10, $payment['decimal'] );
 	    }
 
-	    $amount_id = number_format( $amount_id, 30, '.', '' );
-
 	    $currency = $payment['currency'];
 
 	    $exception_data = array(
@@ -933,7 +932,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    );
 
 	    $wheres = array(
-		    'amount_id' => $amount_id,
+		    'amount_id' => $this->sanitize_float_value( $amount_id ),
 		    'currency' => (string) $currency,
 		    'order_id' => (int) $order_id
 	    );
@@ -957,5 +956,18 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    }
 
 	    wp_send_json_success();
+    }
+
+    protected function sanitize_float_value( $value )
+    {
+	    $notation = explode('E', $value);
+
+	    if(count($notation) === 2){
+		    $exp = abs(end($notation)) + strlen($notation[0]);
+		    $decimal = number_format($value, $exp);
+		    $value = rtrim($decimal, '.0');
+	    }
+
+	    return str_replace( ',', '', $value);
     }
 }
