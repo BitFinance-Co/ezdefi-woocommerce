@@ -469,6 +469,10 @@
         img {
           width: 120px;
           margin: 0 5px;
+
+          @media screen and (max-width: 575.98px) {
+            width: 85px;
+          }
         }
       }
     }

@@ -415,6 +415,11 @@
   width: 120px;
   margin: 0 5px;
 }
+@media screen and (max-width: 575.98px) {
+  #wc_ezdefi_qrcode .ezdefi-payment .app-link-list a img {
+    width: 85px;
+  }
+}
 #wc_ezdefi_qrcode #amount_id .ezdefi-payment .qrcode:not(.expired) {
   padding: 6px 6px 18px 6px;
 }

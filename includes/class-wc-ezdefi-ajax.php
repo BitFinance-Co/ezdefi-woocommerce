@@ -350,7 +350,7 @@ class WC_Ezdefi_Ajax
                             $deepLink = 'ezdefi://' . $payment['deepLink'];
                         }
                     ?>
-				    <a class="qrcode <?php echo (time() > strtotime($payment['expiredTime'])) ? 'expired' : ''; ?>" href="<?php echo $deepLink; ?>">
+				    <a class="qrcode <?php echo (time() > strtotime($payment['expiredTime'])) ? 'expired' : ''; ?>" href="<?php echo $deepLink; ?>" target="_blank">
                         <img class="main" src="<?php echo $payment['qr']; ?>" />
 		                <?php if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) : ?>
                             <img class="alt" style="display: none" src="<?php echo 'https://chart.googleapis.com/chart?cht=qr&chl='.$payment['to'].'&chs=200x200&chld=L|0'; ?>" alt="">
