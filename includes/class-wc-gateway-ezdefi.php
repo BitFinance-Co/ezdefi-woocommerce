@@ -60,7 +60,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
     {
 	    $this->id = 'ezdefi';
 	    $this->method_title = __( 'Pay with cryptocurrency', 'woocommerce-gateway-ezdefi' );
-	    $this->method_description = __( 'Using BTC, ETH or any kinds of cryptocurrency. Handle by ezDeFi', 'woocommerce-gateway-ezdefi' );
+	    $this->method_description = __( 'Using BTC, ETH or any kinds of cryptocurrency handled by ezDeFi', 'woocommerce-gateway-ezdefi' );
 	    $this->has_fields = true;
     }
 
@@ -184,7 +184,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                 <fieldset>
                     <input name="<?php echo $field_key; ?>[ezdefi_wallet]" id="<?php echo $field_key; ?>[ezdefi_wallet]" type="checkbox" class="" value="1" <?php echo ( isset( $this->payment_method['ezdefi_wallet'] ) && $this->payment_method['ezdefi_wallet'] === '1' ) ? 'checked' : '' ;?>>
                     <label for="<?php echo $field_key; ?>[ezdefi_wallet]"><?php echo __( 'Pay with ezDeFi wallet', 'woocommerce-gateway-ezdefi' ); ?></label>
-                    <p class="description"><?php echo __( 'This method is more powerful when amount uniqueness above method reaches allowable limit. Users just need to install ezDeFi wallet then import their private key to pay using qrCode.', 'woocommerce-gateway-ezdefi' ); ?></p>
+                    <p class="description"><?php echo __( 'This method is more powerful when amount uniqueness of above method reaches allowable limit. Users need to install ezDeFi wallet then import their private key to pay using QR Code.', 'woocommerce-gateway-ezdefi' ); ?></p>
                 </fieldset>
             </td>
         </tr>

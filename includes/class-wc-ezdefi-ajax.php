@@ -382,13 +382,13 @@ class WC_Ezdefi_Ajax
 
                     <div class="qrcode__info--alt" style="display: none">
                         <p class="note">
-		                    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'woocommerce-gateway-ezdefi' ); ?><br/>
+		                    <?php _e( 'You have to pay exact amount so that your order can be handled properly.', 'woocommerce-gateway-ezdefi' ); ?><br/>
                         </p>
                         <p class="note">
-		                    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'woocommerce-gateway-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
+		                    <?php _e( 'If you have difficulty for sending exact amount, try', 'woocommerce-gateway-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
                         </p>
 	                    <p class="changeQrcode">
-		                    <a class="changeQrcodeBtn" href="">Use previous QR Code</a>
+		                    <a class="changeQrcodeBtn" href="">Use original QR Code</a>
 	                    </p>
                     </div>
 			    <?php else : ?>
