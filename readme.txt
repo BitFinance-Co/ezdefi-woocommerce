@@ -82,6 +82,11 @@ Track NTY, NewSD, NTF payment through [explorer.nexty.io](explorer.nexty.io)
 
 == Changelog ==
 
+= 1.0.2 =
+
+* Add new QR Code
+* Fix UI issues
+
 = 1.0.1 =
 
 * Improve UX, UI
