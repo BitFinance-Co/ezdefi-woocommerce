@@ -358,6 +358,21 @@ class WC_Ezdefi_Ajax
                     </a>
 			    </p>
 			    <?php if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) : ?>
+                    <p class="receive-address">
+                        <strong><?php _e( 'Address', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
+                            <span class="copy-to-clipboard" data-clipboard-text="<?php echo $payment['to']; ?>" title="Copy to clipboard">
+                            <span class="copy-content"><?php echo $payment['to']; ?></span>
+                            <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
+                        </span>
+                    </p>
+                    <p class="payment-amount">
+                        <strong><?php _e( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
+                            <span class="copy-to-clipboard" data-clipboard-text="<?php echo $value; ?>" title="Copy to clipboard">
+                            <span class="copy-content"><?php echo $value; ?></span>
+                            <span class="amount"><?php echo $payment['token']['symbol'] ?></span>
+                            <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
+                        </span>
+                    </p>
                     <div class="qrcode__info--main">
                         <p class="note">
                             <?php _e( 'If you get error when scanning this QR Code, please use', 'woocommerce-gateway-ezdefi' ); ?>
@@ -366,36 +381,20 @@ class WC_Ezdefi_Ajax
                     </div>
 
                     <div class="qrcode__info--alt" style="display: none">
-                        <p class="receive-address">
-                            <strong><?php _e( 'Address', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
-                            <span class="copy-to-clipboard" data-clipboard-text="<?php echo $payment['to']; ?>" title="Copy to clipboard">
-                            <span class="copy-content"><?php echo $payment['to']; ?></span>
-                            <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
-                        </span>
-                        </p>
-                        <p class="payment-amount">
-                            <strong><?php _e( 'Amount', 'woocommerce-gateway-ezdefi' ); ?>:</strong>
-                            <span class="copy-to-clipboard" data-clipboard-text="<?php echo $value; ?>" title="Copy to clipboard">
-                            <span class="copy-content"><?php echo $value; ?></span>
-                            <span class="amount"><?php echo $payment['token']['symbol'] ?></span>
-                            <img src="<?php echo plugins_url( 'assets/images/copy-icon.svg', WC_EZDEFI_MAIN_FILE ); ?>" />
-                        </span>
                         <p class="note">
 		                    <?php _e( 'You have to pay exact amount so that your order can be handle property.', 'woocommerce-gateway-ezdefi' ); ?><br/>
                         </p>
                         <p class="note">
 		                    <?php _e( 'If you have difficulty for sending exact amount, try to use', 'woocommerce-gateway-ezdefi' ); ?> <a href="" class="ezdefiEnableBtn">ezDeFi Wallet</a>
                         </p>
-	                    <p style="margin-top: 1rem">
-		                    <a class="changeQrcodeBtn" href="">
-			                    <strong>Use previous QR Code</strong>
-		                    </a>
+	                    <p class="changeQrcode">
+		                    <a class="changeQrcodeBtn" href="">Use previous QR Code</a>
 	                    </p>
                     </div>
 			    <?php else : ?>
 				    <p class="app-link-list">
-					    <a target="_blank" href="https://ezdefi.com/ios?utm_source=woocommerce-download"><img src="<?php echo plugins_url( 'assets/images/ios-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /><?php _e( 'Download ezDefi for IOS', 'woocommerce-gateway-ezdefi' ); ?></a>
-					    <a target="_blank" href="https://ezdefi.com/android?utm_source=woocommerce-download"><img src="<?php echo plugins_url( 'assets/images/android-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /><?php _e( 'Download ezDefi for Android', 'woocommerce-gateway-ezdefi' ); ?></a>
+					    <a target="_blank" href="https://ezdefi.com/ios?utm_source=woocommerce-download"><img src="<?php echo plugins_url( 'assets/images/ios-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /></a>
+					    <a target="_blank" href="https://ezdefi.com/android?utm_source=woocommerce-download"><img src="<?php echo plugins_url( 'assets/images/android-icon.png', WC_EZDEFI_MAIN_FILE ); ?>" /></a>
 				    </p>
 			    <?php endif; ?>
 		    <?php endif; ?>
