@@ -27,9 +27,6 @@ class WC_Ezdefi_Ajax
 	    add_action( 'wp_ajax_wc_ezdefi_check_api_key', array( $this, 'wc_ezdefi_check_api_key_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_check_api_key', array( $this, 'wc_ezdefi_check_api_key_ajax_callback' ) );
 
-        add_action( 'wp_ajax_wc_ezdefi_get_currency', array( $this, 'wc_ezdefi_get_currency_ajax_callback' ) );
-        add_action( 'wp_ajax_nopriv_wc_ezdefi_get_currency', array( $this, 'wc_ezdefi_get_currency_ajax_callback' ) );
-
 	    add_action( 'wp_ajax_wc_ezdefi_get_payment', array( $this, 'wc_ezdefi_get_payment_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_get_payment', array( $this, 'wc_ezdefi_get_payment_ajax_callback' ) );
 
@@ -82,34 +79,6 @@ class WC_Ezdefi_Ajax
         }
 
 	    wp_die('true');
-    }
-
-    /**
-     * Get currency ajax callback
-     */
-    public function wc_ezdefi_get_currency_ajax_callback()
-    {
-        if( ! isset( $_POST['keyword'] ) || ! isset( $_POST['api_url'] ) || ! isset( $_POST['api_key'] ) ) {
-	        wp_send_json_error( __( 'Can not get currency', 'woocommerce-gateway-ezdefi' ) );
-        }
-
-    	$keyword = sanitize_text_field( $_POST['keyword'] );
-	    $api_url = sanitize_text_field( $_POST['api_url'] );
-	    $api_key = sanitize_text_field( $_POST['api_key'] );
-
-	    $api = new WC_Ezdefi_Api( $api_url, $api_key );
-
-	    $response = $api->get_list_currency( $keyword );
-
-        if( is_wp_error( $response ) ) {
-            wp_send_json_error( __( 'Can not get currency', 'woocommerce-gateway-ezdefi' ) );
-        }
-
-	    $response = json_decode( $response['body'], true );
-
-        $currency = $response['data'];
-
-        wp_send_json_success( $currency );
     }
 
 	/**
