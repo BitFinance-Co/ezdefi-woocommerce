@@ -39,25 +39,6 @@ return apply_filters(
             'title' => __( 'Gateway API Key', 'woocommerce-gateway-ezdefi' ),
             'type' => 'text',
             'description' => sprintf( __( '<a target="_blank" href="%s">Register to get API Key</a>', 'woocommerce-gateway-ezdefi' ), 'https://merchant.ezdefi.com/register?utm_source=woocommerce-download' ),
-        ),
-        'payment_method' => array(
-            'title' => __( 'Payment Method', 'woocommerce-gateway-ezdefi' ),
-	        'type' => 'method_settings',
-	        'description' => __( 'Description' ),
-	        'desc_tip' => true,
-        ),
-        'acceptable_variation' => array(
-	        'title' => __( 'Acceptable price variation', 'woocommerce-gateway-ezdefi' ),
-	        'type' => 'number',
-	        'description' => __( 'Allowable amount variation (%)' ),
-	        'default' => 0.01,
-	        'placeholder' => '0.01%'
-        ),
-        'currency' => array(
-            'title' => __( 'Accepted Currency', 'woocommerce-gateway-ezdefi' ),
-            'type' => 'currency_settings',
-            'description' => __( 'Description', 'woocommerce-gateway-ezdefi' ),
-            'desc_tip' => true,
         )
     )
 );
