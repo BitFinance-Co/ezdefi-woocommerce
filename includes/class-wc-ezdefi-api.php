@@ -8,6 +8,8 @@ class WC_Ezdefi_Api
 
 	protected $api_key;
 
+	protected $public_key;
+
 	protected $db;
 
 	/**
@@ -70,6 +72,21 @@ class WC_Ezdefi_Api
 		return $this->api_key;
 	}
 
+	public function set_public_key( $public_key )
+    {
+        $this->public_key = $public_key;
+    }
+
+    public function get_public_key()
+    {
+        if( empty( $this->public_key ) ) {
+            $public_key = $this->db->get_public_key();
+            $this->set_public_key( $public_key );
+        }
+
+        return $this->public_key;
+    }
+
 	/**
 	 * Build API Path
 	 *
@@ -128,6 +145,31 @@ class WC_Ezdefi_Api
 		return wp_remote_get( $url, array( 'headers' => $headers ) );
 	}
 
+    /**
+     * Get website config from gateway
+     *
+     * @param $public_key
+     */
+	public function get_website_config()
+    {
+        $public_key = $this->get_public_key();
+
+        $response = $this->call( "website/$public_key" );
+
+        return $this->parse_response( $response );
+    }
+
+    public function get_website_coins()
+    {
+        $website_config = $this->get_website_config();
+
+        if( is_null( $website_config ) ) {
+            return null;
+        }
+
+        return $website_config['coins'];
+    }
+
 	/**
 	 * Create ezDeFi Payment
 	 *
@@ -137,41 +179,41 @@ class WC_Ezdefi_Api
 	 *
 	 * @return array|WP_Error
 	 */
-    public function create_ezdefi_payment( $order, $currency_data, $amountId = false )
+    public function create_ezdefi_payment( $order, $coin_data, $amountId = false )
     {
-    	$value = $this->calculate_discounted_price( $order->get_total(), $currency_data['discount'] );
+    	$value = $this->calculate_discounted_price( $order->get_total(), $coin_data['discount'] );
 
 	    if( $amountId ) {
-	    	$value = $this->generate_amount_id( $order->get_currency(), $currency_data['symbol'], $value, $currency_data );
-	    }
+            $rate = $this->get_token_exchange( $order->get_currency(), $coin_data['symbol'] );
 
-	    if( ! $value ) {
-		    return new WP_Error( 'create_ezdefi_payment', 'Can not create payment.' );
+            if( is_null( $rate ) ) {
+                return new WP_Error( 'create_ezdefi_payment', 'Can not create payment.' );
+            }
+
+            $value = $value * $rate;
 	    }
 
 	    $uoid = $this->generate_uoid( $order->get_order_number(), $amountId );
 
 	    $data = [
 		    'uoid' => $uoid,
-		    'to' => $currency_data['wallet'],
+		    'to' => $coin_data['wallet_address'],
 		    'value' => $value,
-		    'safedist' => ( isset( $currency_data['block_confirm'] ) ) ? $currency_data['block_confirm'] : '',
-//		    'ucid' => $order->get_user_id(),
-	        'ucid' => rand(2, 100),
-		    'duration' => ( isset( $currency_data['lifetime'] ) ) ? $currency_data['lifetime'] : '',
-		    'callback' => home_url() . '/?wc-api=ezdefi',
+//		    'callback' => home_url() . '/?wc-api=ezdefi',
+            'callback' => 'https://ac1a5a05.ngrok.io/?wc-api=ezdefi',
+            'coinId' => $coin_data['_id']
 	    ];
 
 	    if( $amountId ) {
 		    $data['amountId'] = true;
-		    $data['currency'] = $currency_data['symbol'] . ':' . $currency_data['symbol'];
+		    $data['currency'] = $coin_data['symbol'] . ':' . $coin_data['symbol'];
 	    } else {
-		    $data['currency'] = $order->get_currency() . ':' . $currency_data['symbol'];
+		    $data['currency'] = $order->get_currency() . ':' . $coin_data['symbol'];
 	    }
 
 	    $response = $this->call( 'payment/create', 'post', $data );
 
-	    return $response;
+	    return $this->parse_response( $response );
     }
 
 	/**
@@ -187,7 +229,7 @@ class WC_Ezdefi_Api
 	        'paymentid' => $paymentid
         ) );
 
-	    return $response;
+	    return $this->parse_response( $response );
     }
 
 	/**
@@ -244,17 +286,7 @@ class WC_Ezdefi_Api
     {
 	    $response = $this->call( 'token/exchange/' . $fiat . ':' . $token, 'get' );
 
-	    if( is_wp_error( $response ) ) {
-	    	return null;
-	    }
-
-	    $response = json_decode( $response['body'], true );
-
-	    if( $response['code'] < 0 ) {
-	    	return null;
-	    }
-
-	    return $response['data'];
+	    return $this->parse_response( $response );
     }
 
     public function get_token_exchanges( $value, $from, $to )
@@ -263,17 +295,7 @@ class WC_Ezdefi_Api
 
 	    $response = $this->call( $url, 'get' );
 
-	    if( is_wp_error( $response ) ) {
-		    return null;
-	    }
-
-	    $response = json_decode( $response['body'], true );
-
-	    if( $response['code'] < 0 ) {
-		    return null;
-	    }
-
-	    return $response['data'];
+	    return $this->parse_response( $response );
     }
 
 	/**
@@ -333,6 +355,21 @@ class WC_Ezdefi_Api
 			'id' => $id
 		) );
 
-		return $response;
+		return $this->parse_response( $response );
 	}
+
+	protected function parse_response( $response )
+    {
+        if( is_wp_error( $response ) ) {
+            return null;
+        }
+
+        $response = json_decode( $response['body'], true );
+
+        if( $response['code'] < 0 ) {
+            return null;
+        }
+
+        return $response['data'];
+    }
 }

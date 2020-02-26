@@ -1,45 +1,43 @@
 jQuery(function($) {
-    'use strict';
+  'use strict';
 
-    var selectors = {
-        container: '#wc-wzdefi-checkout',
-        input: '#wc_ezdefi_currency',
-        item: '.currency-item',
-        itemWrap: '.currency-item__wrap',
-    };
+  var selectors = {
+    container: '#wc-wzdefi-checkout',
+    input: '#wc-ezdefi-coin',
+    item: '.currency-item',
+    itemWrap: '.currency-item__wrap'
+  };
 
-    var wc_ezdefi_checkout = function() {
-        this.$container = $(selectors.container);
+  var wc_ezdefi_checkout = function() {
+    this.$container = $(selectors.container);
 
-        var onSelectItem = this.onSelectItem.bind(this);
+    var onSelectItem = this.onSelectItem.bind(this);
 
-        $(document.body).on('click', selectors.itemWrap, onSelectItem);
-    };
+    $(document.body).on('click', selectors.itemWrap, onSelectItem);
+  };
 
-    wc_ezdefi_checkout.prototype.onSelectItem = function(e) {
-        $(selectors.item).removeClass('selected');
+  wc_ezdefi_checkout.prototype.onSelectItem = function(e) {
+    $(selectors.item).removeClass('selected');
 
-        var target = $(e.target);
-        var selected;
+    var target = $(e.target);
+    var selected;
 
-        if(target.is(selectors.itemWrap)) {
-            selected = target.find(selectors.item);
-        } else {
-            selected = target.closest(selectors.itemWrap).find(selectors.item);
-        }
+    if (target.is(selectors.itemWrap)) {
+      selected = target.find(selectors.item);
+    } else {
+      selected = target.closest(selectors.itemWrap).find(selectors.item);
+    }
 
-        selected.addClass('selected');
+    selected.addClass('selected');
 
-        var symbol = selected.attr('data-symbol');
+    var coinId = selected.attr('data-id');
 
-        console.log(symbol);
+    if (!coinId || coinId.length === 0) {
+      return false;
+    }
 
-        if(!symbol) {
-            return false;
-        }
+    $(selectors.input).val(coinId);
+  };
 
-        $(selectors.input).val(symbol);
-    };
-
-    new wc_ezdefi_checkout();
+  new wc_ezdefi_checkout();
 });

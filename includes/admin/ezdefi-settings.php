@@ -29,16 +29,20 @@ return apply_filters(
 	        'desc_tip' => true,
         ),
         'api_url' => array(
-            'title' => __( 'Gateway API Url', 'woocommerce-gateway-ezdefi' ),
+            'title' => __( 'API Url', 'woocommerce-gateway-ezdefi' ),
             'type' => 'text',
             'description' => __( 'Description' ),
             'default' => 'https://merchant-api.ezdefi.com/api/',
             'desc_tip' => true,
         ),
         'api_key' => array(
-            'title' => __( 'Gateway API Key', 'woocommerce-gateway-ezdefi' ),
+            'title' => __( 'API Key', 'woocommerce-gateway-ezdefi' ),
             'type' => 'text',
             'description' => sprintf( __( '<a target="_blank" href="%s">Register to get API Key</a>', 'woocommerce-gateway-ezdefi' ), 'https://merchant.ezdefi.com/register?utm_source=woocommerce-download' ),
+        ),
+        'public_key' => array(
+            'title' => __( 'Public Key', 'woocommerce-gateway-ezdefi' ),
+            'type' => 'text'
         )
     )
 );

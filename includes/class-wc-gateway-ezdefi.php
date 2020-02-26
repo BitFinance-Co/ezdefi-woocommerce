@@ -15,8 +15,6 @@ if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
  */
 class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 {
-    const EXPLORER_URL = 'https://explorer.nexty.io/tx/';
-
     public $api_url;
 
     public $api_key;
@@ -97,10 +95,6 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
             $this, 'admin_scripts'
         ) );
 
-        add_action( 'woocommerce_api_' . $this->id, array(
-            $this, 'gateway_callback_handle'
-        ) );
-
 	    add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array(
             $this, 'process_admin_options'
         ) );
@@ -116,7 +110,9 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         }
 
         wp_register_script( 'wc_ezdefi_validate', plugins_url( 'assets/js/jquery.validate.min.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
-        wp_register_style( 'wc_ezdefi_admin', plugins_url( 'assets/css/ezdefi-admin.css', WC_EZDEFI_MAIN_FILE ) );
+        wp_register_style( 'wc_ezdefi_select2', plugins_url( 'assets/css/select2.min.css', WC_EZDEFI_MAIN_FILE ) );
+        wp_register_script( 'wc_ezdefi_select2', plugins_url( 'assets/js/select2.min.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
+        wp_register_style( 'wc_ezdefi_admin', plugins_url( 'assets/css/ezdefi-admin.css', WC_EZDEFI_MAIN_FILE ) );        wp_register_style( 'wc_ezdefi_admin', plugins_url( 'assets/css/ezdefi-admin.css', WC_EZDEFI_MAIN_FILE ) );
         wp_register_script( 'wc_ezdefi_admin', plugins_url( 'assets/js/ezdefi-admin.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
     }
 
@@ -134,6 +130,8 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
     public function generate_settings_html( $form_fields = array(), $echo = true )
     {
         wp_enqueue_script( 'wc_ezdefi_validate', plugins_url( 'assets/js/jquery.validate.min.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
+        wp_enqueue_style( 'wc_ezdefi_select2', plugins_url( 'assets/css/select2.min.css', WC_EZDEFI_MAIN_FILE ) );
+        wp_enqueue_script( 'wc_ezdefi_select2', plugins_url( 'assets/js/select2.min.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
         wp_enqueue_style( 'wc_ezdefi_admin', plugins_url( 'assets/css/ezdefi-admin.css', WC_EZDEFI_MAIN_FILE ) );
         wp_enqueue_script( 'wc_ezdefi_admin', plugins_url( 'assets/js/ezdefi-admin.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
         wp_localize_script( 'wc_ezdefi_admin', 'wc_ezdefi_data',
@@ -169,13 +167,26 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    );
     }
 
+    /**
+     * Icon for payment method on checkout page
+     *
+     * @return mixed|string|void
+     */
     public function get_icon() {
+        $coins = $this->get_website_coins();
+
+        if( is_null( $coins ) ) {
+            return '';
+        }
+
         $icon_html = '<div id="wc-ezdefi-icon">';
-	    foreach( $this->currency as $i => $c ) {
+
+	    foreach( $coins as $i => $c ) {
 	        if($i < 3) {
-		        $icon_html .= '<img src="' . $c['logo'] . '" />';
+		        $icon_html .= '<img src="' . $c['token']['logo'] . '" />';
 	        }
         }
+
         $icon_html .= '</div>';
 
 	    return apply_filters( 'woocommerce_gateway_icon', $icon_html, $this->id );
@@ -197,7 +208,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                 echo wpautop( wp_kses_post( $description ) );
                 echo $this->currency_select_html( $total, $currency );
             ?>
-            <input type="hidden" name="wc_ezdefi_currency" id="wc_ezdefi_currency">
+            <input type="hidden" name="wc_ezdefi_coin" id="wc-ezdefi-coin" value="">
         </div>
 	    <?php echo ob_get_clean();
     }
@@ -208,7 +219,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	 * @return bool
 	 */
 	public function validate_fields() {
-		if( ! isset( $_POST['wc_ezdefi_currency'] ) || empty( $_POST['wc_ezdefi_currency'] ) ) {
+		if( ! isset( $_POST['wc_ezdefi_coin'] ) || empty( $_POST['wc_ezdefi_coin'] ) ) {
 		    wc_add_notice( '<strong>' . __( 'Please select currency', 'woocommerce-gateway-ezdefi' ) . '</strong>', 'error' );
 		    return false;
         }
@@ -228,11 +239,19 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 
 	    $order->update_status('on-hold', __( 'Awaiting ezdefi payment', 'woocommerce-gateway-ezdefi' ) );
 
-	    $symbol = sanitize_text_field( $_POST['wc_ezdefi_currency'] );
+	    $coin_id = sanitize_text_field( $_POST['wc_ezdefi_coin'] );
 
-	    $currency_data = $this->db->get_currency_option( $symbol );
+	    $website_coins = $this->get_website_coins();
 
-	    if( ! $currency_data ) {
+	    $coin_data = null;
+
+	    foreach ( $website_coins as $key => $coin ) {
+            if ( $coin['_id'] == $coin_id ) {
+                $coin_data = $website_coins[$key];
+            }
+        }
+
+	    if( is_null( $coin_data ) ) {
 		    wc_add_notice( 'Fail. Please try again or contact shop owner', 'error' );
 
             $order->update_status( 'failed' );
@@ -243,7 +262,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
             );
         }
 
-	    $order->add_meta_data( 'ezdefi_currency', $symbol );
+	    $order->add_meta_data( 'ezdefi_coin', $coin_id );
 	    $order->save_meta_data();
 
 	    return array(
@@ -294,11 +313,25 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		    return;
 	    }
 
-	    $symbol = $order->get_meta( 'ezdefi_currency' );
+	    $coin_id = $order->get_meta( 'ezdefi_coin' );
 
-	    $selected_currency = $this->db->get_currency_option( $symbol );
+	    $website_config = $this->api->get_website_config();
 
-	    if( ! $selected_currency ) {
+	    if ( is_null( $website_config ) ) {
+	        return;
+        }
+
+        $website_coins = $website_config['coins'];
+
+        $selected_currency = null;
+
+        foreach ( $website_coins as $key => $coin ) {
+            if ( $coin['_id'] == $coin_id ) {
+                $selected_currency = $website_coins[$key];
+            }
+        }
+
+	    if( is_null( $selected_currency ) ) {
 	        return;
         }
 
@@ -319,58 +352,82 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                 <div class="ezdefi-payment-tabs" style="display: none">
                     <ul>
                         <?php
-                            foreach( $this->payment_method as $key => $value ) {
+                            if( $website_config['website']['payAnyWallet'] == true ) {
                                 echo '<li>';
-                                switch ($key) {
-                                    case 'amount_id' :
-                                        echo '<a href="#'.$key.'" id="tab-'.$key.'"><span class="large-screen">' . __( 'Pay with any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span><span class="small-screen">' . __( 'Any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
-                                        break;
-                                    case 'ezdefi_wallet' :
-                                        echo '<a href="#'.$key.'" id="tab-'.$key.'" style="background-image: url('.plugins_url( 'assets/images/ezdefi-icon.png', WC_EZDEFI_MAIN_FILE ).')"><span class="large-screen"> ' . __( 'Pay with ezDeFi wallet', 'woocommerce-gateway-ezdefi' ) . '</span><span class="small-screen" style="background-image: url('.plugins_url( 'assets/images/ezdefi-icon.png', WC_EZDEFI_MAIN_FILE ).')"> ' . __( 'ezDeFi wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
-                                        break;
-                                }
-                                echo '</a></li>';
+                                echo '<a href="#amount_id" id="tab-amount_id><span class="large-screen">' . __( 'Pay with any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span><span class="small-screen">' . __( 'Any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
+                                echo '</li>';
+                            }
+
+                            if( $website_config['website']['payEzdefiWallet'] == true ) {
+                                echo '<li>';
+                                echo '<a href="#ezdefi_wallet" id="tab-ezdefi_wallet" style="background-image: url('.plugins_url( 'assets/images/ezdefi-icon.png', WC_EZDEFI_MAIN_FILE ).')"><span class="large-screen"> ' . __( 'Pay with ezDeFi wallet', 'woocommerce-gateway-ezdefi' ) . '</span><span class="small-screen" style="background-image: url('.plugins_url( 'assets/images/ezdefi-icon.png', WC_EZDEFI_MAIN_FILE ).')"> ' . __( 'ezDeFi wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
+                                echo '</li>';
                             }
                         ?>
                     </ul>
-	                <?php foreach( $this->payment_method as $key => $value ) : ?>
-                        <div id="<?php echo $key;?>" class="ezdefi-payment-panel"></div>
-	                <?php endforeach; ?>
+                    <?php
+                        if( $website_config['website']['payAnyWallet'] == true ) {
+                            echo '<div id="amount_id" class="ezdefi-payment-panel"></div>';
+                        }
+
+                        if( $website_config['website']['payEzdefiWallet'] == true ) {
+                            echo '<div id="ezdefi_wallet" class="ezdefi-payment-panel"></div>';
+                        }
+                    ?>
                 </div>
             </div>
         <?php echo ob_get_clean();
     }
 
+    /**
+     * Generate currency select HTML
+     *
+     * @param $total
+     * @param $currency
+     * @param  array  $selected_currency
+     *
+     * @return false|string
+     */
     public function currency_select_html( $total, $currency, $selected_currency = array() )
     {
+        $coins = $this->get_website_coins( true );
+        $to = implode(',', array_map( function ( $coin ) {
+            return $coin['token']['symbol'];
+        }, $coins ) );
+        $exchanges = $this->api->get_token_exchanges(
+            $total,
+            $currency,
+            $to
+        );
         ob_start(); ?>
         <div class="currency-select">
-		    <?php
-		    $to = implode(',', array_map(function ( $currency ) {
-			    return $currency['symbol'];
-		    }, $this->currency ) );
-		    $exchanges = $this->api->get_token_exchanges(
-			    $total,
-			    $currency,
-			    $to
-		    );
-		    ?>
-		    <?php foreach( $this->currency as $c ) : ?>
+		    <?php foreach( $coins as $c ) : ?>
                 <div class="currency-item__wrap">
-                    <div class="currency-item <?php echo ( ! empty( $selected_currency['symbol'] ) && $c['symbol'] === $selected_currency['symbol'] ) ? 'selected' : ''; ?>" data-symbol="<?php echo $c['symbol']; ?>" >
+                    <div class="currency-item <?php echo ( ! empty( $selected_currency['_id'] ) && $c['_id'] === $selected_currency['_id'] ) ? 'selected' : ''; ?>" data-id="<?php echo $c['_id']; ?>" data-symbol="<?php echo $c['token']['symbol'] ;?>">
+                        <script type="application/json">
+                            <?php
+                                echo json_encode( array(
+                                    '_id' => $c['_id'],
+                                    'discount' => $c['discount'],
+                                    'wallet_address' => $c['walletAddress'],
+                                    'symbol' => $c['token']['symbol'],
+                                    'decimal' => $c['decimal']
+                                ) )
+                            ?>
+                        </script>
                         <div class="item__logo">
-                            <img src="<?php echo $c['logo']; ?>" alt="">
-                            <?php if( ! empty( $c['desc'] ) ) : ?>
+                            <img src="<?php echo $c['token']['logo']; ?>" alt="">
+                            <?php if( ! empty( $c['token']['desc'] ) ) : ?>
                                 <div class="item__desc">
-                                    <?php echo $c['desc']; ?>
+                                    <?php echo $c['token']['desc']; ?>
                                 </div>
                             <?php endif; ?>
                         </div>
                         <div class="item__text">
                             <div class="item__price">
 							    <?php
-							    $discount = ( intval($c['discount']) > 0) ? $c['discount'] : 0;
-							    $index = array_search( $c['symbol'], array_column( $exchanges, 'token' ) );
+							    $discount = ( intval( $c['token']['discount']) > 0 ) ? $c['token']['discount'] : 0;
+							    $index = array_search( $c['token']['symbol'], array_column( $exchanges, 'token' ) );
 							    $amount = $exchanges[$index]['amount'];
 							    $amount = $amount - ( $amount * ( $discount / 100 ) );
 							    echo number_format( $amount, 8 );
@@ -378,7 +435,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                             </div>
                             <div class="item__info">
                                 <div class="item__symbol">
-								    <?php echo $c['symbol']; ?>
+								    <?php echo $c['token']['symbol']; ?>
                                 </div>
                                 <div class="item__discount">
                                     - <?php echo $discount; ?>%
@@ -392,147 +449,27 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         <?php return ob_get_clean();
     }
 
-	/**
-	 * Handle callback from gateway when payment DONE
-	 */
-	public function gateway_callback_handle()
-	{
-	    if( isset( $_GET['uoid'] ) && isset( $_GET['paymentid'] ) ) {
-		    $order_id = sanitize_key( $_GET['uoid'] );
-		    $paymentid = sanitize_key( $_GET['paymentid'] );
-
-		    return $this->process_payment_callback( $order_id, $paymentid );
-        }
-
-		if(
-            isset( $_GET['value'] ) && isset( $_GET['explorerUrl'] ) &&
-            isset( $_GET['currency'] ) && isset( $_GET['id'] ) &&
-            isset( $_GET['decimal'] )
-		) {
-			$value = sanitize_key( $_GET['value'] );
-			$decimal = sanitize_key( $_GET['decimal'] );
-			$value = $value / pow( 10, $decimal );
-			$value = $this->sanitize_float_value( $value );
-			$explorerUrl = sanitize_text_field( $_GET['explorerUrl'] );
-			$currency = sanitize_text_field( $_GET['currency'] );
-			$id = sanitize_key( $_GET['id'] );
-
-			return $this->process_transaction_callback( $value, $explorerUrl, $currency, $id);
-        }
-	}
-
-	public function process_transaction_callback( $value, $explorerUrl, $currency, $id )
+    /**
+     * Get website coins
+     *
+     * @param  bool  $is_coin_select
+     *
+     * @return mixed|null
+     */
+    protected function get_website_coins( $is_checkout_page = false )
     {
-        $response = $this->api->get_transaction( $id );
-
-	    if( is_wp_error( $response ) ) {
-		    wp_send_json_error();
-	    }
-
-	    $response = json_decode( $response['body'], true );
-
-	    if( $response['code'] != 1 ) {
-	        wp_send_json_error();
+        if( $is_checkout_page && get_transient( 'ezdefi_website_coins' ) ) {
+            return get_transient( 'ezdefi_website_coins' );
         }
 
-	    $transaction = $response['data'];
+        $website_config = $this->api->get_website_config();
 
-	    if( $transaction['status'] != 'ACCEPTED' ) {
-	        wp_send_json_error();
+        if( is_null( $website_config ) ) {
+            return null;
         }
 
-	    $data = array(
-            'amount_id' => str_replace( ',', '', $value ),
-            'currency' => $currency,
-            'explorer_url' => $explorerUrl,
-        );
+        set_transient( 'ezdefi_website_coins', $website_config['coins'] );
 
-        $this->db->add_exception( $data );
-
-        wp_send_json_success();
-    }
-
-    public function process_payment_callback( $order_id, $paymentid )
-    {
-	    global $woocommerce;
-
-	    $order_id = substr( $order_id, 0, strpos( $order_id,'-' ) );
-	    $order = wc_get_order( $order_id );
-
-	    if( ! $order ) {
-		    wp_send_json_error();
-	    }
-
-	    $response = $this->api->get_ezdefi_payment( $paymentid );
-
-	    if( is_wp_error( $response ) ) {
-		    wp_send_json_error();
-	    }
-
-	    $payment = json_decode( $response['body'], true );
-
-	    if( $payment['code'] < 0 ) {
-		    wp_send_json_error();
-	    }
-
-	    $payment = $payment['data'];
-
-	    $status = $payment['status'];
-
-	    if( $status === 'PENDING' || $status === 'EXPIRED' ) {
-	        wp_send_json_error();
-        }
-
-	    if( isset( $payment['amountId'] ) && $payment['amountId'] === true ) {
-		    $amount_id = $payment['originValue'];
-	    } else {
-		    $amount_id = $payment['value'] / pow( 10, $payment['decimal'] );
-	    }
-
-	    $currency = $payment['currency'];
-
-	    $exception_data = array(
-		    'status' => strtolower($status),
-		    'explorer_url' => (string) self::EXPLORER_URL . $payment['transactionHash']
-	    );
-
-	    $wheres = array(
-		    'amount_id' => $this->sanitize_float_value( $amount_id ),
-		    'currency' => (string) $currency,
-		    'order_id' => (int) $order_id
-	    );
-
-	    if( isset( $payment['amountId'] ) && $payment['amountId'] = true ) {
-		    $wheres['payment_method'] = 'amount_id';
-	    } else {
-		    $wheres['payment_method'] = 'ezdefi_wallet';
-	    }
-
-	    if( $status === 'DONE' ) {
-		    $order->update_status( 'completed' );
-		    $woocommerce->cart->empty_cart();
-		    $this->db->update_exception( $wheres, $exception_data );
-
-		    if( ! isset( $payment['amountId'] ) || ( isset( $payment['amountId'] ) && $payment['amountId'] != true ) ) {
-		        $this->db->delete_exception_by_order_id( $wheres['order_id'] );
-            }
-	    } elseif( $status === 'EXPIRED_DONE' ) {
-		    $this->db->update_exception( $wheres, $exception_data );
-	    }
-
-	    wp_send_json_success();
-    }
-
-    protected function sanitize_float_value( $value )
-    {
-	    $notation = explode('E', $value);
-
-	    if(count($notation) === 2){
-		    $exp = abs(end($notation)) + strlen($notation[0]);
-		    $decimal = number_format($value, $exp);
-		    $value = rtrim($decimal, '.0');
-	    }
-
-	    return str_replace( ',', '', $value);
+        return $website_config['coins'];
     }
 }

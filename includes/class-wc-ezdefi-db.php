@@ -84,73 +84,10 @@ class WC_Ezdefi_Db
 		return $this->get_option( 'api_key' );
 	}
 
-	/**
-	 * Generate smallest & unique amount id
-	 *
-	 * @param float $price
-	 * @param array $currency_data
-	 *
-	 * @return float
-	 */
-	public function generate_amount_id( $price, $currency_data )
-	{
-		global $wpdb;
-
-		$decimal = $currency_data['decimal'];
-		$symbol = $currency_data['symbol'];
-		$life_time = $currency_data['lifetime'];
-
-		$price = round( $price, $decimal );
-
-		$wpdb->query(
-			$wpdb->prepare("
-				CALL wc_ezdefi_generate_amount_id(%s, %s, %d, %d, @amount_id)
-			", $price, $symbol, $decimal, $life_time)
-		);
-
-		$result = $wpdb->get_row( "SELECT @amount_id", ARRAY_A );
-
-		if( ! $result ) {
-			return null;
-		}
-
-		$amount_id = floatval( $result['@amount_id'] );
-
-		$acceptable_variation = $this->get_acceptable_variation();
-
-		$variation_percent = $acceptable_variation / 100;
-
-		$min = floatval( $price - ( $price * $variation_percent ) );
-		$max = floatval( $price + ( $price * $variation_percent ) );
-
-		if( ( $amount_id < $min ) || ( $amount_id > $max ) ) {
-			return null;
-		}
-
-		return $amount_id;
-	}
-
-	/**
-	 * Get acceptable variation option
-	 *
-	 * @return string
-	 */
-	public function get_acceptable_variation()
-	{
-		return $this->get_option( 'acceptable_variation' );
-	}
-
-	/**
-	 * Get amount table name
-	 *
-	 * @return string
-	 */
-	public function get_amount_table_name()
-	{
-		global $wpdb;
-
-		return $wpdb->prefix . 'woocommerce_ezdefi_amount';
-	}
+    public function get_public_key()
+    {
+        return $this->get_option( 'public_key' );
+    }
 
 	public function delete_amount_id_exception($amount_id, $currency, $order_id)
 	{

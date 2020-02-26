@@ -44,6 +44,9 @@ jQuery(function($) {
         },
         woocommerce_ezdefi_api_key: {
           required: true
+        },
+        woocommerce_ezdefi_public_key: {
+          required: true
         }
       }
     });

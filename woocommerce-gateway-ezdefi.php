@@ -74,9 +74,11 @@ class WC_Ezdefi {
 	 */
 	public function includes()
 	{
+	    require_once dirname( __FILE__ ) . '/functions.php';
 		require_once dirname( __FILE__ ) . '/includes/class-wc-ezdefi-db.php';
 		require_once dirname( __FILE__ ) . '/includes/class-wc-ezdefi-api.php';
 		require_once dirname( __FILE__ ) . '/includes/class-wc-ezdefi-ajax.php';
+		require_once dirname( __FILE__ ) . '/includes/class-wc-ezdefi-callback.php';
 		require_once dirname( __FILE__ ) . '/includes/admin/class-wc-ezdefi-admin-notices.php';
 		require_once dirname( __FILE__ ) . '/includes/admin/class-wc-ezdefi-exception-page.php';
 		require_once dirname( __FILE__ ) . '/includes/class-wc-gateway-ezdefi.php';
