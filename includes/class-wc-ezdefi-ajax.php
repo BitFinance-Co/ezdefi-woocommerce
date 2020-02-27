@@ -174,7 +174,7 @@ class WC_Ezdefi_Ajax
 
         $this->db->add_exception( $data );
 
-        $html = $this->generate_payment_html( $payment, $order );
+        $html = $this->generate_payment_html( $payment, $order, $coin_data );
 
         $order->update_meta_data( 'ezdefi_coin', $coin_data['_id'] );
         $order->save_meta_data();
@@ -189,11 +189,9 @@ class WC_Ezdefi_Ajax
 	 *
 	 * @return false|string
 	 */
-    public function generate_payment_html( $payment, $order ) {
+    public function generate_payment_html( $payment, $order, $coin_data ) {
         $total = $order->get_total();
-        $discount = $this->db->get_currency_option( $payment['currency'] )['discount'];
-	    $discount = ( intval( $discount ) > 0 ) ? $discount : 0;
-        $total = $total - ( $total * ( $discount / 100 ) );
+        $total = $total - ( $total * ( $coin_data['discount'] / 100 ) );
 	    ob_start(); ?>
         <div class="ezdefi-payment" data-paymentid="<?php echo $payment['_id']; ?>">
 		    <?php if( ! $payment ) : ?>

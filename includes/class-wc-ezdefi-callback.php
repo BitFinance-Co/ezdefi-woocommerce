@@ -197,8 +197,7 @@ class WC_Ezdefi_Callback
 
         if( ezdefi_is_pay_any_wallet( $payment_data ) ) {
             $payment_method = 'amount_id';
-            $coin_data = $this->get_coin_data( $payment_data['currency'] );
-            $amount_id = ezdefi_sanitize_payment_value( $payment_data['originValue'], $coin_data['decimal'] );
+            $amount_id = $payment_data['originValue'];
         } else {
             $payment_method = 'ezdefi_wallet';
             $amount_id = $payment_data['value'] / pow( 10, $payment_data['decimal'] );

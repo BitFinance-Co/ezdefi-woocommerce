@@ -22,13 +22,6 @@ function ezdefi_sanitize_float_value( $value )
     return $value;
 }
 
-function ezdefi_sanitize_payment_value( $value, $decimal_number )
-{
-    $value = explode( '.', $value );
-    $decimal = substr( $value[1], 0, $decimal_number );
-    return "$value[0]" . '.' . "$decimal";
-}
-
 function ezdefi_sanitize_uoid( $uoid )
 {
     return substr( $uoid, 0, strpos( $uoid,'-' ) );
