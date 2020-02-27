@@ -29,17 +29,6 @@ function ezdefi_sanitize_payment_value( $value, $decimal_number )
     return "$value[0]" . '.' . "$decimal";
 }
 
-function ezdefi_filter_coin_data_by_symbol( $website_coins, $symbol )
-{
-    $coin_data = null;
-    foreach ($website_coins as $coin) {
-        if( strtolower( $coin['token']['symbol'] ) === strtolower( $symbol ) ) {
-            $coin_data = $coin;
-        }
-    }
-    return $coin_data;
-}
-
 function ezdefi_sanitize_uoid( $uoid )
 {
     return substr( $uoid, 0, strpos( $uoid,'-' ) );

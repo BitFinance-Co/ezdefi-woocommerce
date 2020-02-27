@@ -72,11 +72,21 @@ class WC_Ezdefi_Api
 		return $this->api_key;
 	}
 
+    /**
+     * Set public key
+     *
+     * @param $public_key
+     */
 	public function set_public_key( $public_key )
     {
         $this->public_key = $public_key;
     }
 
+    /**
+     * Get public key
+     *
+     * @return mixed
+     */
     public function get_public_key()
     {
         if( empty( $this->public_key ) ) {
@@ -147,8 +157,6 @@ class WC_Ezdefi_Api
 
     /**
      * Get website config from gateway
-     *
-     * @param $public_key
      */
 	public function get_website_config()
     {
@@ -159,6 +167,11 @@ class WC_Ezdefi_Api
         return $this->parse_response( $response );
     }
 
+    /**
+     * Get website config coins
+     *
+     * @return |null
+     */
     public function get_website_coins()
     {
         $website_config = $this->get_website_config();
@@ -174,7 +187,7 @@ class WC_Ezdefi_Api
 	 * Create ezDeFi Payment
 	 *
 	 * @param array $order
-	 * @param array $currency_data
+	 * @param array $coin_data
 	 * @param bool $amountId
 	 *
 	 * @return array|WP_Error
@@ -190,7 +203,7 @@ class WC_Ezdefi_Api
                 return new WP_Error( 'create_ezdefi_payment', 'Can not create payment.' );
             }
 
-            $value = $value * $rate;
+            $value = round( $value * $rate, $coin_data['decimal'] );
 	    }
 
 	    $uoid = $this->generate_uoid( $order->get_order_number(), $amountId );
@@ -200,7 +213,7 @@ class WC_Ezdefi_Api
 		    'to' => $coin_data['wallet_address'],
 		    'value' => $value,
 //		    'callback' => home_url() . '/?wc-api=ezdefi',
-            'callback' => 'https://ac1a5a05.ngrok.io/?wc-api=ezdefi',
+            'callback' => 'http://718bdab4.ngrok.io/?wc-api=ezdefi',
             'coinId' => $coin_data['_id']
 	    ];
 
@@ -250,31 +263,6 @@ class WC_Ezdefi_Api
     }
 
 	/**
-	 * Generate amount id
-	 *
-	 * @param string $fiat
-	 * @param string $token
-	 * @param float $value
-	 * @param array $currency_data
-	 *
-	 * @return float|null
-	 */
-    public function generate_amount_id( $fiat, $token, $value, $currency_data )
-    {
-	    $rate = $this->get_token_exchange( $fiat, $token );
-
-	    if( ! $rate ) {
-		    return null;
-	    }
-
-	    $value = $value * $rate;
-
-	    $value = $this->db->generate_amount_id( $value, $currency_data );
-
-	    return $value;
-    }
-
-	/**
 	 * Get token exchange
 	 *
 	 * @param string $fiat
@@ -289,6 +277,15 @@ class WC_Ezdefi_Api
 	    return $this->parse_response( $response );
     }
 
+    /**
+     * Get token exchanges
+     *
+     * @param $value
+     * @param $from
+     * @param $to
+     *
+     * @return |null
+     */
     public function get_token_exchanges( $value, $from, $to )
     {
     	$url = "token/exchanges?amount=$value&from=$from&to=$to";
@@ -315,13 +312,11 @@ class WC_Ezdefi_Api
 	    return $uoid = $uoid . '-0';
     }
 
-    public function get_list_wallet()
-    {
-	    $response = $this->call( 'user/list_wallet', 'get', array() );
-
-	    return $response;
-    }
-
+    /**
+     * Check API key
+     *
+     * @return array|WP_Error
+     */
     public function check_api_key()
     {
     	$response = $this->call( 'user/show', 'get' );
@@ -349,6 +344,13 @@ class WC_Ezdefi_Api
 		return $response;
 	}
 
+    /**
+     * Get transaction detail
+     *
+     * @param $id
+     *
+     * @return |null
+     */
 	public function get_transaction( $id )
 	{
 		$response = $this->call( 'transaction/get', 'get', array(
@@ -358,6 +360,13 @@ class WC_Ezdefi_Api
 		return $this->parse_response( $response );
 	}
 
+    /**
+     * Parse response
+     *
+     * @param $response
+     *
+     * @return |null
+     */
 	protected function parse_response( $response )
     {
         if( is_wp_error( $response ) ) {

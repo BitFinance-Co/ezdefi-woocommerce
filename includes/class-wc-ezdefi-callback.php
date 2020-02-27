@@ -109,6 +109,13 @@ class WC_Ezdefi_Callback
         wp_send_json_success();
     }
 
+    /**
+     * Check whether callback is for payment or not
+     *
+     * @param $data
+     *
+     * @return bool
+     */
     protected function is_payment_callback( $data )
     {
         if( ! is_array( $data ) ) {
@@ -118,6 +125,13 @@ class WC_Ezdefi_Callback
         return ( isset( $data['uoid'] ) && isset( $data['paymentid'] ) );
     }
 
+    /**
+     * Check whether callback is for unknown transaction or not
+     *
+     * @param $data
+     *
+     * @return bool
+     */
     protected function is_transaction_callback( $data )
     {
         if( ! is_array( $data ) ) {
@@ -131,6 +145,13 @@ class WC_Ezdefi_Callback
         );
     }
 
+    /**
+     * Check if payment is valid or not.
+     *
+     * @param $payment
+     *
+     * @return bool
+     */
     protected function is_valid_payment( $payment )
     {
         if( is_null( $payment ) ) {
@@ -146,6 +167,13 @@ class WC_Ezdefi_Callback
         return true;
     }
 
+    /**
+     * Get coin data
+     *
+     * @param $symbol
+     *
+     * @return array
+     */
     protected function get_coin_data( $symbol )
     {
         $coin_data = array();
@@ -158,6 +186,11 @@ class WC_Ezdefi_Callback
         return $coin_data;
     }
 
+    /**
+     * Update exception
+     *
+     * @param $payment_data
+     */
     protected function update_exception( $payment_data )
     {
         $status = $payment_data['status'];

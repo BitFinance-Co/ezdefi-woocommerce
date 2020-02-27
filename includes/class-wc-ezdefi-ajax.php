@@ -27,9 +27,6 @@ class WC_Ezdefi_Ajax
 	    add_action( 'wp_ajax_wc_ezdefi_check_api_key', array( $this, 'wc_ezdefi_check_api_key_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_check_api_key', array( $this, 'wc_ezdefi_check_api_key_ajax_callback' ) );
 
-	    add_action( 'wp_ajax_wc_ezdefi_get_payment', array( $this, 'wc_ezdefi_get_payment_ajax_callback' ) );
-	    add_action( 'wp_ajax_nopriv_wc_ezdefi_get_payment', array( $this, 'wc_ezdefi_get_payment_ajax_callback' ) );
-
 	    add_action( 'wp_ajax_wc_ezdefi_create_payment', array( $this, 'wc_ezdefi_create_payment_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_create_payment', array( $this, 'wc_ezdefi_create_payment_ajax_callback' ) );
 
@@ -81,56 +78,6 @@ class WC_Ezdefi_Ajax
 	    wp_die('true');
     }
 
-	/**
-	 * Get EZDefi payment ajax callback
-	 */
-	public function wc_ezdefi_get_payment_ajax_callback()
-	{
-	    $message = __( 'Can not create payment', 'woocommerce-gateway-ezdefi' );
-	    $type = gettype($_POST['coin_data']);
-	    wp_send_json_success($type);
-
-	    $params = array(
-            'uoid' => '',
-            'coin_data' => '',
-            'method' => '',
-        );
-
-	    $params = array_merge( $params, $_POST );
-
-        foreach ($params as $param) {
-            if( empty( $param ) ) {
-                wp_send_json_error( $message );
-            }
-        }
-
-//        $coin_data =
-
-        $uoid = sanitize_key( $params['uoid'] );
-
-        $order = wc_get_order( $uoid );
-
-        if( ! $order ) {
-            wp_send_json_error( $message );
-        }
-
-        $method = sanitize_text_field( $params['method'] );
-
-        $accepted_methods = array( 'ezdefi_wallet', 'amount_id' );
-
-        if( ! in_array( $method, $accepted_methods ) ) {
-            wp_send_json_error( $message );
-        }
-
-		$ezdefi_payment = ( $order->get_meta( 'ezdefi_payment' ) ) ? $order->get_meta( 'ezdefi_payment' ) : array();
-
-		if( array_key_exists( $method, $ezdefi_payment ) && $ezdefi_payment[$method] !== '' ) {
-			return $this->get_ezdefi_payment( $ezdefi_payment[$method] );
-		}
-
-		return $this->create_ezdefi_payment( $order, $coin_data, $method );
-	}
-
     /**
      * Create ezDeFi payment ajax callback
      */
@@ -170,148 +117,42 @@ class WC_Ezdefi_Ajax
             wp_send_json_error( $message );
         }
 
-	    return $this->create_ezdefi_payment( $order, $coin_data, $method, true );
-    }
+        $amount_id = ( $method === 'amount_id' ) ? true : false;
 
-	/**
-	 * Validate post data before creating ezDeFi Payment
-	 *
-	 * @param array $data
-	 * @param string $message
-	 *
-	 * @return array
-	 */
-	private function validate_post_data( $data, $message = '' )
-	{
-		if( ! isset( $data['uoid'] ) || ! isset( $data['symbol'] ) || ! isset( $data['method'] ) ) {
-			wp_send_json_error( $message );
-		}
+        $payment = $this->api->create_ezdefi_payment( $order, $coin_data, $amount_id );
 
-		$uoid = sanitize_key( $_POST['uoid'] );
-
-		$data = array();
-
-		$data['order'] = $this->get_order( $uoid, __( 'Can not create payment', 'woocommerce-gateway-ezdefi' ) );
-
-		$data['method'] = $this->validate_payment_method( sanitize_text_field( $_POST['method'] ), __( 'Can not create payment', 'woocommerce-gateway-ezdefi' ) );
-
-		return $data;
-	}
-
-	/**
-	 * Validate payment method
-	 *
-	 * @param string $method
-	 * @param string $message
-	 *
-	 * @return mixed
-	 */
-	private function validate_payment_method( $method, $message )
-	{
-		$accepted_method = $this->db->get_option( 'payment_method' );
-
-		if( ! array_key_exists( $method, $accepted_method ) ){
-			wp_send_json_error( $message );
-		}
-
-		return $method;
-	}
-
-	/**
-	 * Get WC Order or Send JSON error
-	 *
-	 * @param int $uoid
-	 * @param string $message
-	 *
-	 * @return bool|WC_Order|WC_Order_Refund
-	 */
-	private function get_order( $uoid, $message )
-	{
-		$order = wc_get_order( $uoid );
-
-		if( ! $order ) {
-			wp_send_json_error( $message );
-		}
-
-		return $order;
-	}
-
-	/**
-	 * Get ezDeFi payment then render HTML
-	 *
-	 * @param int $paymentid
-	 */
-	private function get_ezdefi_payment( $paymentid )
-	{
-		$response = $this->api->get_ezdefi_payment( $paymentid );
-
-		if( is_wp_error( $response ) ) {
-			wp_send_json_error( __( 'Can not get payment', 'woocommerce-gateway-ezdefi' ) );
-		}
-
-		$response = json_decode( $response['body'], true );
-
-		$ezdefi_payment = $response['data'];
-
-		$uoid = substr( $ezdefi_payment['uoid'], 0, strpos( $ezdefi_payment['uoid'],'-' ) );
-
-		$order = wc_get_order( $uoid );
-
-		if( ! $order ) {
-			wp_send_json_error( __( 'Can not get payment', 'woocommerce-gateway-ezdefi' ) );
-        }
-
-		$html = $this->generate_payment_html( $ezdefi_payment, $order );
-
-		wp_send_json_success( $html );
-	}
-
-	/**
-	 * Create ezDeFi payment then render HTML
-	 *
-	 * @param array $order
-	 * @param string $symbol
-	 * @param string $method
-	 * @param bool $clear_meta_data
-	 */
-    private function create_ezdefi_payment( $order, $coin_data, $method, $clear_meta_data = false )
-    {
-	    $amount_id = ( $method === 'amount_id' ) ? true : false;
-
-	    $payment = $this->api->create_ezdefi_payment( $order, $coin_data, $amount_id );
-
-	    if( is_null( $payment ) ) {
+        if( is_null( $payment ) ) {
             wp_send_json_error();
         }
 
-	    if( $amount_id ) {
-		    $value = $payment['originValue'];
-		    $value = explode( '.', $value );
-		    $number = $value[0];
-		    $decimal = $value[1];
-		    $decimal = substr( $decimal, 0, $coin_data['decimal'] );
-		    $value = "$number" . '.' . "$decimal";
-		    $payment['originValue'] = $value;
-	    } else {
-		    $value = $payment['value'] / pow( 10, $payment['decimal'] );
-	    }
+        if( $amount_id ) {
+            $value = $payment['originValue'];
+            $value = explode( '.', $value );
+            $number = $value[0];
+            $decimal = $value[1];
+            $decimal = substr( $decimal, 0, $coin_data['decimal'] );
+            $value = "$number" . '.' . "$decimal";
+            $payment['originValue'] = $value;
+        } else {
+            $value = $payment['value'] / pow( 10, $payment['decimal'] );
+        }
 
-	    $data = array(
+        $data = array(
             'amount_id' => str_replace( ',', '', $value),
             'currency' => $coin_data['symbol'],
-            'order_id' => substr( $payment['uoid'], 0, strpos( $payment['uoid'],'-' ) ),
+            'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
             'status' => 'not_paid',
             'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet',
         );
 
-	    $this->db->add_exception( $data );
+        $this->db->add_exception( $data );
 
-	    $html = $this->generate_payment_html( $payment, $order );
+        $html = $this->generate_payment_html( $payment, $order );
 
-	    $order->update_meta_data( 'ezdefi_coin', $coin_data['_id'] );
-	    $order->save_meta_data();
+        $order->update_meta_data( 'ezdefi_coin', $coin_data['_id'] );
+        $order->save_meta_data();
 
-	    wp_send_json_success( $html );
+        wp_send_json_success( $html );
     }
 
 	/**

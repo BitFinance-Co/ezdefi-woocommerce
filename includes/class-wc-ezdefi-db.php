@@ -84,11 +84,25 @@ class WC_Ezdefi_Db
 		return $this->get_option( 'api_key' );
 	}
 
+    /**
+     * Get public key
+     *
+     * @return array|string
+     */
     public function get_public_key()
     {
         return $this->get_option( 'public_key' );
     }
 
+    /**
+     * Delete exception
+     *
+     * @param $amount_id
+     * @param $currency
+     * @param $order_id
+     *
+     * @return bool|false|int
+     */
 	public function delete_amount_id_exception($amount_id, $currency, $order_id)
 	{
 		global $wpdb;
@@ -102,6 +116,13 @@ class WC_Ezdefi_Db
 		return $wpdb->query( "DELETE FROM $table_name WHERE amount_id = $amount_id AND currency = '$currency' AND order_id = $order_id LIMIT 1" );
 	}
 
+    /**
+     * Delete exceptions by order id
+     *
+     * @param $order_id
+     *
+     * @return bool|false|int
+     */
 	public function delete_exception_by_order_id($order_id)
 	{
 		global $wpdb;
@@ -113,6 +134,13 @@ class WC_Ezdefi_Db
 		return $wpdb->query( $query );
 	}
 
+    /**
+     * Add exception
+     *
+     * @param $data
+     *
+     * @return bool|false|int
+     */
 	public function add_exception( $data )
 	{
 		global $wpdb;
@@ -132,6 +160,15 @@ class WC_Ezdefi_Db
 		return $wpdb->query($query);
 	}
 
+    /**
+     * Get exception
+     *
+     * @param  array  $params
+     * @param  int  $offset
+     * @param  int  $per_page
+     *
+     * @return array
+     */
 	public function get_exception( $params = array(), $offset = 0, $per_page = 15 )
 	{
 		global $wpdb;
@@ -187,6 +224,14 @@ class WC_Ezdefi_Db
 		);
 	}
 
+    /**
+     * Update exception
+     *
+     * @param  array  $wheres
+     * @param  array  $data
+     *
+     * @return bool|false|int|void
+     */
 	public function update_exception( $wheres = array(), $data = array() )
 	{
 		global $wpdb;
