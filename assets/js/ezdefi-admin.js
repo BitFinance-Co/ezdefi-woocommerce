@@ -2,7 +2,8 @@ jQuery(function($) {
   'use strict';
 
   var selectors = {
-    apiKeyInput: '#woocommerce_ezdefi_api_key'
+    apiKeyInput: '#woocommerce_ezdefi_api_key',
+    publicKeyInput: '#woocommerce_ezdefi_public_key'
   };
 
   var wc_ezdefi_admin = function() {
@@ -13,8 +14,11 @@ jQuery(function($) {
     this.initValidation.call(this);
 
     var onChangeApiKey = this.onChangeApiKey.bind(this);
+    var onChangePublicKey = this.onChangePublicKey.bind(this);
 
-    $(document.body).on('change', selectors.apiKeyInput, onChangeApiKey);
+    $(document.body)
+      .on('change', selectors.apiKeyInput, onChangeApiKey)
+      .on('change', selectors.publicKeyInput, onChangePublicKey);
   };
 
   wc_ezdefi_admin.prototype.initValidation = function() {
@@ -71,6 +75,42 @@ jQuery(function($) {
         complete: function(data) {
           var response = data.responseText;
           var $inputWrapper = self.$form.find('#woocommerce_ezdefi_api_key').closest('td');
+          if (response === 'true') {
+            $inputWrapper.append('<span class="correct">Correct</span>');
+            window.setTimeout(function() {
+              $inputWrapper.find('.correct').remove();
+            }, 1000);
+          }
+        }
+      },
+      messages: {
+        remote: 'API Key is not correct. Please check again'
+      }
+    });
+  };
+
+  wc_ezdefi_admin.prototype.onChangePublicKey = function(e) {
+    var self = this;
+    var $input = $(e.target);
+    $input.rules('add', {
+      remote: {
+        url: wc_ezdefi_data.ajax_url,
+        type: 'POST',
+        data: {
+          action: 'wc_ezdefi_check_public_key',
+          api_url: function() {
+            return self.$form.find('#woocommerce_ezdefi_api_url').val();
+          },
+          api_key: function() {
+            return self.$form.find('#woocommerce_ezdefi_api_key').val();
+          },
+          public_key: function() {
+            return self.$form.find('#woocommerce_ezdefi_public_key').val();
+          }
+        },
+        complete: function(data) {
+          var response = data.responseText;
+          var $inputWrapper = self.$form.find('#woocommerce_ezdefi_public_key').closest('td');
           if (response === 'true') {
             $inputWrapper.append('<span class="correct">Correct</span>');
             window.setTimeout(function() {

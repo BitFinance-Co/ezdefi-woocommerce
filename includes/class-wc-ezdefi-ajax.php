@@ -27,6 +27,9 @@ class WC_Ezdefi_Ajax
 	    add_action( 'wp_ajax_wc_ezdefi_check_api_key', array( $this, 'wc_ezdefi_check_api_key_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_check_api_key', array( $this, 'wc_ezdefi_check_api_key_ajax_callback' ) );
 
+        add_action( 'wp_ajax_wc_ezdefi_check_public_key', array( $this, 'wc_ezdefi_check_public_key_ajax_callback' ) );
+        add_action( 'wp_ajax_nopriv_wc_ezdefi_check_public_key', array( $this, 'wc_ezdefi_check_public_key_ajax_callback' ) );
+
 	    add_action( 'wp_ajax_wc_ezdefi_create_payment', array( $this, 'wc_ezdefi_create_payment_ajax_callback' ) );
 	    add_action( 'wp_ajax_nopriv_wc_ezdefi_create_payment', array( $this, 'wc_ezdefi_create_payment_ajax_callback' ) );
 
@@ -76,6 +79,30 @@ class WC_Ezdefi_Ajax
         }
 
 	    wp_die('true');
+    }
+
+    /**
+     * Check public key ajax callback
+     */
+    public function wc_ezdefi_check_public_key_ajax_callback()
+    {
+        if( ! isset( $_POST['api_url'] ) || ! isset( $_POST['api_key'] ) || ! isset( $_POST['public_key'] ) ) {
+            wp_die('false');
+        }
+
+        $api_url = sanitize_text_field( $_POST['api_url'] );
+        $api_key = sanitize_text_field( $_POST['api_key'] );
+
+        $api = new WC_Ezdefi_Api( $api_url, $api_key );
+        $api->set_public_key( $_POST['public_key'] );
+
+        $response = $api->get_website_config();
+
+        if( is_null( $response ) ) {
+            wp_die('false');
+        }
+
+        wp_die('true');
     }
 
     /**
