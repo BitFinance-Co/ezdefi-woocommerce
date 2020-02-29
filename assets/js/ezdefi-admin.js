@@ -120,7 +120,7 @@ jQuery(function($) {
         }
       },
       messages: {
-        remote: 'API Key is not correct. Please check again'
+        remote: 'Website ID is not correct. Please check again'
       }
     });
   };
