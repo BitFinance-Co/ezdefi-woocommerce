@@ -212,9 +212,10 @@ class WC_Ezdefi_Api
 		    'uoid' => $uoid,
 		    'to' => $coin_data['wallet_address'],
 		    'value' => $value,
-//		    'callback' => home_url() . '/?wc-api=ezdefi',
-            'callback' => 'http://718bdab4.ngrok.io/?wc-api=ezdefi',
-            'coinId' => $coin_data['_id']
+		    'safedist' => $coin_data['block_confirm'],
+		    'duration' => $coin_data['duration'] * 60,
+		    'callback' => home_url() . '/?wc-api=ezdefi',
+            'coinId' => $coin_data['_id'],
 	    ];
 
 	    if( $amountId ) {
