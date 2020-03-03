@@ -43,6 +43,12 @@ return apply_filters(
         'public_key' => array(
             'title' => __( 'Website ID', 'woocommerce-gateway-ezdefi' ),
             'type' => 'text'
+        ),
+        'order_status' => array(
+            'title' => __( 'Order status', 'woocommerce-gateway-ezdefi' ),
+            'type' => 'select',
+            'options' => wc_get_order_statuses(),
+            'default' => 'wc-processing',
         )
     )
 );

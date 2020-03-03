@@ -167,7 +167,8 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 	    wp_localize_script( 'wc_ezdefi_qrcode', 'wc_ezdefi_data',
 		    array(
 			    'ajax_url' => admin_url( 'admin-ajax.php' ),
-                'checkout_url' => wc_get_checkout_url()
+                'checkout_url' => wc_get_checkout_url(),
+                'order_status' => $this->db->get_order_status()
 		    )
 	    );
     }
@@ -314,7 +315,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
     {
         $order = wc_get_order( $order_id );
 
-	    if( ( $order->get_payment_method() != $this->id ) || ( $order->get_status() === 'completed' ) || ( $order->get_status() === 'failed' ) ) {
+	    if( ( $order->get_payment_method() != $this->id ) || ( $order->get_status() === $this->db->get_order_status() ) || ( $order->get_status() === 'failed' ) ) {
 		    return;
 	    }
 

@@ -63,7 +63,7 @@ class WC_Ezdefi_Callback
         $status = $payment['status'];
 
         if( $status === 'DONE' ) {
-            $order->update_status( 'completed' );
+            $order->update_status( $this->db->get_order_status() );
             $woocommerce->cart->empty_cart();
             $this->update_exception( $payment );
 

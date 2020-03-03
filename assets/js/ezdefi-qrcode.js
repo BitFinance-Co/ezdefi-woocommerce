@@ -143,7 +143,7 @@ jQuery(function($) {
         order_id: self.paymentData.uoid
       }
     }).done(function(response) {
-      if (response == 'completed') {
+      if (response == wc_ezdefi_data.order_status ) {
         self.success();
       } else {
         var checkOrderStatus = self.checkOrderStatus.bind(self);

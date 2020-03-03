@@ -94,6 +94,12 @@ class WC_Ezdefi_Db
         return $this->get_option( 'public_key' );
     }
 
+    public function get_order_status()
+    {
+        $order_status = $this->get_option( 'order_status' );
+        return str_replace( 'wc-', '', $order_status );
+    }
+
     /**
      * Delete exception
      *
