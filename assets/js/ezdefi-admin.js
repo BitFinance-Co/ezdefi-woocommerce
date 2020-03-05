@@ -7,7 +7,7 @@ jQuery(function($) {
   };
 
   var wc_ezdefi_admin = function() {
-    this.$form = $('form');
+    this.$form = $('form#mainform');
 
     this.$form.find(selectors.apiKeyInput).attr('autocomplete', 'off');
 
