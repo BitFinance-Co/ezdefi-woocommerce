@@ -42,6 +42,12 @@ jQuery(function($) {
           .removeClass('form-invalid');
       },
       rules: {
+        woocommerce_ezdefi_title: {
+          required: true
+        },
+        woocommerce_ezdefi_description: {
+          required: true
+        },
         woocommerce_ezdefi_api_url: {
           required: true,
           url: true

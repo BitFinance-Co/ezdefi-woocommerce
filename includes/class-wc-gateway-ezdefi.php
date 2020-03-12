@@ -115,9 +115,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         }
 
         wp_register_script( 'wc_ezdefi_validate', plugins_url( 'assets/js/jquery.validate.min.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
-        wp_register_style( 'wc_ezdefi_select2', plugins_url( 'assets/css/select2.min.css', WC_EZDEFI_MAIN_FILE ) );
-        wp_register_script( 'wc_ezdefi_select2', plugins_url( 'assets/js/select2.min.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
-        wp_register_style( 'wc_ezdefi_admin', plugins_url( 'assets/css/ezdefi-admin.css', WC_EZDEFI_MAIN_FILE ) );        wp_register_style( 'wc_ezdefi_admin', plugins_url( 'assets/css/ezdefi-admin.css', WC_EZDEFI_MAIN_FILE ) );
+        wp_register_style( 'wc_ezdefi_admin', plugins_url( 'assets/css/ezdefi-admin.css', WC_EZDEFI_MAIN_FILE ) );
         wp_register_script( 'wc_ezdefi_admin', plugins_url( 'assets/js/ezdefi-admin.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
     }
 
@@ -135,8 +133,6 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
     public function generate_settings_html( $form_fields = array(), $echo = true )
     {
         wp_enqueue_script( 'wc_ezdefi_validate', plugins_url( 'assets/js/jquery.validate.min.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
-        wp_enqueue_style( 'wc_ezdefi_select2', plugins_url( 'assets/css/select2.min.css', WC_EZDEFI_MAIN_FILE ) );
-        wp_enqueue_script( 'wc_ezdefi_select2', plugins_url( 'assets/js/select2.min.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
         wp_enqueue_style( 'wc_ezdefi_admin', plugins_url( 'assets/css/ezdefi-admin.css', WC_EZDEFI_MAIN_FILE ) );
         wp_enqueue_script( 'wc_ezdefi_admin', plugins_url( 'assets/js/ezdefi-admin.js', WC_EZDEFI_MAIN_FILE ), array( 'jquery' ), WC_EZDEFI_VERSION, true );
         wp_localize_script( 'wc_ezdefi_admin', 'wc_ezdefi_data',
@@ -146,6 +142,40 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
         );
 
         return parent::generate_settings_html($form_fields, $echo);
+    }
+
+    /**
+     * Validate function for title field
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return string
+     */
+    public function validate_title_field( $key, $value )
+    {
+        if( empty( $value ) ) {
+            $value = 'Pay with cryptocurrencies';
+        }
+
+        return $this->validate_text_field( $key, $value );
+    }
+
+    /**
+     * Validate function for description field
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return string
+     */
+    public function validate_description_field( $key, $value )
+    {
+        if( empty( $value ) ) {
+            $value = 'Using BTC, ETH or any kinds of cryptocurrency. Handled by ezDeFi';
+        }
+
+        return $this->validate_text_field( $key, $value );
     }
 
 	/**
