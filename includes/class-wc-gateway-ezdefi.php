@@ -390,7 +390,7 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
                         <?php
                             if( $website_config['website']['payAnyWallet'] == true ) {
                                 echo '<li>';
-                                echo '<a href="#amount_id" id="tab-amount_id><span class="large-screen">' . __( 'Pay with any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span><span class="small-screen">' . __( 'Any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
+                                echo '<a href="#amount_id" id="tab-amount_id"><span class="large-screen">' . __( 'Pay with any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span><span class="small-screen">' . __( 'Any crypto wallet', 'woocommerce-gateway-ezdefi' ) . '</span></a>';
                                 echo '</li>';
                             }
 
