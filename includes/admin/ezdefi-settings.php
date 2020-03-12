@@ -42,7 +42,7 @@ return apply_filters(
             'description' => sprintf( __( '<a target="_blank" href="%s">Register to get API Key</a>', 'woocommerce-gateway-ezdefi' ), 'https://merchant.ezdefi.com/register?utm_source=woocommerce-download' ),
         ),
         'public_key' => array(
-            'title' => __( 'Website ID', 'woocommerce-gateway-ezdefi' ),
+            'title' => __( 'Site ID', 'woocommerce-gateway-ezdefi' ),
             'type' => 'text'
         ),
         'order_status' => array(
