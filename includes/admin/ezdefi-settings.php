@@ -33,6 +33,7 @@ return apply_filters(
             'type' => 'text',
             'description' => __( 'Description' ),
             'default' => 'https://merchant-api.ezdefi.com/api/',
+            'placeholder' => 'https://merchant-api.ezdefi.com/api/',
             'desc_tip' => true,
         ),
         'api_key' => array(
