@@ -84,14 +84,14 @@ jQuery(function($) {
     var active = panel ? panel : this.findActiveTab.call(this);
     var method = active.attr('id');
     var selectedCoin = this.$currencySelect.find('.selected');
-    var coin_data = JSON.parse(selectedCoin.find('script[type="application/json"]').html());
+    var coin_id = selectedCoin.attr('data-id');
     $.ajax({
       url: wc_ezdefi_data.ajax_url,
       method: 'post',
       data: {
         action: 'wc_ezdefi_create_payment',
         uoid: self.paymentData.uoid,
-        coin_data: coin_data,
+        coin_id: coin_id,
         method: method
       },
       beforeSend: function() {

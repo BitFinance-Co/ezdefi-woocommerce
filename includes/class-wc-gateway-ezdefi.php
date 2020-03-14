@@ -440,19 +440,6 @@ class WC_Gateway_Ezdefi extends WC_Payment_Gateway
 		    <?php foreach( $coins as $c ) : ?>
                 <div class="currency-item__wrap">
                     <div class="currency-item <?php echo ( ! empty( $selected_currency['_id'] ) && $c['_id'] === $selected_currency['_id'] ) ? 'selected' : ''; ?>" data-id="<?php echo $c['_id']; ?>" data-symbol="<?php echo $c['token']['symbol'] ;?>">
-                        <script type="application/json">
-                            <?php
-                                echo json_encode( array(
-                                    '_id' => $c['_id'],
-                                    'discount' => $c['discount'],
-                                    'wallet_address' => $c['walletAddress'],
-                                    'symbol' => $c['token']['symbol'],
-                                    'decimal' => $c['decimal'],
-                                    'block_confirmation' => $c['blockConfirmation'],
-                                    'duration' => $c['expiration']
-                                ) )
-                            ?>
-                        </script>
                         <div class="item__logo">
                             <img src="<?php echo $c['token']['logo']; ?>" alt="">
                             <?php if( ! empty( $c['token']['desc'] ) ) : ?>
