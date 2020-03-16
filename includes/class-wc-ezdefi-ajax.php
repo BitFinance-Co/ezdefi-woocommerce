@@ -168,7 +168,7 @@ class WC_Ezdefi_Ajax
         $payment = $this->api->create_ezdefi_payment( $order, $coin_data, $amount_id );
 
         if( is_null( $payment ) ) {
-            wp_send_json_error();
+            wp_send_json_error( $message );
         }
 
         if( $amount_id ) {
