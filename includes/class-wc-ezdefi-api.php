@@ -197,7 +197,7 @@ class WC_Ezdefi_Api
     	$value = $this->calculate_discounted_price( $order->get_total(), $coin_data['discount'] );
 
 	    if( $amountId ) {
-            $rate = $this->get_token_exchange( $order->get_currency(), $coin_data['symbol'] );
+            $rate = $this->get_token_exchange( $order->get_currency(), $coin_data['token']['symbol'] );
 
             if( is_null( $rate ) ) {
                 return new WP_Error( 'create_ezdefi_payment', 'Can not create payment.' );
