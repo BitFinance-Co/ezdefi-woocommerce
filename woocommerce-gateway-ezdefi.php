@@ -30,6 +30,10 @@ class WC_Ezdefi {
 		$this->define_constants();
 
 		add_filter( 'woocommerce_payment_gateways', array( $this, 'add_gateways' ) );
+
+        add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array(
+            $this, 'plugin_action_links'
+        ) );
 	}
 
 	/**
@@ -79,6 +83,7 @@ class WC_Ezdefi {
 		require_once dirname( __FILE__ ) . '/includes/class-wc-ezdefi-api.php';
 		require_once dirname( __FILE__ ) . '/includes/class-wc-ezdefi-ajax.php';
 		require_once dirname( __FILE__ ) . '/includes/class-wc-ezdefi-callback.php';
+        require_once dirname( __FILE__ ) . '/includes/admin/class-wc-ezdefi-admin-notices.php';
 		require_once dirname( __FILE__ ) . '/includes/admin/class-wc-ezdefi-exception-page.php';
 		require_once dirname( __FILE__ ) . '/includes/class-wc-gateway-ezdefi.php';
 	}
@@ -107,6 +112,22 @@ class WC_Ezdefi {
 		define( 'WC_EZDEFI_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
 		define( 'WC_EZDEFI_PLUGIN_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 	}
+
+    /**
+     * Add action link
+     *
+     * @param $links
+     *
+     * @return array
+     */
+    public function plugin_action_links( $links )
+    {
+        $plugin_links = array(
+            '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=ezdefi' ) . '">' . __( 'Settings', 'woocommerce-gateway-ezdefi' ) . '</a>'
+        );
+
+        return array_merge( $plugin_links, $links );
+    }
 
 	/**
 	 * Get the main WC_Ezdefi instance
