@@ -3,7 +3,9 @@ jQuery(function($) {
 
     var selectors = {
         table: '#wc-ezdefi-order-assign',
+        tab: '#wc-ezdefi-exception-tab',
         select: '#order-select',
+        expceptionIdInput: '.exception-id-input',
         amountIdInput: '.amount-id-input',
         currencyInput: '.currency-input',
         orderIdInput: '.order-id-input',
@@ -23,6 +25,7 @@ jQuery(function($) {
 
     var wc_ezdefi_assign = function() {
         this.$table = $(selectors.table);
+        this.$tab = $(selectors.tab);
         this.$nav = $(selectors.nav);
         this.$navBtn = this.$nav.find('a.button');
         // this.$select = this.$table.find(selectors.select);
@@ -51,6 +54,7 @@ jQuery(function($) {
     wc_ezdefi_assign.prototype.init = function() {
         var data = {
             action: 'wc_ezdefi_get_exception',
+            confirmed: this.$tab.find('.nav-tab-active').attr('data-confirmed')
         };
         this.getException.call(this, data);
     };
@@ -130,7 +134,8 @@ jQuery(function($) {
     wc_ezdefi_assign.prototype.getAjaxData = function() {
         var form = $(selectors.filterForm);
         var data = {
-            'action': 'wc_ezdefi_get_exception'
+            'action': 'wc_ezdefi_get_exception',
+            'confirmed': this.$tab.find('.nav-tab-active').attr('data-confirmed')
         };
         form.find('input, select').each(function() {
             var val = '';
@@ -226,6 +231,7 @@ jQuery(function($) {
                 "<td class='amount-id-column'>" +
                     "<span>" + (row['amount_id'] * 1) + "</span>" +
                     "<input type='hidden' class='amount-id-input' value='" + row['amount_id'] + "' >" +
+                    "<input type='hidden' class='exception-id-input' value='" + row['id'] + "' >" +
                 "</td>" +
                 "<td>" +
                     "<span class='symbol'>" + row['currency'] + "</span>" +
@@ -263,7 +269,7 @@ jQuery(function($) {
 
             var last_td;
 
-            if(row['status'] === 'done') {
+            if(row['confirmed'] == 1) {
                 last_td = $(
                     "<td>" +
                     "<button class='button reverseBtn'>Reverse</button> " +
@@ -376,16 +382,14 @@ jQuery(function($) {
         e.preventDefault();
         var self = this;
         var row = $(e.target).closest('tr');
-        var old_order_id = row.find(selectors.oldOrderIdInput).val();
         var order_id = row.find(selectors.orderIdInput).val();
-        var amount_id = row.find(selectors.amountIdInput).val();
-        var currency = row.find(selectors.currencyInput).val();
+        var old_order_id = row.find(selectors.oldOrderIdInput).val();
+        var exception_id = row.find(selectors.expceptionIdInput).val();
         var data = {
             action: 'wc_ezdefi_assign_amount_id',
-            old_order_id: old_order_id,
             order_id: order_id,
-            amount_id: amount_id,
-            currency: currency
+            old_order_id: old_order_id,
+            exception_id: exception_id
         };
         this.callAjax.call(this, data).success(function() {
             var data = self.getAjaxData();
@@ -398,13 +402,11 @@ jQuery(function($) {
         var self = this;
         var row = $(e.target).closest('tr');
         var order_id = row.find(selectors.orderIdInput).val();
-        var amount_id = row.find(selectors.amountIdInput).val();
-        var currency = row.find(selectors.currencyInput).val();
+        var exception_id = row.find(selectors.expceptionIdInput).val();
         var data = {
             action: 'wc_ezdefi_reverse_order',
             order_id: order_id,
-            amount_id: amount_id,
-            currency: currency
+            exception_id: exception_id
         };
         this.callAjax.call(this, data).success(function() {
             var data = self.getAjaxData();
@@ -419,14 +421,10 @@ jQuery(function($) {
         }
         var self = this;
         var row = $(e.target).closest('tr');
-        var order_id = row.find(selectors.orderIdInput).val();
-        var amount_id = row.find(selectors.amountIdInput).val();
-        var currency = row.find(selectors.currencyInput).val();
+        var exception_id = row.find(selectors.expceptionIdInput).val();
         var data = {
             action: 'wc_ezdefi_delete_amount_id',
-            order_id: order_id,
-            amount_id: amount_id,
-            currency: currency
+            exception_id: exception_id
         };
         this.callAjax.call(this, data).success(function() {
             var data = self.getAjaxData();

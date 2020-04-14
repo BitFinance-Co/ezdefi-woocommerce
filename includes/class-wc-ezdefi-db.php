@@ -140,6 +140,17 @@ class WC_Ezdefi_Db
 		return $wpdb->query( $query );
 	}
 
+	public function delete_exception($exception_id)
+    {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+        $query = "DELETE FROM $table_name WHERE id = $exception_id";
+
+        return $wpdb->query( $query );
+    }
+
     /**
      * Add exception
      *
@@ -189,7 +200,8 @@ class WC_Ezdefi_Db
 			'order_id' => '',
 			'email' => '',
 			'payment_method' => '',
-			'status' => ''
+			'status' => '',
+            'confirmed' => 0
 		);
 
 		$params = array_merge( $default, $params );
@@ -201,7 +213,9 @@ class WC_Ezdefi_Db
 		foreach( $params as $column => $param ) {
 			if( ! empty( $param ) && in_array( $column, array_keys( $default ) ) && $column != 'amount_id' ) {
 				$sql[] = ( $column === 'email' ) ? " t2.billing_email = '$param' " : " t1.$column = '$param' ";
-			}
+			} elseif ( $column === 'confirmed' ) {
+			    $sql[] = " t1.$column = $param ";
+            }
 		}
 
 		if( ! empty( $sql ) ) {

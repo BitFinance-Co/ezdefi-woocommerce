@@ -171,27 +171,27 @@ class WC_Ezdefi_Ajax
             wp_send_json_error( $message );
         }
 
-        if( $amount_id ) {
-            $value = $payment['originValue'];
-            $value = explode( '.', $value );
-            $number = $value[0];
-            $decimal = $value[1];
-            $decimal = substr( $decimal, 0, $coin_data['decimal'] );
-            $value = "$number" . '.' . "$decimal";
-            $payment['originValue'] = $value;
-        } else {
-            $value = $payment['value'] / pow( 10, $payment['decimal'] );
-        }
-
-        $data = array(
-            'amount_id' => str_replace( ',', '', $value),
-            'currency' => $coin_data['token']['symbol'],
-            'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
-            'status' => 'not_paid',
-            'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet',
-        );
-
-        $this->db->add_exception( $data );
+//        if( $amount_id ) {
+//            $value = $payment['originValue'];
+//            $value = explode( '.', $value );
+//            $number = $value[0];
+//            $decimal = $value[1];
+//            $decimal = substr( $decimal, 0, $coin_data['decimal'] );
+//            $value = "$number" . '.' . "$decimal";
+//            $payment['originValue'] = $value;
+//        } else {
+//            $value = $payment['value'] / pow( 10, $payment['decimal'] );
+//        }
+//
+//        $data = array(
+//            'amount_id' => str_replace( ',', '', $value),
+//            'currency' => $coin_data['token']['symbol'],
+//            'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
+//            'status' => 'not_paid',
+//            'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet',
+//        );
+//
+//        $this->db->add_exception( $data );
 
         $html = $this->generate_payment_html( $payment, $order, $coin_data );
 
@@ -388,15 +388,13 @@ class WC_Ezdefi_Ajax
      */
     public function wc_ezdefi_assign_amount_id_ajax_callback()
     {
-        if( ! isset( $_POST['amount_id'] ) || ! isset( $_POST['order_id'] ) || ! isset( $_POST['currency'] ) ) {
+        if( ! isset( $_POST['order_id'] ) || ! isset( $_POST['exception_id'] ) ) {
             wp_send_json_error();
         }
 
-        $amount_id = sanitize_text_field( $_POST['amount_id'] );
+        $exception_id = sanitize_key( $_POST['exception_id'] );
 
-        $currency = sanitize_text_field( $_POST['currency'] );
-
-	    $old_order_id = ( $_POST['old_order_id'] && ! empty( $_POST['old_order_id'] ) ) ? sanitize_key( $_POST['old_order_id'] ) : null;
+        $old_order_id = ( isset( $_POST['old_order_id'] ) && ! empty( $_POST['old_order_id'] ) ) ? sanitize_key( $_POST['old_order_id'] ) : null;
 
         $order_id = sanitize_key( $_POST['order_id'] );
 
@@ -406,14 +404,19 @@ class WC_Ezdefi_Ajax
 		    wp_send_json_error();
 	    }
 
-	    $order->update_status( 'completed' );
+	    $order->update_status( $this->db->get_order_status() );
 
-	    if( is_null( $old_order_id ) ) {
-		    $this->db->delete_amount_id_exception( $amount_id, $currency, $old_order_id );
-		    $this->db->delete_exception_by_order_id( $order_id );
-        } else {
-		    $this->db->delete_exception_by_order_id( $old_order_id );
-	    }
+	    if( $old_order_id && $old_order_id != $order_id && $old_order = wc_get_order( $old_order_id ) ) {
+            $old_order->update_status( 'on-hold' );
+        }
+
+	    $this->db->update_exception(
+            array( 'id' => (int) $exception_id ),
+            array(
+                'order_id' => $order_id,
+                'confirmed' => 1
+            )
+        );
 
 	    wp_send_json_success();
     }
@@ -423,13 +426,11 @@ class WC_Ezdefi_Ajax
      */
 	public function wc_ezdefi_reverse_order_ajax_callback()
 	{
-		if( ! isset( $_POST['amount_id'] ) || ! isset( $_POST['order_id'] ) || ! isset( $_POST['currency'] ) ) {
-			wp_send_json_error();
-		}
+        if( ! isset( $_POST['order_id'] ) || ! isset( $_POST['exception_id'] ) ) {
+            wp_send_json_error();
+        }
 
-		$amount_id = sanitize_text_field( $_POST['amount_id'] );
-
-		$currency = sanitize_text_field( $_POST['currency'] );
+        $exception_id = sanitize_key( $_POST['exception_id'] );
 
 		$order_id = sanitize_key( $_POST['order_id'] );
 
@@ -441,20 +442,13 @@ class WC_Ezdefi_Ajax
 
 		$order->update_status( 'on-hold' );
 
-		$wheres = array(
-            'amount_id' => $amount_id,
-            'currency' => $currency,
-            'order_id' => $order_id,
-            'status' => 'done'
+		$this->db->update_exception(
+            array( 'id' => (int) $exception_id ),
+            array(
+                'order_id' => null,
+                'confirmed' => 0
+            )
         );
-
-		$data = array(
-            'order_id' => null,
-            'status' => null,
-            'payment_method' => null
-        );
-
-		$this->db->update_exception( $wheres, $data );
 
 		wp_send_json_success();
 	}
@@ -464,13 +458,15 @@ class WC_Ezdefi_Ajax
      */
     public function wc_ezdefi_delete_amount_id_ajax_callback()
     {
-	    $amount_id = sanitize_text_field( $_POST['amount_id'] );
+        if( ! isset( $_POST['exception_id'] ) ) {
+            wp_send_json_error();
+        }
 
-	    $order_id = ( ! empty( $_POST['order_id'] ) ) ? sanitize_key( $_POST['order_id'] ) : null;
+        $exception_id = sanitize_key( $_POST['exception_id'] );
 
-	    $currency = sanitize_text_field( $_POST['currency'] );
+        $this->db->delete_exception( $exception_id );
 
-	    $this->db->delete_amount_id_exception( $amount_id, $currency, $order_id );
+        wp_send_json_success();
     }
 }
 

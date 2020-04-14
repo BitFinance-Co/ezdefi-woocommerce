@@ -62,17 +62,29 @@ class WC_Ezdefi_Callback
 
         $status = $payment['status'];
 
+        if( $status != 'DONE' && $status != 'EXPIRED_DONE' ) {
+            wp_send_json_error();
+        }
+
         if( $status === 'DONE' ) {
             $order->update_status( $this->db->get_order_status() );
             $woocommerce->cart->empty_cart();
-            $this->update_exception( $payment );
 
-            if( ! ezdefi_is_pay_any_wallet( $payment ) ) {
-                $this->db->delete_exception_by_order_id( $order_id );
-            }
-        } elseif( $status === 'EXPIRED_DONE' ) {
-            $this->update_exception( $payment );
+//            if( ! ezdefi_is_pay_any_wallet( $payment ) ) {
+//                wp_send_json_success();
+//            }
         }
+
+        $value = ( ezdefi_is_pay_any_wallet( $payment ) ) ? $payment['originValue'] : ( $payment['value'] / pow( 10, $payment['decimal'] ) );
+
+        $this->db->add_exception( array(
+            'amount_id' => ezdefi_sanitize_float_value( $value ),
+            'currency' => $payment['token']['symbol'],
+            'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
+            'status' => strtolower( $status ),
+            'payment_method' => ezdefi_is_pay_any_wallet( $payment ) ? 'amount_id' : 'ezdefi_wallet',
+            'explorer_url' => $payment['explorer']['tx'] . $payment['transactionHash']
+        ) );
 
         wp_send_json_success();
     }
