@@ -57,6 +57,7 @@ class WC_Ezdefi {
 			status varchar(20),
 			payment_method varchar(100),
 			explorer_url varchar(200),
+			confirmed tinyint(1) DEFAULT 0 NOT NULL,
 			PRIMARY KEY (id)
 		) $charset_collate;";
 
