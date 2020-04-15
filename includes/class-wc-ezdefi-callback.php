@@ -70,21 +70,26 @@ class WC_Ezdefi_Callback
             $order->update_status( $this->db->get_order_status() );
             $woocommerce->cart->empty_cart();
 
-//            if( ! ezdefi_is_pay_any_wallet( $payment ) ) {
-//                wp_send_json_success();
-//            }
+            if( ! ezdefi_is_pay_any_wallet( $payment ) ) {
+                $this->db->delete_exception_by_order_id( ezdefi_sanitize_uoid( $payment['uoid'] ) );
+                wp_send_json_success();
+            }
         }
 
         $value = ( ezdefi_is_pay_any_wallet( $payment ) ) ? $payment['originValue'] : ( $payment['value'] / pow( 10, $payment['decimal'] ) );
 
-        $this->db->add_exception( array(
-            'amount_id' => ezdefi_sanitize_float_value( $value ),
-            'currency' => $payment['token']['symbol'],
-            'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
-            'status' => strtolower( $status ),
-            'payment_method' => ezdefi_is_pay_any_wallet( $payment ) ? 'amount_id' : 'ezdefi_wallet',
-            'explorer_url' => $payment['explorer']['tx'] . $payment['transactionHash']
-        ) );
+        $this->db->update_exception(
+            array(
+                'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
+                'payment_method' => ezdefi_is_pay_any_wallet( $payment ) ? 'amount_id' : 'ezdefi_wallet',
+            ),
+            array(
+                'amount_id' => ezdefi_sanitize_float_value( $value ),
+                'currency' => $payment['token']['symbol'],
+                'status' => strtolower( $status ),
+                'explorer_url' => $payment['explorer']['tx'] . $payment['transactionHash']
+            )
+        );
 
         wp_send_json_success();
     }

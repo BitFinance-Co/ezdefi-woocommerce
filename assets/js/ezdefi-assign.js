@@ -52,10 +52,7 @@ jQuery(function($) {
     };
 
     wc_ezdefi_assign.prototype.init = function() {
-        var data = {
-            action: 'wc_ezdefi_get_exception',
-            confirmed: this.$tab.find('.nav-tab-active').attr('data-confirmed')
-        };
+        var data = this.getAjaxData();
         this.getException.call(this, data);
     };
 
@@ -135,8 +132,20 @@ jQuery(function($) {
         var form = $(selectors.filterForm);
         var data = {
             'action': 'wc_ezdefi_get_exception',
-            'confirmed': this.$tab.find('.nav-tab-active').attr('data-confirmed')
         };
+
+        if(this.$tab.find('.nav-tab-active').attr('data-archived')) {
+            data['archived'] = 1;
+        } else {
+            var confirmed = this.$tab.find('.nav-tab-active').attr('data-confirmed');
+
+            data['confirmed'] = confirmed;
+
+            if(confirmed == 0) {
+                data['archived'] = 0;
+            }
+        }
+
         form.find('input, select').each(function() {
             var val = '';
             if($(this).is('input')) {
@@ -229,7 +238,7 @@ jQuery(function($) {
                 "<tr>" +
                 "<td>" + (number + offset) + "</td>" +
                 "<td class='amount-id-column'>" +
-                    "<span>" + (row['amount_id'] * 1) + "</span>" +
+                    "<span>" + (row['amount_id'].replace(/^0+(\d)|(\d)0+$/gm, '$1$2')) + "</span>" +
                     "<input type='hidden' class='amount-id-input' value='" + row['amount_id'] + "' >" +
                     "<input type='hidden' class='exception-id-input' value='" + row['id'] + "' >" +
                 "</td>" +

@@ -11,7 +11,7 @@ function ezdefi_is_pay_any_wallet( $payment_data )
 
 function ezdefi_sanitize_float_value( $value )
 {
-    $notation = explode('E', $value);
+    $notation = explode('E', strtoupper( $value ) );
 
     if(count($notation) === 2){
         $exp = abs(end($notation)) + strlen($notation[0]);

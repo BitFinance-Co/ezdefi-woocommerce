@@ -7,60 +7,61 @@ defined( 'ABSPATH' ) or exit;
 	<h1 class="wp-heading-inline">ezDeFi Exception Management</h1>
 	<hr class="wp-header-end">
     <nav class="nav-tab-wrapper" id="wc-ezdefi-exception-tab">
-        <a href="?page=wc-ezdefi-exception&confirmed=0" data-confirmed="0" class="nav-tab <?php echo ( ( ! $_GET['confirmed'] ) || ( isset( $_GET['confirmed'] ) && $_GET['confirmed'] == '0' ) ) ? 'nav-tab-active' : ''; ?>">Pending</a>
+        <a href="?page=wc-ezdefi-exception&confirmed=0" data-confirmed="0" class="nav-tab <?php echo ( ( ! $_GET['confirmed'] && ! $_GET['archived'] ) || ( isset( $_GET['confirmed'] ) && $_GET['confirmed'] == '0' ) ) ? 'nav-tab-active' : ''; ?>">Pending</a>
         <a href="?page=wc-ezdefi-exception&confirmed=1" data-confirmed="1" class="nav-tab <?php echo ( isset( $_GET['confirmed'] ) && $_GET['confirmed'] == '1' ) ? 'nav-tab-active' : ''; ?>">Confirmed</a>
+        <a href="?page=wc-ezdefi-exception&archived=1" data-archived="1" class="nav-tab <?php echo ( isset( $_GET['archived'] ) && $_GET['archived'] == '1' ) ? 'nav-tab-active' : ''; ?>">Archived</a>
     </nav>
-<!--    <table class="widefat" id="wc-ezdefi-exception-table-filter">-->
-<!--        <thead>-->
-<!--            <th><strong>Filter</strong></th>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--            <tr>-->
-<!--                <td>-->
-<!--                    <form action="" id="wc-ezdefi-exception-table-filter-form">-->
-<!--                        <div class="filter-container">-->
-<!--                            <div class="filter-rows">-->
-<!--                                <label for="">Amount</label>-->
-<!--                                <input type="number" name="amount_id" placeholder="Amount">-->
-<!--                            </div>-->
-<!--                            <div class="filter-rows">-->
-<!--                                <label for="">Currency</label>-->
-<!--                                <input type="text" name="currency" placeholder="Currency">-->
-<!--                            </div>-->
-<!--                            <div class="filter-rows">-->
-<!--                                <label for="">Order ID</label>-->
-<!--                                <input type="number" name="order_id" placeholder="Order ID">-->
-<!--                            </div>-->
-<!--                            <div class="filter-rows">-->
-<!--                                <label for="">Billing Email</label>-->
-<!--                                <input type="text" name="email" placeholder="Billing Email">-->
-<!--                            </div>-->
-<!--                            <div class="filter-rows">-->
-<!--                                <label for="">Payment Method</label>-->
-<!--                                <select name="payment_method" id="">-->
-<!--                                    <option value="" selected>Any Payment Method</option>-->
-<!--                                    <option value="ezdefi_wallet">Pay with ezDeFi wallet</option>-->
-<!--                                    <option value="amount_id">Pay with any crypto wallet</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                            <div class="filter-rows">-->
-<!--                                <label for="">Status</label>-->
-<!--                                <select name="status" id="">-->
-<!--                                    <option value="" selected >Any Status</option>-->
-<!--                                    <option value="expired_done">Paid after expired</option>-->
-<!--                                    <option value="not_paid">Not paid</option>-->
-<!--                                    <option value="done">Paid on time</option>-->
-<!--                                </select>-->
-<!--                            </div>-->
-<!--                            <div class="filter-rows">-->
-<!--                                <button class="button button-primary filterBtn">Search</button>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
+    <table class="widefat" id="wc-ezdefi-exception-table-filter">
+        <thead>
+            <th><strong>Filter</strong></th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <form action="" id="wc-ezdefi-exception-table-filter-form">
+                        <div class="filter-container">
+                            <div class="filter-rows">
+                                <label for="">Amount</label>
+                                <input type="number" name="amount_id" placeholder="Amount">
+                            </div>
+                            <div class="filter-rows">
+                                <label for="">Currency</label>
+                                <input type="text" name="currency" placeholder="Currency">
+                            </div>
+                            <div class="filter-rows">
+                                <label for="">Order ID</label>
+                                <input type="number" name="order_id" placeholder="Order ID">
+                            </div>
+                            <div class="filter-rows">
+                                <label for="">Billing Email</label>
+                                <input type="text" name="email" placeholder="Billing Email">
+                            </div>
+                            <div class="filter-rows">
+                                <label for="">Payment Method</label>
+                                <select name="payment_method" id="">
+                                    <option value="" selected>Any Payment Method</option>
+                                    <option value="ezdefi_wallet">Pay with ezDeFi wallet</option>
+                                    <option value="amount_id">Pay with any crypto wallet</option>
+                                </select>
+                            </div>
+                            <div class="filter-rows">
+                                <label for="">Status</label>
+                                <select name="status" id="">
+                                    <option value="" selected >Any Status</option>
+                                    <option value="expired_done">Paid after expired</option>
+                                    <option value="not_paid">Not paid</option>
+                                    <option value="done">Paid on time</option>
+                                </select>
+                            </div>
+                            <div class="filter-rows">
+                                <button class="button button-primary filterBtn">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="widefat striped" id="wc-ezdefi-order-assign">
 		<thead>
             <th><strong>#</strong></th>

@@ -171,27 +171,28 @@ class WC_Ezdefi_Ajax
             wp_send_json_error( $message );
         }
 
-//        if( $amount_id ) {
-//            $value = $payment['originValue'];
-//            $value = explode( '.', $value );
-//            $number = $value[0];
-//            $decimal = $value[1];
-//            $decimal = substr( $decimal, 0, $coin_data['decimal'] );
-//            $value = "$number" . '.' . "$decimal";
-//            $payment['originValue'] = $value;
-//        } else {
-//            $value = $payment['value'] / pow( 10, $payment['decimal'] );
-//        }
-//
-//        $data = array(
-//            'amount_id' => str_replace( ',', '', $value),
-//            'currency' => $coin_data['token']['symbol'],
-//            'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
-//            'status' => 'not_paid',
-//            'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet',
-//        );
-//
-//        $this->db->add_exception( $data );
+        if( $amount_id ) {
+            $value = $payment['originValue'];
+            $value = explode( '.', $value );
+            $number = $value[0];
+            $decimal = $value[1];
+            $decimal = substr( $decimal, 0, $coin_data['decimal'] );
+            $value = "$number" . '.' . "$decimal";
+            $payment['originValue'] = $value;
+        } else {
+            $value = $payment['value'] / pow( 10, $payment['decimal'] );
+        }
+
+        $data = array(
+            'amount_id' => str_replace( ',', '', $value),
+            'currency' => $coin_data['token']['symbol'],
+            'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
+            'status' => 'not_paid',
+            'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet',
+            'explorer_url' => null,
+        );
+
+        $this->db->add_or_update_exception( $data );
 
         $html = $this->generate_payment_html( $payment, $order, $coin_data );
 
@@ -224,7 +225,7 @@ class WC_Ezdefi_Ajax
 	                    $value = $payment['value'] / pow( 10, $payment['decimal'] );
                     }
 
-				    $notation = explode('E', $value);
+				    $notation = explode('E', strtoupper($value));
 
 				    if(count($notation) === 2){
 					    $exp = abs(end($notation)) + strlen($notation[0]);
@@ -233,7 +234,7 @@ class WC_Ezdefi_Ajax
 				    }
                 ?>
 			    <p class="exchange">
-				    <span><?php echo $total; ?> <?php echo $order->get_currency(); ?></span>
+				    <span><?php echo ezdefi_sanitize_float_value( $total ); ?> <?php echo $order->get_currency(); ?></span>
 				    <img width="16" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfjChgQMyxZjA7+AAACP0lEQVRo3u2YvWsUQRTAf8nFQs5LCEY0aCGIB1ErRVMoFpYGTGNlo2AnBxHlrLQJKVSwiV//gqCV4gemEGJhiBYXRAtBDIhICiUGL8GP3Fjs7rs5vN0o5M1LsW+a2XkDv9/MvF12t4B2dDDODqbVOan46zgaVKzwN3A4O4VuarGAo8EZC4VeXnoKJruQK+QKa12hI2VyFyUFhY08Ymfcd1S49feU7VSZ5DPL4qrXGpxuhW/iJj8DgJutTrGJ38vHoPCobUnwg9QN8HeTItzGNP2yF7M85D11lTvhLAPSn2CYpah7R5zmOUmnChrgsrf6p6xPhvfRiAe/slsNnoqHcRketsDDbDw8ZYPvlsR5CzwMSGpICT+WhYdBSR4Ov3p9gbGV8Hr3PEAPx6XvPXZC7sBm3qSvPoRApJCB71KB+jHHERbab34YAZjLSuoW4T+EuYBNHJXC32W+A2taYAN9lgJFHjDZfGsNHUWe4XC8VVHwirD9hBLPZcpM+mN0NQTaHUGR+xySq3vpj1Gd8FfvuKjCyDiC5OyjdklpkSeE0N+aCLF6gNGY8IuCBb4zfklxzFjg4ZRQRi3wB/guB1AOjV9HhUXh3Ibo87zEYw7KpFqUWPUoUWaIrXL9gf18iRSeGPyamGdPYlI2wL/zflPQx4+g8CWu0tN6OiNBwL/5xAQjXhWQFCFc4IqMvOYY3xSKcIHlrPQ5z/UVvSr3wQqRK+QKuYIfVU9hSuGt+L924ZoFvqmgji+kZl6wSI2qtsAfm/EoPAbFFD0AAAAldEVYdGRhdGU6Y3JlYXRlADIwMTktMTAtMjRUMTY6NTE6NDQrMDA6MDBiAik3AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE5LTEwLTI0VDE2OjUxOjQ0KzAwOjAwE1+RiwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=" />
 				    <span class="currency"><?php echo $value . ' ' . $payment['currency']; ?></span>
 			    </p>

@@ -177,6 +177,25 @@ class WC_Ezdefi_Db
 		return $wpdb->query($query);
 	}
 
+	public function add_or_update_exception( $data )
+    {
+        global $wpdb;
+
+        $keys = array();
+        $values = array();
+
+        foreach ( $data as $key => $value ) {
+            $keys[] = "$key";
+            $values[] = "'$value'";
+        }
+
+        $exception_table = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+        $query = "INSERT INTO $exception_table (" . implode( ',', $keys ) . ") VALUES (" . implode( ',', $values ) . ") ON DUPLICATE KEY UPDATE amount_id = '" . $data['amount_id'] . "', currency = '" . $data['currency'] . "'";
+
+        return $wpdb->query($query);
+    }
+
     /**
      * Get exception
      *
@@ -201,7 +220,7 @@ class WC_Ezdefi_Db
 			'email' => '',
 			'payment_method' => '',
 			'status' => '',
-            'confirmed' => 0
+            'confirmed' => 0,
 		);
 
 		$params = array_merge( $default, $params );
@@ -211,25 +230,23 @@ class WC_Ezdefi_Db
 		$sql = array();
 
 		foreach( $params as $column => $param ) {
-			if( ! empty( $param ) && in_array( $column, array_keys( $default ) ) && $column != 'amount_id' ) {
-				$sql[] = ( $column === 'email' ) ? " t2.billing_email = '$param' " : " t1.$column = '$param' ";
-			} elseif ( $column === 'confirmed' ) {
-			    $sql[] = " t1.$column = $param ";
+            if ( $column === 'archived' ) {
+                $sql[] = ( $param == 1 ) ? " t1.explorer_url IS NULL " : " t1.explorer_url IS NOT NULL ";
+            } elseif ( $column === 'confirmed' ) {
+                $sql[] = " t1.confirmed = $param ";
+            } elseif ( ! empty( $param ) && in_array( $column, array_keys( $default ) ) ) {
+                if ( $column === 'amount_id' ) {
+                    $sql[] = " t1.amount_id RLIKE '^$param' ";
+                } elseif( $column === 'email' ) {
+                    $sql[] = " t2.billing_email = '$param' ";
+                } else {
+                    $sql[] = " t1.$column = '$param' ";
+                }
             }
 		}
 
 		if( ! empty( $sql ) ) {
 			$query .= ' WHERE ' . implode( $sql, 'AND' );
-		}
-
-		if( ! empty( $params['amount_id'] ) ) {
-			$amount_id = $params['amount_id'];
-			if( ! empty( $sql ) ) {
-				$query .= " AND";
-			} else {
-				$query .= " WHERE";
-			}
-			$query .= " amount_id RLIKE '^$amount_id'";
 		}
 
 		$query .= " ORDER BY id DESC LIMIT $offset, $per_page";
