@@ -7,9 +7,9 @@ defined( 'ABSPATH' ) or exit;
 	<h1 class="wp-heading-inline">ezDeFi Exception Management</h1>
 	<hr class="wp-header-end">
     <nav class="nav-tab-wrapper" id="wc-ezdefi-exception-tab">
-        <a href="?page=wc-ezdefi-exception&confirmed=0" data-confirmed="0" class="nav-tab <?php echo ( ( ! $_GET['confirmed'] && ! $_GET['archived'] ) || ( isset( $_GET['confirmed'] ) && $_GET['confirmed'] == '0' ) ) ? 'nav-tab-active' : ''; ?>">Pending</a>
-        <a href="?page=wc-ezdefi-exception&confirmed=1" data-confirmed="1" class="nav-tab <?php echo ( isset( $_GET['confirmed'] ) && $_GET['confirmed'] == '1' ) ? 'nav-tab-active' : ''; ?>">Confirmed</a>
-        <a href="?page=wc-ezdefi-exception&archived=1" data-archived="1" class="nav-tab <?php echo ( isset( $_GET['archived'] ) && $_GET['archived'] == '1' ) ? 'nav-tab-active' : ''; ?>">Archived</a>
+        <a href="?page=wc-ezdefi-exception&type=pending" data-type="pending" class="nav-tab <?php echo ( ( ! $_GET['type'] ) || ( isset( $_GET['type'] ) && $_GET['type'] == 'pending' ) ) ? 'nav-tab-active' : ''; ?>">Pending</a>
+        <a href="?page=wc-ezdefi-exception&type=confirmed" data-type="confirmed" class="nav-tab <?php echo ( isset( $_GET['type'] ) && $_GET['type'] == 'confirmed' ) ? 'nav-tab-active' : ''; ?>">Confirmed</a>
+        <a href="?page=wc-ezdefi-exception&type=archived" data-type="archived" class="nav-tab <?php echo ( isset( $_GET['type'] ) && $_GET['type'] == 'archived' ) ? 'nav-tab-active' : ''; ?>">Archived</a>
     </nav>
     <table class="widefat" id="wc-ezdefi-exception-table-filter">
         <thead>

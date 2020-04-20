@@ -189,10 +189,9 @@ class WC_Ezdefi_Ajax
             'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
             'status' => 'not_paid',
             'payment_method' => ( $amount_id ) ? 'amount_id' : 'ezdefi_wallet',
-            'explorer_url' => null,
         );
 
-        $this->db->add_or_update_exception( $data );
+        $this->db->add_exception( $data );
 
         $html = $this->generate_payment_html( $payment, $order, $coin_data );
 
@@ -333,7 +332,7 @@ class WC_Ezdefi_Ajax
 
         $post_data = array_map( 'sanitize_text_field', $_POST );
 
-        $data = $this->db->get_exception( $post_data, $offset, $per_page );
+        $data = $this->db->get_exceptions( $post_data, $offset, $per_page );
 
         $total = $data['total'];
 
@@ -418,6 +417,11 @@ class WC_Ezdefi_Ajax
                 'confirmed' => 1
             )
         );
+
+	    $this->db->delete_exceptions( array(
+            'order_id' => $order_id,
+            'confirmed' => 0
+        ) );
 
 	    wp_send_json_success();
     }

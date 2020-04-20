@@ -132,19 +132,8 @@ jQuery(function($) {
         var form = $(selectors.filterForm);
         var data = {
             'action': 'wc_ezdefi_get_exception',
+            'type': this.$tab.find('.nav-tab-active').attr('data-type')
         };
-
-        if(this.$tab.find('.nav-tab-active').attr('data-archived')) {
-            data['archived'] = 1;
-        } else {
-            var confirmed = this.$tab.find('.nav-tab-active').attr('data-confirmed');
-
-            data['confirmed'] = confirmed;
-
-            if(confirmed == 0) {
-                data['archived'] = 0;
-            }
-        }
 
         form.find('input, select').each(function() {
             var val = '';

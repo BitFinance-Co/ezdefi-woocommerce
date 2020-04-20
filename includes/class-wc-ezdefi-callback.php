@@ -61,6 +61,9 @@ class WC_Ezdefi_Callback
         }
 
         $status = $payment['status'];
+        $uoid = (int) ezdefi_sanitize_uoid( $payment['uoid'] );
+        $payment_method = ezdefi_is_pay_any_wallet( $payment ) ? 'amount_id' : 'ezdefi_wallet';
+
 
         if( $status != 'DONE' && $status != 'EXPIRED_DONE' ) {
             wp_send_json_error();
@@ -70,18 +73,21 @@ class WC_Ezdefi_Callback
             $order->update_status( $this->db->get_order_status() );
             $woocommerce->cart->empty_cart();
 
-            if( ! ezdefi_is_pay_any_wallet( $payment ) ) {
-                $this->db->delete_exception_by_order_id( ezdefi_sanitize_uoid( $payment['uoid'] ) );
+            if( $payment_method === 'ezdefi_wallet' ) {
+                $this->db->delete_exceptions( array(
+                    'order_id' => $uoid
+                ) );
+
                 wp_send_json_success();
             }
         }
 
-        $value = ( ezdefi_is_pay_any_wallet( $payment ) ) ? $payment['originValue'] : ( $payment['value'] / pow( 10, $payment['decimal'] ) );
+        $value = ( $payment_method === 'amount_id' ) ? $payment['originValue'] : ( $payment['value'] / pow( 10, $payment['decimal'] ) );
 
         $this->db->update_exception(
             array(
-                'order_id' => ezdefi_sanitize_uoid( $payment['uoid'] ),
-                'payment_method' => ezdefi_is_pay_any_wallet( $payment ) ? 'amount_id' : 'ezdefi_wallet',
+                'order_id' => $uoid,
+                'payment_method' => $payment_method,
             ),
             array(
                 'amount_id' => ezdefi_sanitize_float_value( $value ),
@@ -90,6 +96,11 @@ class WC_Ezdefi_Callback
                 'explorer_url' => $payment['explorer']['tx'] . $payment['transactionHash']
             )
         );
+
+        $this->db->delete_exceptions( array(
+            'order_id' => $uoid,
+            'explorer_url' => null,
+        ) );
 
         wp_send_json_success();
     }
