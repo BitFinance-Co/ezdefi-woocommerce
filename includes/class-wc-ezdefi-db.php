@@ -219,7 +219,7 @@ class WC_Ezdefi_Db
                     case 'archived' :
                         $sql[] = " t1.confirmed = 0 ";
                         $sql[] = " t1.explorer_url IS NULL ";
-                        $sql[] = " t1.is_show = 1";
+                        $sql[] = " t1.is_show = 1 ";
                         break;
                 }
             }  elseif ( ! empty( $param ) && in_array( $column, array_keys( $default ) ) ) {
