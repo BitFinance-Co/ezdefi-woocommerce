@@ -269,6 +269,8 @@ jQuery(function($) {
             var last_td;
 
             if(row['confirmed'] == 1) {
+                html.find('td.order-column .actions').remove();
+                html.find('td.order-column .select-order').remove();
                 last_td = $(
                     "<td>" +
                     "<button class='button reverseBtn'>Reverse</button> " +
