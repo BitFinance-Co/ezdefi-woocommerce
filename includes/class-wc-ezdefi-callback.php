@@ -84,7 +84,7 @@ class WC_Ezdefi_Callback
 
         $value = ( $payment_method === 'amount_id' ) ? $payment['originValue'] : ( $payment['value'] / pow( 10, $payment['decimal'] ) );
 
-        $this->db->update_exception(
+        $this->db->update_exceptions(
             array(
                 'order_id' => $uoid,
                 'payment_method' => $payment_method,
@@ -94,7 +94,8 @@ class WC_Ezdefi_Callback
                 'currency' => $payment['token']['symbol'],
                 'status' => strtolower( $status ),
                 'explorer_url' => $payment['explorer']['tx'] . $payment['transactionHash']
-            )
+            ),
+            1
         );
 
         $this->db->delete_exceptions( array(
@@ -193,60 +194,6 @@ class WC_Ezdefi_Callback
         }
 
         return true;
-    }
-
-    /**
-     * Get coin data
-     *
-     * @param $symbol
-     *
-     * @return array
-     */
-    protected function get_coin_data( $symbol )
-    {
-        $coin_data = array();
-        $website_coins = $this->api->get_website_coins();
-        foreach ($website_coins as $coin) {
-            if( strtolower( $coin['token']['symbol'] ) === strtolower( $symbol ) ) {
-                $coin_data = $coin;
-            }
-        }
-        return $coin_data;
-    }
-
-    /**
-     * Update exception
-     *
-     * @param $payment_data
-     */
-    protected function update_exception( $payment_data )
-    {
-        $status = $payment_data['status'];
-
-        if( ezdefi_is_pay_any_wallet( $payment_data ) ) {
-            $payment_method = 'amount_id';
-            $amount_id = $payment_data['originValue'];
-        } else {
-            $payment_method = 'ezdefi_wallet';
-            $amount_id = $payment_data['value'] / pow( 10, $payment_data['decimal'] );
-        }
-
-        $amount_id = ezdefi_sanitize_float_value( $amount_id );
-        $amount_id = str_replace( ',', '', $amount_id);
-
-        $wheres = array(
-            'amount_id' => $amount_id,
-            'currency' => (string) $payment_data['currency'],
-            'order_id' => (int) ezdefi_sanitize_uoid( $payment_data['uoid'] ),
-            'payment_method' => $payment_method,
-        );
-
-        $data = array(
-            'status' => strtolower($status),
-            'explorer_url' => (string) self::EXPLORER_URL . $payment_data['transactionHash']
-        );
-
-        $this->db->update_exception( $wheres, $data );
     }
 }
 
