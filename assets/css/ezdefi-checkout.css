@@ -13,6 +13,12 @@
   flex-wrap: wrap;
   margin: 20px -2.5px 0 -2.5px;
 }
+@media screen and (max-width: 575.98px) {
+  #wc-wzdefi-checkout .currency-select {
+    max-height: 160px;
+    overflow-y: auto;
+  }
+}
 #wc-wzdefi-checkout .currency-select .currency-item__wrap {
   width: 140px;
   padding: 0 5px;

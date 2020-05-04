@@ -15,6 +15,11 @@
     flex-wrap: wrap;
     margin: 20px -2.5px 0 -2.5px;
 
+    @media screen and (max-width: 575.98px) {
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
     .currency-item__wrap {
       width: 140px;
 
