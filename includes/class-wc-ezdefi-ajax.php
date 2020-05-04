@@ -450,7 +450,6 @@ class WC_Ezdefi_Ajax
 		$this->db->update_exception(
             array( 'id' => (int) $exception_id ),
             array(
-                'order_id' => null,
                 'confirmed' => 0
             )
         );
