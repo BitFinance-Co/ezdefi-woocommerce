@@ -197,6 +197,7 @@ jQuery(function($) {
     wc_ezdefi_assign.prototype.renderHtml = function(data, offset) {
         var self = this;
         if(data.length === 0) {
+            self.$table.find('tbody tr').not('.spinner-row').remove();
             self.$table.append("<tr><td colspan='5'>Not found</td></tr>")
         }
         for(var i=0;i<data.length;i++) {
