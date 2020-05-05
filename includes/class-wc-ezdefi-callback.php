@@ -63,7 +63,7 @@ class WC_Ezdefi_Callback
         $status = $payment['status'];
         $uoid = (int) ezdefi_sanitize_uoid( $payment['uoid'] );
         $payment_method = ezdefi_is_pay_any_wallet( $payment ) ? 'amount_id' : 'ezdefi_wallet';
-
+        $explorer_url = $payment['explorer']['tx'] . $payment['transactionHash'];
 
         if( $status != 'DONE' && $status != 'EXPIRED_DONE' ) {
             wp_send_json_error();
@@ -71,6 +71,8 @@ class WC_Ezdefi_Callback
 
         if( $status === 'DONE' ) {
             $order->update_status( $this->db->get_order_status() );
+            $order->update_meta_data( 'ezdefi_explorer_url', $explorer_url );
+            $order->save_meta_data();
             $woocommerce->cart->empty_cart();
 
             if( $payment_method === 'ezdefi_wallet' ) {
@@ -93,7 +95,7 @@ class WC_Ezdefi_Callback
                 'amount_id' => ezdefi_sanitize_float_value( $value ),
                 'currency' => $payment['token']['symbol'],
                 'status' => strtolower( $status ),
-                'explorer_url' => $payment['explorer']['tx'] . $payment['transactionHash']
+                'explorer_url' => $explorer_url
             ),
             1
         );
