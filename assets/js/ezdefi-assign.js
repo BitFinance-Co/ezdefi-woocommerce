@@ -420,7 +420,7 @@ jQuery(function($) {
 
     wc_ezdefi_assign.prototype.onRemove = function(e) {
         e.preventDefault();
-        if(!confirm('Do you want to delete this amount ID')) {
+        if(!confirm('Do you want to delete this amount ID?')) {
             return false;
         }
         var self = this;
