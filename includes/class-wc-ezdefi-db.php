@@ -174,7 +174,7 @@ class WC_Ezdefi_Db
 	}
 
     /**
-     * Get exception
+     * Get exceptions
      *
      * @param  array  $params
      * @param  int  $offset
@@ -254,6 +254,22 @@ class WC_Ezdefi_Db
 	}
 
     /**
+     * Get exception
+     *
+     * @param $exception_id
+     */
+	public function get_exception( $exception_id )
+    {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+        $query = "SELECT * FROM $table_name WHERE id = $exception_id";
+
+        return $wpdb->get_row( $query );
+    }
+
+    /**
      * Update exception
      *
      * @param  array  $wheres
@@ -277,7 +293,7 @@ class WC_Ezdefi_Db
 
 		foreach ( $data as $column => $value ) {
 			if( is_null( $value ) ) {
-				$query .= $comma . $column . " IS NULL";
+				$query .= $comma . $column . " = NULL";
 			} else {
 				$query .= $comma . $column . " = '" . $value . "'";
 			}
