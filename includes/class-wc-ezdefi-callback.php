@@ -71,7 +71,7 @@ class WC_Ezdefi_Callback
 
         if( $status === 'DONE' ) {
             $order->update_status( $this->db->get_order_status() );
-            $order->update_meta_data( 'ezdefi_explorer_url', $explorer_url );
+            $order->add_order_note( "Ezdefi Explorer URL: $explorer_url" );
             $order->save_meta_data();
             $woocommerce->cart->empty_cart();
 
