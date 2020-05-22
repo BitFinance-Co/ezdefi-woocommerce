@@ -50,6 +50,7 @@ return apply_filters(
             'type' => 'select',
             'options' => wc_get_order_statuses(),
             'default' => 'wc-processing',
+            'description' => __( 'Order status when payment received', 'woocommerce-gateway-ezdefi' )
         )
     )
 );
