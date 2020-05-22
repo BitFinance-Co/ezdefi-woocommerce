@@ -361,6 +361,21 @@ class WC_Ezdefi_Api
 		return $this->parse_response( $response );
 	}
 
+	public function update_callback_url()
+    {
+        return wp_remote_request(
+            $this->build_path( 'website/update_callback' ),
+            array(
+                'method' => 'PUT',
+                'headers' => $this->get_headers(),
+                'body' => array(
+                    'websiteId' => $this->get_public_key(),
+                    'callback' => home_url() . '/?wc-api=ezdefi'
+                )
+            )
+        );
+    }
+
     /**
      * Parse response
      *
