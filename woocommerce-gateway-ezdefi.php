@@ -3,7 +3,7 @@
  * Plugin Name: ezDeFi - Bitcoin, Ethereum and Cryptocurrencies Payment Gateway for WooCommerce
  * Plugin URI: https://ezdefi.io/
  * Description: Accept Bitcoin, Ethereum and Cryptocurrencies on your Woocommerce store with ezDeFi
- * Version: 1.0.0
+ * Version: 2.0.0
  * Author: ezDeFi
  * Author URI: https://ezdefi.io/
  * License: GPLv2 or later
@@ -20,6 +20,8 @@ class WC_Ezdefi {
 	 */
 	protected static $instance;
 
+	protected $version = '2.0.0';
+
 	/**
 	 * Constructs the class
 	 */
@@ -34,7 +36,77 @@ class WC_Ezdefi {
         add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array(
             $this, 'plugin_action_links'
         ) );
+
+        add_action( 'admin_init', array(
+            $this, 'update_database_notice'
+        ) );
+
+        add_action( 'admin_post_woocommerce_gateway_ezdefi_update_database', array(
+            $this, 'update_database'
+        ) );
 	}
+
+    /**
+     * Notice update database after update plugin
+     */
+    public function update_database_notice()
+    {
+        $current_version = get_option( 'woocommerce_gateway_ezdefi_version' );
+
+        if( ! empty( $current_version ) && version_compare( $current_version, $this->version, '>=' ) ) {
+            return;
+        }
+
+        add_action( 'admin_notices', function() {
+            ob_start(); ?>
+            <div class="error is-dismissible">
+                <p>
+                    <strong>
+                        <?php echo __( 'Woocommerce Gateway Ezdefi has been updated. You have to update your database to newest version.' ); ?>
+                    </strong>
+                </p>
+                <p>
+                    <?php echo __( 'The update process may take a little while, so please be patient.', 'woocommerce-gateway-ezdefi' ); ?>
+                </p>
+                <form action="<?php echo admin_url( 'admin-post.php' ); ?>" method="POST">
+                    <?php wp_nonce_field( 'woocommerce_gateway_ezdefi_update_database', 'woocommerce_gateway_ezdefi_update_database_nonce' ); ?>
+                    <input type="hidden" name="action" value="woocommerce_gateway_ezdefi_update_database">
+                    <p><input class="button button-primary" type="submit" value="Update database"></p>
+                </form>
+            </div>
+            <?php echo ob_get_clean();
+        });
+    }
+
+    public function update_database()
+    {
+        global $wpdb;
+
+        if(
+            ! isset( $_POST['woocommerce_gateway_ezdefi_update_database_nonce'] ) ||
+            ! wp_verify_nonce( $_POST['woocommerce_gateway_ezdefi_update_database_nonce'], 'woocommerce_gateway_ezdefi_update_database' )
+        ) {
+            wp_safe_redirect( admin_url() );
+        }
+
+        $amount_table_name = $wpdb->prefix . 'woocommerce_ezdefi_amount';
+
+        $wpdb->query( "DROP TABLE IF EXISTS $amount_table_name" );
+        $wpdb->query( "DROP PROCEDURE IF EXISTS `wc_ezdefi_generate_amount_id`" );
+        $wpdb->query( "DROP EVENT IF EXISTS `wc_ezdefi_clear_amount_table`" );
+
+        $exception_table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+        if( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $exception_table_name ) ) === $exception_table_name ) {
+            $wpdb->query(
+                "ALTER TABLE $exception_table_name ADD confirmed TinyInt(1) DEFAULT 0, ADD is_show TinyInt(1) DEFAULT 1, ALTER explorer_url SET DEFAULT NULL;"
+            );
+        }
+
+        update_option( 'woocommerce_gateway_ezdefi_version', $this->version );
+
+        wp_safe_redirect( admin_url() );
+    }
 
 	/**
 	 * Run when activate plugin
