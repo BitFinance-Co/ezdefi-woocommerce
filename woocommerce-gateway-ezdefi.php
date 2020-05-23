@@ -182,6 +182,8 @@ class WC_Ezdefi {
         if (! wp_next_scheduled ( 'woocommerce_gateway_ezdefi_weekly_event' ) ) {
             wp_schedule_event( time(), 'weekly', 'woocommerce_gateway_ezdefi_weekly_event' );
         }
+
+        update_option( 'woocommerce_gateway_ezdefi_version', '2.0.0' );
 	}
 
     /**
