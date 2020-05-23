@@ -44,6 +44,14 @@ class WC_Ezdefi {
         add_action( 'admin_post_woocommerce_gateway_ezdefi_update_database', array(
             $this, 'update_database'
         ) );
+
+        add_filter( 'cron_schedules', array(
+            $this, 'add_cron_schedule'
+        ) );
+
+        add_action( 'woocommerce_gateway_ezdefi_weekly_event', array(
+            $this, 'clear_database'
+        ) );
 	}
 
     /**
@@ -78,6 +86,9 @@ class WC_Ezdefi {
         });
     }
 
+    /**
+     * Update database
+     */
     public function update_database()
     {
         global $wpdb;
@@ -94,6 +105,7 @@ class WC_Ezdefi {
         $wpdb->query( "DROP TABLE IF EXISTS $amount_table_name" );
         $wpdb->query( "DROP PROCEDURE IF EXISTS `wc_ezdefi_generate_amount_id`" );
         $wpdb->query( "DROP EVENT IF EXISTS `wc_ezdefi_clear_amount_table`" );
+        $wpdb->query( "DROP EVENT IF EXISTS `wc_ezdefi_clear_exception_table`" );
 
         $exception_table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
 
@@ -106,6 +118,35 @@ class WC_Ezdefi {
         update_option( 'woocommerce_gateway_ezdefi_version', $this->version );
 
         wp_safe_redirect( admin_url() );
+    }
+
+    /**
+     * Add weekly cron schedule
+     *
+     * @param $schedules
+     *
+     * @return mixed
+     */
+    public function add_cron_schedule( $schedules )
+    {
+        $schedules['weekly'] = array(
+            'interval' => 604800,
+            'display' => __( 'Once Weekly' )
+        );
+
+        return $schedules;
+    }
+
+    /**
+     * Create database weekly
+     */
+    public function clear_database()
+    {
+        global $wpdb;
+
+        $exception_table_name = $wpdb->prefix . 'woocommerce_ezdefi_exception';
+
+        $wpdb->query( "DELETE FROM $exception_table_name;" );
     }
 
 	/**
@@ -138,14 +179,18 @@ class WC_Ezdefi {
 
 		dbDelta( $sql );
 
-		// Add schedule event to clear database table
-		$wpdb->query( "
-			CREATE EVENT IF NOT EXISTS `wc_ezdefi_clear_exception_table`
-			ON SCHEDULE EVERY 7 DAY
-			DO
-				DELETE FROM $exception_table_name;
-		" );
+        if (! wp_next_scheduled ( 'woocommerce_gateway_ezdefi_weekly_event' ) ) {
+            wp_schedule_event( time(), 'weekly', 'woocommerce_gateway_ezdefi_weekly_event' );
+        }
 	}
+
+    /**
+     * Run when deactivate plugin
+     */
+	public static function deactivate()
+    {
+        wp_clear_scheduled_hook( 'woocommerce_gateway_ezdefi_weekly_event' );
+    }
 
 	/**
 	 * Includes required files
@@ -226,3 +271,5 @@ function woocommerce_gateway_ezdefi_init() {
 }
 
 register_activation_hook( __FILE__, array( 'WC_Ezdefi', 'activate' ) );
+
+register_deactivation_hook( __FILE__, array( 'WC_Ezdefi', 'deactivate' ) );
