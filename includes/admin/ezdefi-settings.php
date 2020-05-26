@@ -17,15 +17,15 @@ return apply_filters(
         'title' => array(
 	        'title' => __( 'Title', 'woocommerce-gateway-ezdefi' ),
 	        'type' => 'text',
-	        'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce-gateway-stripe' ),
-	        'default' => __( 'Pay with cryptocurrency', 'woocommerce-gateway-stripe' ),
+	        'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce-gateway-ezdefi' ),
+	        'default' => __( 'Pay with cryptocurrency', 'woocommerce-gateway-ezdefi' ),
 	        'desc_tip' => true,
         ),
         'description' => array(
 	        'title' => __( 'Description', 'woocommerce-gateway-ezdefi' ),
 	        'type' => 'text',
-	        'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce-gateway-stripe' ),
-	        'default' => __( 'Using BTC, ETH or any kinds of cryptocurrency. Handle by ezDeFi', 'woocommerce-gateway-stripe' ),
+	        'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce-gateway-ezdefi' ),
+	        'default' => __( 'Using BTC, ETH or any kinds of cryptocurrency. Handled by ezDeFi', 'woocommerce-gateway-ezdefi' ),
 	        'desc_tip' => true,
         ),
         'api_url' => array(
