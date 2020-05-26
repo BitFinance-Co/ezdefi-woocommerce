@@ -18,7 +18,7 @@ return apply_filters(
 	        'title' => __( 'Title', 'woocommerce-gateway-ezdefi' ),
 	        'type' => 'text',
 	        'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce-gateway-ezdefi' ),
-	        'default' => __( 'Pay with cryptocurrency', 'woocommerce-gateway-ezdefi' ),
+	        'default' => __( 'Pay with Cryptocurrencies', 'woocommerce-gateway-ezdefi' ),
 	        'desc_tip' => true,
         ),
         'description' => array(
